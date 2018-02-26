@@ -89,8 +89,8 @@ public class MainScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                LocalPlayer.setMap(new MapCastle());
-                game.setScreen(new /*CharSelectScreen(game)*/GameScreen(game));
+                //LocalPlayer.setMap(new MapCastle());
+                //game.setScreen(new /*CharSelectScreen(game)*/GameScreen(game));
                 return true;
             }
         });

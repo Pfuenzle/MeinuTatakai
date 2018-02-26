@@ -33,7 +33,6 @@ public class MyGdxGame extends Game {
 
 	private boolean butBack_old = false;
 
-
 	Screen sOldScreen;
 	Screen sNewScreen;
 

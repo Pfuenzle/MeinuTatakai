@@ -175,19 +175,31 @@ public class LoginScreen implements Screen {
                 String password = passwordTextField.getText();
                 String packet = packettype + "x" + username.length() + "x" + username + "x" + password;
                 SocketHints socketHints = new SocketHints();
-                final Socket socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
+                Socket socket = null;
+                try
+                {
+                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
+                }
+                catch(com.badlogic.gdx.utils.GdxRuntimeException e)
+                {
+                    ret_type = 1;
+                    ret_text = "Server unreachable";
+                    return false;
+                }
+
                 try {
                     socket.getOutputStream().write(packet.getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
+                final Socket finalSocket = socket;
                 new Thread(new Runnable() {
                     @Override
                     public void run () {
                         String resp = "";
                         try {
-                            resp = new BufferedReader(new InputStreamReader(socket.getInputStream())).readLine();
+                            resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -216,19 +228,30 @@ public class LoginScreen implements Screen {
                 final String password = passwordTextField.getText();
                 String packet = packettype + "x" + username.length() + "x" + username + "x" + password;
                 SocketHints socketHints = new SocketHints();
-                final Socket socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
+                Socket socket = null;
+                try
+                {
+                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
+                }
+                catch(com.badlogic.gdx.utils.GdxRuntimeException e)
+                {
+                    ret_type = 1;
+                    ret_text = "Server unreachable";
+                    return false;
+                }
                 try {
                     socket.getOutputStream().write(packet.getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
+                final Socket finalSocket = socket;
                 new Thread(new Runnable() {
                     @Override
                     public void run () {
                         String resp = "";
                         try {
-                            resp = new BufferedReader(new InputStreamReader(socket.getInputStream())).readLine();
+                            resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
