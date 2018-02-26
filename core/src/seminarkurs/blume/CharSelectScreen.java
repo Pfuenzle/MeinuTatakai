@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 /**
@@ -18,14 +19,16 @@ public class CharSelectScreen implements Screen {
 
 
 
-    MyGdxGame game;
+    private MyGdxGame game;
 
-    Stage stage;
+    private Stage stage;
+
+    private Skin uiSkin;
 
     private int screen_width;
     private int screen_height;
 
-    Button butBack;
+    private Button butBack;
 
     private BitmapFont font_Name;
     @Override
@@ -35,8 +38,8 @@ public class CharSelectScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        game.stage.getBatch().begin();
-        game.stage.getBatch().end();
+        stage.getBatch().begin();
+        stage.getBatch().end();
         stage.act();
         stage.draw();
     }
@@ -69,7 +72,9 @@ public class CharSelectScreen implements Screen {
     public CharSelectScreen(MyGdxGame game)
     {
         this.game = game;
-        stage = game.stage;
+        stage = game.getStage();
+
+        uiSkin = game.getSkin();
 
         initBackButton();
 
@@ -81,7 +86,7 @@ public class CharSelectScreen implements Screen {
 
     public void initBackButton()
     {
-        butBack = new TextButton("<----", game.uiSkin);
+        butBack = new TextButton("<----", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition(game.getScreenX()/25, game.getScreenY()/15*13);

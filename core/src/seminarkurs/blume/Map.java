@@ -14,14 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
  */
 
 public class Map {
-    protected String mapName;
+    private String mapName;
 
-    BitmapFont font_error = new BitmapFont();
+    private BitmapFont font_error = new BitmapFont();
     private boolean bLoadMapError = false;
 
 
-    public Texture backgroundTexture;
-    public Sprite backgroundSprite;
+    private Texture backgroundTexture;
+    private Sprite backgroundSprite;
 
     private int screen_width;
     private int screen_height;

@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 /**
@@ -23,20 +24,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class GameScreen implements Screen {
 
+    private MyGdxGame game;
 
+    private Stage stage;
 
-    MyGdxGame game;
-
-    Stage stage;
+    private Skin uiSkin;
 
     private boolean bMapError = false;
 
-    BitmapFont font_error = new BitmapFont();
+    private BitmapFont font_error = new BitmapFont();
 
     private int screen_width;
     private int screen_height;
 
-    Button butBack;
+    private Button butBack;
 
     private BitmapFont font_Name;
     @Override
@@ -46,13 +47,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        game.stage.getBatch().begin();
+        stage.getBatch().begin();
         stage.act();
         if(bMapError)
             font_error.draw(stage.getBatch(), "ERROR LOADING MAP!", screen_width/3, screen_height/20*18);
         else
             font_error.draw(stage.getBatch(), "DONE LOADING MAP " + LocalPlayer.getMap().getName(), screen_width/3, screen_height/20*18);
-        game.stage.getBatch().end();
+        stage.getBatch().end();
         stage.draw();
     }
 
@@ -84,7 +85,9 @@ public class GameScreen implements Screen {
     public GameScreen(MyGdxGame game)
     {
         this.game = game;
-        stage = game.stage;
+        stage = game.getStage();
+
+        uiSkin = game.getSkin();
 
         LocalPlayer.setbIsIngame(true);
 
@@ -111,7 +114,7 @@ public class GameScreen implements Screen {
 
     public void initPauseButton()
     {
-        butBack = new TextButton("||", game.uiSkin);
+        butBack = new TextButton("||", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition(game.getScreenX()/25, game.getScreenY()/15*13);

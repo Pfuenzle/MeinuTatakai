@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import java.awt.Font;
@@ -19,16 +20,18 @@ import java.awt.Font;
 public class MultiplayerScreen implements Screen {
 
 
-    MyGdxGame game;
+    private MyGdxGame game;
 
-    Stage stage;
+    private Stage stage;
+
+    private Skin uiSkin;
 
     private int screen_width;
     private int screen_height;
 
-    Button butBack;
-    Button butRank;
-    Button butSearch;
+    private Button butBack;
+    private Button butRank;
+    private Button butSearch;
 
 
     @Override
@@ -38,8 +41,8 @@ public class MultiplayerScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        game.stage.getBatch().begin();
-        game.stage.getBatch().end();
+        stage.getBatch().begin();
+        stage.getBatch().end();
         stage.act();
         stage.draw();
     }
@@ -72,7 +75,9 @@ public class MultiplayerScreen implements Screen {
     public MultiplayerScreen(MyGdxGame game)
     {
         this.game = game;
-        stage = game.stage;
+        stage = game.getStage();
+
+        uiSkin = game.getSkin();
 
         initBackButton();
 
@@ -84,7 +89,7 @@ public class MultiplayerScreen implements Screen {
 
     public void initBackButton()
     {
-        butBack = new TextButton("<----", game.uiSkin);
+        butBack = new TextButton("<----", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition(game.getScreenX()/25, game.getScreenY()/15*13);
@@ -104,7 +109,7 @@ public class MultiplayerScreen implements Screen {
         float input_width = game.getScreenX() / 3;
         float input_height = game.getScreenY() / 12;
 
-        butRank = new TextButton("Play ranked game", game.uiSkin);
+        butRank = new TextButton("Play ranked game", uiSkin);
         butRank.setTransform(true);
         butRank.setScale(2f);
         butRank.setSize(input_width / 3, input_height);
@@ -117,7 +122,7 @@ public class MultiplayerScreen implements Screen {
         });
         stage.addActor(butRank);
 
-        butSearch = new TextButton("Search player", game.uiSkin);
+        butSearch = new TextButton("Search player", uiSkin);
         butSearch.setTransform(true);
         butSearch.setScale(2f);
         butSearch.setSize(input_width / 3, input_height);

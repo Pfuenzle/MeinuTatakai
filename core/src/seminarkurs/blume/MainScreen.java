@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 /**
@@ -14,15 +15,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class MainScreen implements Screen {
 
-    MyGdxGame game;
+    private MyGdxGame game;
 
-    Stage stage;
+    private Stage stage;
 
-    Screen gThis;
+    private Skin uiSkin;
 
-    Button butSingle;
-    Button butMulti;
-    Button butCareer;
+    private Button butSingle;
+    private Button butMulti;
+    private Button butCareer;
 
     @Override
     public void show() {
@@ -31,8 +32,8 @@ public class MainScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        game.stage.getBatch().begin();
-        game.stage.getBatch().end();
+        stage.getBatch().begin();
+        stage.getBatch().end();
         stage.act();
         stage.draw();
     }
@@ -64,11 +65,9 @@ public class MainScreen implements Screen {
 
     public MainScreen(final MyGdxGame game) {
         this.game = game;
-        stage = game.stage;
+        stage = game.getStage();
 
-        gThis = this;
-
-        game.sNewScreen = this;
+        uiSkin = game.getSkin();
 
         setupInterface();
 
@@ -80,7 +79,7 @@ public class MainScreen implements Screen {
         float input_width = game.getScreenX()/3;
         float input_height = game.getScreenY()/12;
 
-        butSingle = new TextButton("Singleplayer", game.uiSkin);
+        butSingle = new TextButton("Singleplayer", uiSkin);
         butSingle.setTransform(true);
         butSingle.setScale(2f);
         butSingle.setSize(input_width / 3, input_height);
@@ -96,7 +95,7 @@ public class MainScreen implements Screen {
         });
         stage.addActor(butSingle);
 
-        butMulti = new TextButton("Multiplayer", game.uiSkin);
+        butMulti = new TextButton("Multiplayer", uiSkin);
         butMulti.setTransform(true);
         butMulti.setScale(2f);
         butMulti.setSize(input_width / 3, input_height);
@@ -111,7 +110,7 @@ public class MainScreen implements Screen {
         });
         stage.addActor(butMulti);
 
-        butCareer = new TextButton("CareerScreen", game.uiSkin);
+        butCareer = new TextButton("CareerScreen", uiSkin);
         butCareer.setTransform(true);
         butCareer.setScale(2f);
         butCareer.setSize(input_width / 3, input_height);

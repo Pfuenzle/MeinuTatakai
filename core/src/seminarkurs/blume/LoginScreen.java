@@ -87,18 +87,12 @@ public class LoginScreen implements Screen {
     {
         this.game = game;
 
-        game.sNewScreen = this;
-
-
-
-        game.sOldScreen = this;
-
         font_msg = new BitmapFont();
         font_msg.setColor(Color.RED);
         font_msg.getData().setScale(3f);
 
-        stage = game.stage;
-        uiSkin = game.uiSkin;
+        stage = game.getStage();
+        uiSkin = game.getSkin();
 
         setupInterfaces();
 

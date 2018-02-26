@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
@@ -29,16 +30,16 @@ import java.io.InputStreamReader;
 public class CareerScreen implements Screen {
 
 
-    MyGdxGame game;
+    private MyGdxGame game;
 
-    Stage stage;
+    private Stage stage;
 
-    Skin uiSkin;
+    private Skin uiSkin;
 
     private int screen_width;
     private int screen_height;
 
-    Button butBack;
+    private Button butBack;
 
     private BitmapFont font_Name;
 
@@ -56,7 +57,7 @@ public class CareerScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        game.stage.getBatch().begin();
+        stage.getBatch().begin();
         if(!userNotFound)
         {
             font_Name.draw(stage.getBatch(), username, screen_width/2, (screen_height/4)*3);
@@ -70,7 +71,7 @@ public class CareerScreen implements Screen {
         else
             font_Name.draw(stage.getBatch(), "User not found", screen_width/2, (screen_height/4)*1);
 
-        game.stage.getBatch().end();
+        stage.getBatch().end();
         stage.act();
         stage.draw();
     }
@@ -103,9 +104,9 @@ public class CareerScreen implements Screen {
     public CareerScreen(MyGdxGame game)
     {
         this.game = game;
-        stage = game.stage;
+        stage = game.getStage();
 
-        uiSkin = game.uiSkin;
+        uiSkin = game.getSkin();
 
         initBackButton();
 
@@ -126,6 +127,7 @@ public class CareerScreen implements Screen {
     {
         font_Name = new BitmapFont();
         font_Name.getData().setScale(5f);
+        font_Name.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         font_Name.setColor(Color.GREEN);
 
         float screen_x = game.getScreenX();
@@ -147,11 +149,11 @@ public class CareerScreen implements Screen {
             }
         });
         stage.addActor(button_user);
-    }
+    }//https://www.youtube.com/watch?v=-Xh4lRqN8hE
 
     public void initBackButton()
     {
-        butBack = new TextButton("<----", game.uiSkin);
+        butBack = new TextButton("<----", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         //butBack.setSize(input_width / 3, input_height);

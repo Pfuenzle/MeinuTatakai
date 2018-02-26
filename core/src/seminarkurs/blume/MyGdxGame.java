@@ -18,25 +18,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class MyGdxGame extends Game {
 
-	Stage stage;
+	private Stage stage;
 
-	Skin uiSkin;
+	private Skin uiSkin;
 
-	BitmapFont font;
-	BitmapFont font_yellow;
+	private BitmapFont font;
+	private BitmapFont font_yellow;
 
 	private int screen_width;
 	private int screen_height;
 
-	public static Texture backgroundTexture;
-	public static Sprite backgroundSprite;
+	private static Texture backgroundTexture;
+	private static Sprite backgroundSprite;
 
-	private boolean butBack_old = false;
-
-	Screen sOldScreen;
-	Screen sNewScreen;
-
-	MyGdxGame gThis;
 
 	@Override
 	public void create () {
@@ -47,8 +41,6 @@ public class MyGdxGame extends Game {
 		uiSkin.getFont("font").getData().setScale(3f);
 
 		Gdx.app.setLogLevel(Application.LOG_ERROR);
-
-		gThis = this;
 
 		initBackground();
 
@@ -127,5 +119,14 @@ public class MyGdxGame extends Game {
 		return this;
 	}
 
+	public Stage getStage()
+	{
+		return this.stage;
+	}
+
+	public Skin getSkin()
+	{
+		return this.uiSkin;
+	}
 
 }

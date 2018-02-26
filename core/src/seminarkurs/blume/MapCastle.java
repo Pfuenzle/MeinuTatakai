@@ -10,9 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class MapCastle extends Map {
 
-
-
-
     public MapCastle()
     {
         super();
