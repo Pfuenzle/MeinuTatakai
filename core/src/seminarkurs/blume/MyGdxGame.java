@@ -129,4 +129,9 @@ public class MyGdxGame extends Game {
 		return this.uiSkin;
 	}
 
+	public MyGdxGame(String HWID)
+	{
+		NetworkPlayer.setHWID(HWID);
+	}
+
 }

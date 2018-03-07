@@ -167,7 +167,7 @@ public class LoginScreen implements Screen {
                 String username = usernameTextField.getText();
                 //NetworkPlayer.setUsername(username);
                 String password = passwordTextField.getText();
-                String packet = packettype + "x" + username.length() + "x" + username + "x" + password;
+                String packet = packettype + "x" + NetworkPlayer.fill(username.length(), 4) + "x" + username + "x" + NetworkPlayer.fill(password.length(), 4) + "x" + password + "x" + NetworkPlayer.getHWID();
                 SocketHints socketHints = new SocketHints();
                 Socket socket = null;
                 try
@@ -220,7 +220,7 @@ public class LoginScreen implements Screen {
                 final String username = usernameTextField.getText();
                 NetworkPlayer.setUsername(username);
                 final String password = passwordTextField.getText();
-                String packet = packettype + "x" + username.length() + "x" + username + "x" + password;
+                String packet = packettype + "x" + NetworkPlayer.fill(username.length(), 4) + "x" + username + "x" + NetworkPlayer.fill(password.length(), 4) + "x" + password + "x" + NetworkPlayer.getHWID();
                 SocketHints socketHints = new SocketHints();
                 Socket socket = null;
                 try
