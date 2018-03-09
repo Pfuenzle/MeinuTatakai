@@ -4,6 +4,9 @@ package seminarkurs.blume;
  * Created by Leon on 22.02.2018.
  */
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
@@ -17,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 /**
  * Created by Leon on 04.02.2018.
@@ -30,6 +35,8 @@ public class GameScreen implements Screen {
 
     private Skin uiSkin;
 
+    private GamePlayer gamePlayer;
+
     private boolean bMapError = false;
 
     private BitmapFont font_error = new BitmapFont();
@@ -40,10 +47,23 @@ public class GameScreen implements Screen {
     private Button butBack;
 
     private BitmapFont font_Name;
+
+
+    private Touchpad touchpad;
+    private Touchpad.TouchpadStyle touchpadStyle;
+    private Skin touchpadSkin;
+    private Drawable touchBackground;
+    private Drawable touchKnob;
+    private Texture blockTexture;
+    private Sprite blockSprite;
+
+
     @Override
     public void show() {
 
     }
+
+
 
     @Override
     public void render(float delta) {
@@ -53,6 +73,18 @@ public class GameScreen implements Screen {
             font_error.draw(stage.getBatch(), "ERROR LOADING MAP!", screen_width/3, screen_height/20*18);
         else
             font_error.draw(stage.getBatch(), "DONE LOADING MAP " + LocalPlayer.getMap().getName(), screen_width/3, screen_height/20*18);
+
+
+        //Move blockSprite with TouchPad
+        blockSprite.setX(blockSprite.getX() + touchpad.getKnobPercentX()*(int) gamePlayer.getSpeed());
+        blockSprite.setY(blockSprite.getY() + touchpad.getKnobPercentY()*(int) gamePlayer.getSpeed());
+
+        blockSprite.draw(stage.getBatch());
+
+
+        stage.act(Gdx.graphics.getDeltaTime());
+
+
         stage.getBatch().end();
         stage.draw();
     }
@@ -91,13 +123,16 @@ public class GameScreen implements Screen {
 
         LocalPlayer.setbIsIngame(true);
 
-        initPauseButton();
+        gamePlayer = new GamePlayer();
+
+
+        setupInterface();
 
         if(LocalPlayer.getMap() != null)
         {
             font_error.getData().setScale(5f);
             font_error.setColor(Color.GREEN);
-            setupInterface();
+
         }
 
         else
@@ -110,6 +145,46 @@ public class GameScreen implements Screen {
 
         this.screen_width = Gdx.graphics.getWidth();
         this.screen_height = Gdx.graphics.getHeight();
+
+        Gdx.app.log("Init", "davor");
+
+        Gdx.input.setInputProcessor(stage);
+    }
+
+    private void initTouchpad() {
+        //Create a touchpad skin
+        touchpadSkin = new Skin();
+        //Set background image
+        touchpadSkin.add("touchBackground", new Texture("buttons/touchpad/touchBackground.png"));
+        //Set knob image
+        touchpadSkin.add("touchKnob", new Texture("buttons/touchpad/touchKnob.png"));
+        //Create TouchPad Style
+        touchpadStyle = new Touchpad.TouchpadStyle();
+        //Create Drawable's from TouchPad skin
+        touchBackground = touchpadSkin.getDrawable("touchBackground");
+        touchKnob = touchpadSkin.getDrawable("touchKnob");
+        //Apply the Drawables to the TouchPad Style
+        touchpadStyle.background = touchBackground;
+        touchpadStyle.knob = touchKnob;
+        //Create new TouchPad with the created style
+        touchpad = new Touchpad(10, touchpadStyle);
+        //setBounds(x,y,width,height)
+        touchpad.setBounds(15, 15, 200, 200);
+
+        //Create a Stage and add TouchPad
+        stage.addActor(touchpad);
+
+
+
+        //Create block sprite
+        blockTexture = new Texture(Gdx.files.internal("buttons/touchpad/block.png"));
+        blockSprite = new Sprite(blockTexture);
+        //Set position to centre of the screen
+        blockSprite.setPosition(screen_width/2-blockSprite.getWidth()/2, screen_height/2-blockSprite.getHeight()/2);
+
+
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     public void initPauseButton()
@@ -132,7 +207,8 @@ public class GameScreen implements Screen {
 
     public void setupInterface()
     {
-
+        initPauseButton();
+        initTouchpad();
     }
 
 }

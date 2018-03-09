@@ -51,7 +51,7 @@ public class MyGdxGame extends Game {
 
 		Settings.init();
 
-		this.setScreen(new LoginScreen(this));
+		this.setScreen(new GameScreen(this));
 	}
 
 	@Override

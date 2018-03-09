@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class GamePlayer implements Serializable {
 
     private double health;
-    private double speed;
+    private double speed = 5;
 
     private int player;
     private String skin;
