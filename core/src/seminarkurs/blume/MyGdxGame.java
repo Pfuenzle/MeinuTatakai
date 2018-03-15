@@ -112,6 +112,7 @@ public class MyGdxGame extends Game {
 	private void renderFPS()
 	{
 		font_yellow.draw(stage.getBatch(), "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), screen_width/20*18, screen_height/20*19);
+		font_yellow.draw(stage.getBatch(), "SESSION: " + NetworkPlayer.getSESSION(), screen_width/20*10, screen_height/20*19);
 	}
 
 	public MyGdxGame getGame()

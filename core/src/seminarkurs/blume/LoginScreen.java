@@ -121,7 +121,7 @@ public class LoginScreen implements Screen {
         float input_height = game.getScreenY()/12;
 
         final TextField usernameTextField = new TextField("", uiSkin);
-        usernameTextField.setPosition(input_width,input_height*6 );
+        usernameTextField.setPosition(input_width,input_height*6);
         usernameTextField.setSize(input_width, input_height);
         usernameTextField.setMessageText("Username");
         if(Settings.isSaveUser())
@@ -197,7 +197,7 @@ public class LoginScreen implements Screen {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        AccountPacket packet_ret = new AccountPacket(resp);
+                        RegisterPacket packet_ret = new RegisterPacket(resp);
                         ret_text = packet_ret.getMsg();
                         //Gdx.app.log("AccountPacket", resp);
                         //Gdx.app.log("AccountPacket", String.valueOf(packet_ret.getReturn()));
@@ -249,7 +249,7 @@ public class LoginScreen implements Screen {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        AccountPacket packet_ret = new AccountPacket(resp);
+                        LoginPacket packet_ret = new LoginPacket(resp);
                         ret_text = packet_ret.getMsg();
                         //Gdx.app.log("LoginPacket", resp);
                         //Gdx.app.log("LoginPacket", String.valueOf(packet_ret.getReturn()));

@@ -43,9 +43,18 @@ public class NetworkPlayer {
     private static int wins = 88;
     private static int losses = -2;
 
+
     //Network
-    private static String SESSION;
+    private static String SESSION = "0";
     private static String HWID;
+
+    public static String getSESSION() {
+        return SESSION;
+    }
+
+    public static void setSESSION(String SESSION) {
+        NetworkPlayer.SESSION = SESSION;
+    }
 
     public static String getHWID() {
         return HWID;
