@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  * Created by Leon on 22.02.2018.
  */
 
-public class MapCastle extends Map {
+public class MapCastle extends Map { //deprecated
 
     public MapCastle()
     {
