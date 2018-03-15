@@ -37,6 +37,7 @@ public class MultiplayerScreen implements Screen {
     private Skin uiSkin;
 
     private boolean inQueue = false;
+    private boolean inGame = false;
 
     private int screen_width;
     private int screen_height;
@@ -55,6 +56,8 @@ public class MultiplayerScreen implements Screen {
 
     private String debug = "";
 
+    String enemy;
+    String port;
     @Override
     public void show() {
 
@@ -64,7 +67,9 @@ public class MultiplayerScreen implements Screen {
     public void render(float delta) {
         stage.getBatch().begin();
         if(inQueue)
-            font.draw(stage.getBatch(), "In Queue with " + NetworkPlayer.getRP()+ " RP with " + String.valueOf(queueing_players) + " other Players" + debug, screen_width/20*7, screen_height/20*7);
+            font.draw(stage.getBatch(), "In Queue with " + NetworkPlayer.getRP()+ " RP. Players in Queue: " + String.valueOf(queueing_players), screen_width/20*6, screen_height/20*10);
+        if(inGame)
+            font.draw(stage.getBatch(), "Found match against " + enemy + " on Port " + port, screen_width/20*6, screen_height/20*7);
         stage.getBatch().end();
         stage.act();
         stage.draw();
@@ -173,6 +178,22 @@ public class MultiplayerScreen implements Screen {
     }
 
     private void startRanked() throws IOException {
+        butRank.remove();
+        butSearch.remove();
+        butCancel = new TextButton("Cancel", uiSkin);
+        butCancel.setTransform(true);
+        butCancel.setScale(2f);
+        butCancel.setSize(input_width / 3, input_height);
+        butCancel.setPosition((game.getScreenX() / 2) - butRank.getWidth(), input_height * 7);
+        butCancel.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                dispose();
+                game.setScreen(new MultiplayerScreen(game));
+                return true;
+            }
+        });
+        stage.addActor(butCancel);
         final String enterPacket = "x5x0x" + NetworkPlayer.fill(NetworkPlayer.getUsername().length(), 4) + "x" + NetworkPlayer.getUsername() + "x" + NetworkPlayer.getSESSION();
         new Thread(new Runnable() {
             @Override
@@ -219,33 +240,24 @@ public class MultiplayerScreen implements Screen {
                         int queueing_players_str = Integer.parseInt(response.substring(4, 8));
                         queueing_players = Integer.parseInt(String.valueOf(queueing_players_str));
                     }
-                    //queueing_players = 5;
-                    /*else if(packet_in.substring(0, 3).equals("5x1"))
+                    else if(response.substring(0, 3).equals("5x1"))
                     {
-                        String queueing_players_str = packet_in.substring(4, packet_in.length());
-                        queueing_players = Integer.parseInt(queueing_players_str);
-                    }*/
+                        //5x1xLENGTHxENEMYxPORT
+                        int enemy_length = Integer.parseInt(response.substring(4, 8));
+                        enemy = response.substring(9, 9 + enemy_length);
+                        int offset = 10 + enemy_length;
+                        port = response.substring(offset+2);
+                        inQueue = false;
+                        inGame = true;
+                        try {
+                            clientSocket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         }).start();
-
-
-        butRank.remove();
-        butSearch.remove();
-        butCancel = new TextButton("Cancel", uiSkin);
-        butCancel.setTransform(true);
-        butCancel.setScale(2f);
-        butCancel.setSize(input_width / 3, input_height);
-        butCancel.setPosition((game.getScreenX() / 2) - butRank.getWidth(), input_height * 7);
-        butCancel.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                dispose();
-                game.setScreen(new MultiplayerScreen(game));
-                return true;
-            }
-        });
-        stage.addActor(butRank);
     }
 
 }
