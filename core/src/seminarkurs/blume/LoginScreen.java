@@ -254,7 +254,6 @@ public class LoginScreen implements Screen {
                         //Gdx.app.log("LoginPacket", resp);
                         //Gdx.app.log("LoginPacket", String.valueOf(packet_ret.getReturn()));
                         //Gdx.app.log("LoginPacket", packet_ret.getMsg());
-                        ret_type = 1;
                         if(packet_ret.getReturn())
                         {
                             //game.sOldScreen = new LoginScreen(game);

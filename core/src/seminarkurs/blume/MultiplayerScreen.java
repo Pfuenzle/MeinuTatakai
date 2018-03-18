@@ -227,32 +227,35 @@ public class MultiplayerScreen implements Screen {
                     e.printStackTrace();
                 }
 
+                Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
                 while(inQueue)
                 {
-                String response = "";
+                String response = null;
                     try {
                         response = inFromServer.readLine();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if(response.substring(0, 3).equalsIgnoreCase("5x2"))
-                    {
-                        int queueing_players_str = Integer.parseInt(response.substring(4, 8));
-                        queueing_players = Integer.parseInt(String.valueOf(queueing_players_str));
-                    }
-                    else if(response.substring(0, 3).equals("5x1"))
-                    {
-                        //5x1xLENGTHxENEMYxPORT
-                        int enemy_length = Integer.parseInt(response.substring(4, 8));
-                        enemy = response.substring(9, 9 + enemy_length);
-                        int offset = 10 + enemy_length;
-                        port = response.substring(offset+2);
-                        inQueue = false;
-                        inGame = true;
-                        try {
-                            clientSocket.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                    Gdx.app.debug("PACKET", response);
+                    if(response != null) {
+                        if (response.substring(0, 3).equalsIgnoreCase("5x2")) {
+                            int queueing_players_str = Integer.parseInt(response.substring(4, 8));
+                            queueing_players = Integer.parseInt(String.valueOf(queueing_players_str));
+                        } else if (response.substring(0, 3).equals("5x1")) {
+                            Gdx.app.debug("Game found", response);
+                            //5x1xLENGTHxENEMYxPORT
+                            int enemy_length = Integer.parseInt(response.substring(4, 8));
+                            enemy = response.substring(9, 9 + enemy_length);
+                            int offset = 10 + enemy_length;
+                            port = response.substring(offset + 2);
+                            inQueue = false;
+                            inGame = true;
+                            try {
+                                clientSocket.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
