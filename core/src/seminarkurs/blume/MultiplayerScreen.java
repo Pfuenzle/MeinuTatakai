@@ -256,6 +256,7 @@ public class MultiplayerScreen implements Screen {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                            game.setScreen(new MultiPlayerGameScreen(game, Integer.parseInt(port), enemy));
                         }
                     }
                 }
