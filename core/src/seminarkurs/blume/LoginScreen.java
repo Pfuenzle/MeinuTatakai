@@ -108,7 +108,7 @@ public class LoginScreen implements Screen {
             font_msg.draw(stage.getBatch(), ret_text, msg_x, msg_y);
         }
 
-        if(ret_type ==2) //Draw Register Message
+        if(ret_type == 2) //Draw Register Message
         {
             font_msg.draw(stage.getBatch(), ret_text, msg_x, msg_y);
         }
@@ -251,6 +251,7 @@ public class LoginScreen implements Screen {
                         }
                         LoginPacket packet_ret = new LoginPacket(resp);
                         ret_text = packet_ret.getMsg();
+                        ret_type = 1;
                         //Gdx.app.log("LoginPacket", resp);
                         //Gdx.app.log("LoginPacket", String.valueOf(packet_ret.getReturn()));
                         //Gdx.app.log("LoginPacket", packet_ret.getMsg());
