@@ -9,14 +9,15 @@ import java.io.Serializable;
 
 public class GamePlayer implements Serializable {
 
-    private double health;
-    private double speed = 5;
+    private double health = 400; //max 1000
+    private double speed = 1000;
 
     private int player;
     private String skin;
 
     private double x;
     private double y;
+
 
     private String name;
     private int RP;

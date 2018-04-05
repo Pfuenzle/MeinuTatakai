@@ -32,6 +32,7 @@ public class MyGdxGame extends Game {
 	private static Sprite backgroundSprite;
 
 
+
 	@Override
 	public void create () {
 		stage = new Stage();
