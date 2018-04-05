@@ -31,7 +31,7 @@ public class MyGdxGame extends Game {
 	private static Texture backgroundTexture;
 	private static Sprite backgroundSprite;
 
-
+	private String deviceName;
 	@Override
 	public void create () {
 		stage = new Stage();
@@ -111,8 +111,10 @@ public class MyGdxGame extends Game {
 
 	private void renderFPS()
 	{
-		font_yellow.draw(stage.getBatch(), "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), screen_width/20*18, screen_height/20*19);
-		font_yellow.draw(stage.getBatch(), "SESSION: " + NetworkPlayer.getSESSION(), screen_width/20*10, screen_height/20*19);
+		if(!deviceName.equals("nicisilver")) {
+			font_yellow.draw(stage.getBatch(), "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), screen_width / 20 * 18, screen_height / 20 * 19);
+			font_yellow.draw(stage.getBatch(), "SESSION: " + NetworkPlayer.getSESSION(), screen_width / 20 * 10, screen_height / 20 * 19);
+		}
 	}
 
 	public MyGdxGame getGame()
@@ -130,9 +132,10 @@ public class MyGdxGame extends Game {
 		return this.uiSkin;
 	}
 
-	public MyGdxGame(String HWID)
+	public MyGdxGame(String HWID, String deviceName)
 	{
 		NetworkPlayer.setHWID(HWID);
+		this.deviceName = deviceName;
 	}
 
 }

@@ -1,5 +1,6 @@
 package seminarkurs.blume;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +35,10 @@ public class AndroidLauncher extends AndroidApplication{
 		} catch (java.security.NoSuchAlgorithmException e) {
 		}
 
-		initialize(new MyGdxGame(hwid), config);
+		BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+		String deviceName = myDevice.getName();
+
+		initialize(new MyGdxGame(hwid, deviceName), config);
 	}
 
 }
