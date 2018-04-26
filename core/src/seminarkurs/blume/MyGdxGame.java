@@ -23,7 +23,7 @@ public class MyGdxGame extends Game {
 	private Skin uiSkin;
 
 	private BitmapFont font;
-	private BitmapFont font_yellow;
+	public BitmapFont font_yellow;
 
 	private int screen_width;
 	private int screen_height;

@@ -35,8 +35,13 @@ public class AndroidLauncher extends AndroidApplication{
 		} catch (java.security.NoSuchAlgorithmException e) {
 		}
 
-		BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
-		String deviceName = myDevice.getName();
+		String deviceName = "";
+		try {
+			BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+			deviceName = myDevice.getName();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 
 		initialize(new MyGdxGame(hwid, deviceName), config);
 	}

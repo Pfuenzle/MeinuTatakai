@@ -40,9 +40,6 @@ public class MultiPlayerGameScreen implements Screen {
 
     private BitmapFont statusFont;
 
-    private int rp;
-    private String username;
-
     @Override
     public void show() {
 
@@ -51,10 +48,12 @@ public class MultiPlayerGameScreen implements Screen {
     @Override
     public void render(float delta) {
         stage.getBatch().begin();
-        stage.act();
-        //statusFont.draw(stage.getBatch(), "Status: " + MP.getServerStatus(), screen_width/3, screen_height/20*19);
-        statusFont.draw(stage.getBatch(), "Enemy: " + /*MP.getEnemy().getName()*/username + " with " + rp/*MP.getEnemy().getRP()*/ + " RP", screen_width/4, screen_height/2);
+        game.font_yellow.draw(stage.getBatch(), "Server status: " + MP.getServerStatus(), screen_width/3, screen_height/20*16);
+        game.font_yellow.draw(stage.getBatch(), "Enemy name: " + MP.getEnemy().getUsername() + " with " + MP.getEnemy().getRP() + " RP", screen_width/4, screen_height/8*5);
+        game.font_yellow.draw(stage.getBatch(), "Enemy model: " + MP.getEnemy().getPlayer() + " with skin: " + MP.getEnemy().getSkin(), screen_width/4, screen_height/8*3);
+        //statusFont.draw(stage.getBatch(), "Enemy name: ", screen_width/4, screen_height/4*3);
         stage.getBatch().end();
+        stage.act();
         stage.draw();
     }
 
@@ -83,8 +82,7 @@ public class MultiPlayerGameScreen implements Screen {
         stage.clear();
     }
 
-    public MultiPlayerGameScreen(MyGdxGame game, int PORT, String enemy)
-    {
+    public MultiPlayerGameScreen(MyGdxGame game, int PORT, String enemy) throws IOException, ClassNotFoundException {
         this.game = game;
         this.stage = game.getStage();
 
@@ -97,55 +95,13 @@ public class MultiPlayerGameScreen implements Screen {
         this.screen_width = Gdx.graphics.getWidth();
         this.screen_height = Gdx.graphics.getHeight();
 
-        //MP = new MultiPlayer(PORT);
+        MP = new MultiPlayer(PORT);
 
         statusFont = new BitmapFont();
 
-        statusFont.getData().setScale(5f);
+        statusFont.getData().setScale(3f);
         statusFont.setColor(Color.GREEN);
-        statusFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        this.username = enemy;
-
-        String packettype = "1x0";
-        String packet = packettype + "x" + username;
-        SocketHints socketHints = new SocketHints();
-        Socket socket = null;
-        try
-        {
-            socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
-        }
-        catch(com.badlogic.gdx.utils.GdxRuntimeException e)
-        {
-            return;
-        }
-        try {
-            socket.getOutputStream().write(packet.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        final Socket finalSocket = socket;
-        new Thread(new Runnable() {
-            @Override
-            public void run () {
-                String resp;
-                try {
-                    resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return;
-                }
-                //Gdx.app.log("UserPacket", resp);
-                UserPacket user = new UserPacket(resp);
-                if(user.getRet())
-                {
-                    rp = user.getRP();
-                }
-
-            }
-        }).start();
+        //statusFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
     public void initPauseButton()
@@ -157,8 +113,8 @@ public class MultiPlayerGameScreen implements Screen {
         butBack.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                //dispose();
-                //game.setScreen(new MainScreen(game));
+                dispose();
+                game.setScreen(new MainScreen(game));
                 //Add pause-code
                 return true;
             }

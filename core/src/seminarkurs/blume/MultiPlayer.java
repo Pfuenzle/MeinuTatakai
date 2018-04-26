@@ -1,9 +1,15 @@
 package seminarkurs.blume;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.net.SocketHints;
+
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
@@ -16,13 +22,15 @@ public class MultiPlayer {
 
     private Socket socket;
 
-    private GamePlayer enemy;
+    private GamePlayer localPlayer;
 
-    private String serverStatus;
+    public static GamePlayer enemy;
+
+    private static String serverStatus;
 
     private boolean multiplayerRunning;
 
-    public String getServerStatus() {
+    public static String getServerStatus() {
         return serverStatus;
     }
 
@@ -40,19 +48,31 @@ public class MultiPlayer {
 
 
 
-
-
-
-    private void parsePacket(String packet)
-    {
-        if(packet.substring(0, 2).equals("10"))
-            handleStatus(packet);
-        else if(packet.substring(0, 2).equals("99"))
-            multiplayerRunning = false;
-        else if(packet.substring(0, 2).equals("11"))
-            handleEnemyPacket(packet);
-        else if(packet.substring(0, 2).equals("12"))
-            handleLocalPacket(packet);
+    private static void parsePacket(String packet) {
+        if (packet.substring(0, 2).equals("10")) {
+            enemy.setUsername(packet.substring(3));
+        }
+        else if (packet.substring(0, 2).equals("11")) {
+            enemy.setRP(Integer.parseInt(packet.substring(3)));
+        }
+        else if (packet.substring(0, 2).equals("12")) {
+            enemy.setHealth(Double.parseDouble(packet.substring(3)));
+        }
+        else if (packet.substring(0, 2).equals("13")) {
+            enemy.setSpeed(Double.parseDouble(packet.substring(3)));
+        }
+        else if (packet.substring(0, 2).equals("14")) {
+            enemy.setPlayer(Integer.parseInt(packet.substring(3)));
+        }
+        else if (packet.substring(0, 2).equals("15")) {
+            enemy.setSkin(Integer.parseInt(packet.substring(3)));
+        }
+        else if (packet.substring(0, 2).equals("16")) {
+            enemy.setX(Double.parseDouble(packet.substring(3)));
+        }
+        else if (packet.substring(0, 2).equals("17")) {
+            enemy.setY(Double.parseDouble(packet.substring(3)));
+        }
     }
 
     private void handleEnemyPacket(String packet)
@@ -71,25 +91,26 @@ public class MultiPlayer {
     }
 
     public void startMultiPlayerThread() throws IOException, ClassNotFoundException {
-        socket = new Socket(SERVER,PORT);
+        socket = new Socket(SERVER,PORT); //verbinde zu server
         multiplayerRunning = true;
 
-        ObjectInputStream enemyObjectInput = new ObjectInputStream(socket.getInputStream());
-        GamePlayer enemy =(GamePlayer) enemyObjectInput.readObject();
+        final DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
+
+        outToClient.writeBytes("10x" + localPlayer.getUsername() + "\n");
+        outToClient.writeBytes("11x" + String.valueOf(localPlayer.getRP()) + "\n");
+        outToClient.writeBytes("12x" + String.valueOf(localPlayer.getHealth()) + "\n");
+        outToClient.writeBytes("13x" + String.valueOf(localPlayer.getSpeed()) + "\n");
+        outToClient.writeBytes("14x" + String.valueOf(localPlayer.getPlayer()) + "\n");
+        outToClient.writeBytes("15x" + String.valueOf(localPlayer.getSkin()) + "\n");
+        outToClient.writeBytes("16x" + String.valueOf(localPlayer.getX()) + "\n");
+        outToClient.writeBytes("17x" + String.valueOf(localPlayer.getY()) + "\n");
 
         new Thread(new Runnable() {
             public void run() {
-                BufferedReader inFromServer = new BufferedReader(new InputStreamReader(System.in));
                 String packet = null;
                 while(multiplayerRunning)
                 {
-                    try {
-                        packet = inFromServer.readLine();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if(packet != null)
-                        parsePacket(packet);
+
                 }
                 try {
                     socket.close();
@@ -100,14 +121,32 @@ public class MultiPlayer {
         }).start();
     }
 
-    public void startMultiPlayer()
-    {
-
-    }
-
-    public MultiPlayer(int PORT)
-    {
+    public MultiPlayer(int PORT) throws IOException, ClassNotFoundException {
         this.PORT = PORT;
+
+        localPlayer = new GamePlayer();
+
+        localPlayer.setRP(NetworkPlayer.getRP());
+        localPlayer.setUsername(NetworkPlayer.getUsername());
+        localPlayer.setHealth(100);
+        localPlayer.setSpeed(10);
+        localPlayer.setPlayer(1);
+        localPlayer.setSkin(0);
+        localPlayer.setX(0);
+        localPlayer.setX(0);
+
+        enemy = new GamePlayer();
+
+        enemy.setRP(12344321);
+        enemy.setUsername("gegnername");
+        enemy.setHealth(100);
+        enemy.setSpeed(10);
+        enemy.setPlayer(1);
+        enemy.setSkin(0);
+        enemy.setX(0);
+        enemy.setX(0);
+
+        startMultiPlayerThread();
     }
 
 }

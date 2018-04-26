@@ -2,25 +2,45 @@ package seminarkurs.blume;
 
 import java.io.Serializable;
 
-/**
- * Created by Leon on 27.02.2018.
- */
+public class GamePlayer implements Serializable{
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-public class GamePlayer implements Serializable {
+    public GamePlayer()
+    {
+
+    }
+
+    private String username;
+    private int RP;
 
     private double health;
     private double speed;
 
     private int player;
-    private String skin;
+    private int skin;
 
     private double x;
     private double y;
 
-    private String name;
-    private int RP;
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getRP() {
+        return RP;
+    }
+
+    public void setRP(int RP) {
+        this.RP = RP;
+    }
 
     public double getHealth() {
         return health;
@@ -49,11 +69,11 @@ public class GamePlayer implements Serializable {
     }
 
 
-    public String getSkin() {
+    public int getSkin() {
         return skin;
     }
 
-    public void setSkin(String skin) {
+    public void setSkin(int skin) {
         this.skin = skin;
     }
 
@@ -74,22 +94,4 @@ public class GamePlayer implements Serializable {
     public void setY(double y) {
         this.y = y;
     }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getRP() {
-        return RP;
-    }
-
-    public void setRP(int RP) {
-        this.RP = RP;
-    }
 }
-

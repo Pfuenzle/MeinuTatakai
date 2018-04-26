@@ -190,6 +190,7 @@ public class MultiplayerScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
                 game.setScreen(new MultiplayerScreen(game));
+                //stop queue
                 return true;
             }
         });
@@ -213,7 +214,7 @@ public class MultiplayerScreen implements Screen {
                 }
 
                 try {
-                    outputStream.writeBytes(enterPacket);
+                    outputStream.writeBytes(enterPacket); //send packet to enter queue
                 } catch (IOException e) {
                     System.exit(1);
                     e.printStackTrace();
@@ -248,7 +249,7 @@ public class MultiplayerScreen implements Screen {
                             int enemy_length = Integer.parseInt(response.substring(4, 8));
                             enemy = response.substring(9, 9 + enemy_length);
                             int offset = 10 + enemy_length;
-                            port = response.substring(offset + 2);
+                            port = response.substring(offset);
                             inQueue = false;
                             inGame = true;
                             try {
@@ -256,7 +257,14 @@ public class MultiplayerScreen implements Screen {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            game.setScreen(new MultiPlayerGameScreen(game, Integer.parseInt(port), enemy));
+                            dispose();
+                            try {
+                                game.setScreen(new MultiPlayerGameScreen(game, Integer.parseInt(port), enemy));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
