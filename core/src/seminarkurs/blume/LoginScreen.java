@@ -36,6 +36,9 @@ public class LoginScreen implements Screen {
 
     private Skin uiSkin;
 
+    Button button_reg;
+    Button button_log;
+
     private BitmapFont font_msg;
 
     private int ret_type = 0;
@@ -157,12 +160,14 @@ public class LoginScreen implements Screen {
         passCheckBox.setChecked(Settings.isSavePass());
         stage.addActor(passCheckBox);
 
-        Button button_reg = new TextButton("Register",uiSkin);
+        button_reg = new TextButton("Register",uiSkin);
         button_reg.setSize(input_width/3,input_height);
         button_reg.setPosition(input_width,input_height*2f);
         button_reg.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                button_reg.setDisabled(true);
+                button_log.setDisabled(true);
                 String packettype = "0x2";
                 String username = usernameTextField.getText();
                 //NetworkPlayer.setUsername(username);
@@ -178,6 +183,8 @@ public class LoginScreen implements Screen {
                 {
                     ret_type = 1;
                     ret_text = "Server unreachable";
+                    button_reg.setDisabled(false);
+                    button_log.setDisabled(false);
                     return false;
                 }
 
@@ -195,6 +202,8 @@ public class LoginScreen implements Screen {
                         try {
                             resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
                         } catch (IOException e) {
+                            button_reg.setDisabled(false);
+                            button_log.setDisabled(false);
                             e.printStackTrace();
                         }
                         RegisterPacket packet_ret = new RegisterPacket(resp);
@@ -203,6 +212,8 @@ public class LoginScreen implements Screen {
                         //Gdx.app.log("AccountPacket", String.valueOf(packet_ret.getReturn()));
                         //Gdx.app.log("AccountPacket", packet_ret.getMsg());
                         ret_type = 2;
+                        button_reg.setDisabled(false);
+                        button_log.setDisabled(false);
                     }
                 }).start();
                 return true;
@@ -210,12 +221,14 @@ public class LoginScreen implements Screen {
         });
         stage.addActor(button_reg);
 
-        Button button_log = new TextButton("Login",uiSkin);
+        button_log = new TextButton("Login",uiSkin);
         button_log.setSize(input_width/3,input_height);
         button_log.setPosition(input_width + 2*(input_width/3),input_height*2f);
         button_log.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                button_reg.setDisabled(true);
+                button_log.setDisabled(true);
                 String packettype = "0x1";
                 final String username = usernameTextField.getText();
                 NetworkPlayer.setUsername(username);
@@ -231,12 +244,19 @@ public class LoginScreen implements Screen {
                 {
                     ret_type = 1;
                     ret_text = "Server unreachable";
+                    button_reg.setDisabled(false);
+                    button_log.setDisabled(false);
                     return false;
                 }
                 try {
                     socket.getOutputStream().write(packet.getBytes());
                 } catch (IOException e) {
+                    ret_type = 1;
+                    ret_text = "Server unreachable";
+                    button_reg.setDisabled(false);
+                    button_log.setDisabled(false);
                     e.printStackTrace();
+                    return false;
                 }
 
                 final Socket finalSocket = socket;
@@ -247,6 +267,8 @@ public class LoginScreen implements Screen {
                         try {
                             resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
                         } catch (IOException e) {
+                            button_reg.setDisabled(false);
+                            button_log.setDisabled(false);
                             e.printStackTrace();
                         }
                         LoginPacket packet_ret = new LoginPacket(resp);
