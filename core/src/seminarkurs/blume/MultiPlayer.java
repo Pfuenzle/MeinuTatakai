@@ -30,12 +30,22 @@ public class MultiPlayer {
 
     private boolean multiplayerRunning;
 
+    private static boolean init = false;
+
     public static String getServerStatus() {
         return serverStatus;
     }
 
     private void setServerStatus(String serverStatus) {
         this.serverStatus = serverStatus;
+    }
+
+    public GamePlayer getLocalPlayer() {
+        return localPlayer;
+    }
+
+    public void setLocalPlayer(GamePlayer localPlayer) {
+        this.localPlayer = localPlayer;
     }
 
     public GamePlayer getEnemy() {
@@ -46,32 +56,43 @@ public class MultiPlayer {
         this.enemy = enemy;
     }
 
-
-
     private static void parsePacket(String packet) {
         if (packet.substring(0, 2).equals("10")) {
             enemy.setUsername(packet.substring(3));
+            System.out.println("Set enemy username to " + packet.substring(3));
+            init = true;
         }
         else if (packet.substring(0, 2).equals("11")) {
             enemy.setRP(Integer.parseInt(packet.substring(3)));
+            init = true;
         }
         else if (packet.substring(0, 2).equals("12")) {
             enemy.setHealth(Double.parseDouble(packet.substring(3)));
+            init = true;
         }
         else if (packet.substring(0, 2).equals("13")) {
             enemy.setSpeed(Double.parseDouble(packet.substring(3)));
+            init = true;
         }
         else if (packet.substring(0, 2).equals("14")) {
             enemy.setPlayer(Integer.parseInt(packet.substring(3)));
+            init = true;
         }
         else if (packet.substring(0, 2).equals("15")) {
             enemy.setSkin(Integer.parseInt(packet.substring(3)));
+            init = true;
         }
         else if (packet.substring(0, 2).equals("16")) {
             enemy.setX(Double.parseDouble(packet.substring(3)));
+            init = true;
         }
         else if (packet.substring(0, 2).equals("17")) {
             enemy.setY(Double.parseDouble(packet.substring(3)));
+            init = true;
+        }
+        else if (packet.substring(0, 2).equals("18")) {
+            enemy.setDirection(Integer.parseInt(packet.substring(3)));
+            init = true;
         }
     }
 
@@ -96,7 +117,6 @@ public class MultiPlayer {
 
         final DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
 
-        outToClient.writeBytes("10x" + localPlayer.getUsername() + "\n");
         outToClient.writeBytes("11x" + String.valueOf(localPlayer.getRP()) + "\n");
         outToClient.writeBytes("12x" + String.valueOf(localPlayer.getHealth()) + "\n");
         outToClient.writeBytes("13x" + String.valueOf(localPlayer.getSpeed()) + "\n");
@@ -104,19 +124,45 @@ public class MultiPlayer {
         outToClient.writeBytes("15x" + String.valueOf(localPlayer.getSkin()) + "\n");
         outToClient.writeBytes("16x" + String.valueOf(localPlayer.getX()) + "\n");
         outToClient.writeBytes("17x" + String.valueOf(localPlayer.getY()) + "\n");
+        outToClient.writeBytes("18x" + String.valueOf(localPlayer.getDirection()) + "\n");
+        outToClient.writeBytes("10x" + localPlayer.getUsername() + "\n");
 
         new Thread(new Runnable() {
             public void run() {
+                BufferedReader inFromServer = null;
+                try {
+                    inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 String packet = null;
                 while(multiplayerRunning)
                 {
-
+                    try {
+                        packet = inFromServer.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Packet received: ");
+                    if(packet != null)
+                        System.out.println(packet);
+                    if(packet != null)
+                        parsePacket(packet);
+                    if(!init || enemy.getUsername().equals("null"))
+                    {
+                        try {
+                            outToClient.writeBytes("19x\n");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
                 try {
                     socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                //packet = null;
             }
         }).start();
     }
@@ -137,16 +183,28 @@ public class MultiPlayer {
 
         enemy = new GamePlayer();
 
-        enemy.setRP(12344321);
+        /*enemy.setRP(12344321);
         enemy.setUsername("gegnername");
         enemy.setHealth(100);
         enemy.setSpeed(10);
         enemy.setPlayer(1);
         enemy.setSkin(0);
         enemy.setX(0);
-        enemy.setX(0);
+        enemy.setX(0);*/
 
         startMultiPlayerThread();
+    }
+
+    public void moveLeft(float num) throws IOException, InterruptedException {
+        localPlayer.setX(localPlayer.getX() - num);
+        localPlayer.setDirection(-1);
+        localPlayer.sendUpdate(socket);
+    }
+
+    public void moveRight(float num) throws IOException, InterruptedException {
+        localPlayer.setX(localPlayer.getX() + num);
+        localPlayer.setDirection(1);
+        localPlayer.sendUpdate(socket);
     }
 
 }

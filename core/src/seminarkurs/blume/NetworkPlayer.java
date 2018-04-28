@@ -1,5 +1,14 @@
 package seminarkurs.blume;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.net.SocketHints;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * Created by Leon on 01.02.2018.
  */
@@ -78,6 +87,52 @@ public class NetworkPlayer {
             ret = ret + number_arr[i];
         }
         return ret;
+    }
+
+    public static void update()
+    {
+        String packettype = "1x0";
+        String packet = packettype + "x" + username;
+        SocketHints socketHints = new SocketHints();
+        Socket socket = null;
+        try
+        {
+            socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
+        }
+        catch(com.badlogic.gdx.utils.GdxRuntimeException e)
+        {
+            return;
+        }
+        try {
+            socket.getOutputStream().write(packet.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        final Socket finalSocket = socket;
+        new Thread(new Runnable() {
+            @Override
+            public void run () {
+                String resp;
+                try {
+                    resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    e.toString();
+                    Gdx.app.log("UserPacket", e.toString());
+                    return;
+                }
+                //Gdx.app.log("UserPacket", resp);
+                UserPacket user = new UserPacket(resp);
+                if(user.getRet()) {
+                    setRP(user.getRP());
+                    setWins(getWins());
+                    setLosses(user.getLosses());
+                }
+
+            }
+        }).start();
     }
 
 }

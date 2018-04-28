@@ -47,6 +47,9 @@ public class MultiplayerScreen implements Screen {
     private Button butSearch;
     private Button butCancel;
 
+    Socket rankedSocket = null;
+    DataOutputStream rankedOutputStream = null;
+
     private BitmapFont font;
 
     private float input_width;
@@ -188,9 +191,13 @@ public class MultiplayerScreen implements Screen {
         butCancel.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                try {
+                    rankedOutputStream.writeBytes("x5x9");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 dispose();
                 game.setScreen(new MultiplayerScreen(game));
-                //stop queue
                 return true;
             }
         });
@@ -200,21 +207,19 @@ public class MultiplayerScreen implements Screen {
             @Override
             public void run() {
                 inQueue = true;
-                Socket clientSocket = null;
                 try {
-                    clientSocket = new Socket("seminarkurs.pfuenzle.io", 1337);
+                    rankedSocket = new Socket("seminarkurs.pfuenzle.io", 1337);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                DataOutputStream outputStream = null;
                 try {
-                    outputStream = new DataOutputStream(clientSocket.getOutputStream());
+                    rankedOutputStream = new DataOutputStream(rankedSocket.getOutputStream());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 try {
-                    outputStream.writeBytes(enterPacket); //send packet to enter queue
+                    rankedOutputStream.writeBytes(enterPacket); //send packet to enter queue
                 } catch (IOException e) {
                     System.exit(1);
                     e.printStackTrace();
@@ -222,7 +227,7 @@ public class MultiplayerScreen implements Screen {
 
                 BufferedReader inFromServer = null;
                 try {
-                    inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    inFromServer = new BufferedReader(new InputStreamReader(rankedSocket.getInputStream()));
                 } catch (IOException e) {
                     System.exit(1);
                     e.printStackTrace();
@@ -253,13 +258,13 @@ public class MultiplayerScreen implements Screen {
                             inQueue = false;
                             inGame = true;
                             try {
-                                clientSocket.close();
+                                rankedSocket.close();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                             dispose();
                             try {
-                                game.setScreen(new MultiPlayerGameScreen(game, Integer.parseInt(port), enemy));
+                                game.setScreen(new MultiPlayerGameScreen(game, Integer.parseInt(port)));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             } catch (ClassNotFoundException e) {

@@ -299,6 +299,7 @@ public class LoginScreen implements Screen {
                                 Settings.setPassword("");
                                 Settings.setSavePass(false);
                             }
+                            NetworkPlayer.update();
                             dispose();
                             game.setScreen(new MainScreen(game));
                         }

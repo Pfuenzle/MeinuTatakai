@@ -1,17 +1,16 @@
 package seminarkurs.blume;
 
-import java.io.Serializable;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
-public class GamePlayer implements Serializable{
+public class GamePlayer{
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+    boolean isFilled = false;
 
     public GamePlayer()
     {
-
+        username = null;
     }
 
     private String username;
@@ -25,6 +24,8 @@ public class GamePlayer implements Serializable{
 
     private double x;
     private double y;
+
+    private int direction;
 
     public String getUsername() {
         return username;
@@ -94,4 +95,40 @@ public class GamePlayer implements Serializable{
     public void setY(double y) {
         this.y = y;
     }
+
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public void sendUpdate(Socket s) throws IOException, InterruptedException
+    {
+        Socket socket = s;
+        final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
+
+        outToClient.writeBytes("10x" + getUsername() + "\n");
+        System.out.println("Sent Username");
+        outToClient.writeBytes("11x" + String.valueOf(getRP()) + "\n");
+        System.out.println("Sent RP");
+        outToClient.writeBytes("12x" + String.valueOf(getHealth()) + "\n");
+        System.out.println("Sent health");
+        outToClient.writeBytes("13x" + String.valueOf(getSpeed()) + "\n");
+        System.out.println("Sent speed");
+        outToClient.writeBytes("14x" + String.valueOf(getPlayer()) + "\n");
+        System.out.println("Sent player");
+        outToClient.writeBytes("15x" + String.valueOf(getSkin()) + "\n");
+        System.out.println("Sent skin");
+        outToClient.writeBytes("16x" + String.valueOf(getX()) + "\n");
+        System.out.println("Sent x");
+        outToClient.writeBytes("17x" + String.valueOf(getY()) + "\n");
+        System.out.println("Sent y");
+        outToClient.writeBytes("18x" + String.valueOf(getDirection()) + "\n");
+        System.out.println("Sent direction");
+
+    }
+
 }
