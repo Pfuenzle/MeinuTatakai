@@ -21,6 +21,7 @@ public class AndroidLauncher extends AndroidApplication{
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useImmersiveMode = true;
+
 		String hwid_raw = Build.VERSION.RELEASE + Build.BRAND + Build.DEVICE + Build.FINGERPRINT;
 
 		String hwid = "";
