@@ -2,6 +2,8 @@ package seminarkurs.blume;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,6 +26,9 @@ public class MainScreen implements Screen {
     private Button butSingle;
     private Button butMulti;
     private Button butCareer;
+
+    float input_width;
+    float input_height;
 
     @Override
     public void show() {
@@ -76,8 +81,8 @@ public class MainScreen implements Screen {
 
     private void setupInterface()
     {
-        float input_width = game.getScreenX()/3;
-        float input_height = game.getScreenY()/12;
+        input_width = game.getScreenX()/3;
+        input_height = game.getScreenY()/12;
 
         butSingle = new TextButton("Singleplayer", uiSkin);
         butSingle.setTransform(true);

@@ -22,8 +22,8 @@ public class GamePlayer{
     private int player;
     private int skin;
 
-    private double x;
-    private double y;
+    private double x = 0;
+    private double y = 0;
 
     private int direction;
 

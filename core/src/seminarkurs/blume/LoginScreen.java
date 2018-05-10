@@ -44,6 +44,8 @@ public class LoginScreen implements Screen {
     private int ret_type = 0;
     private String ret_text = "";
 
+    private BitmapFont font_title;
+
     //PopUp pop = new PopUp(stage, "text");
 
     @Override
@@ -55,6 +57,7 @@ public class LoginScreen implements Screen {
     public void render(float delta) {
         stage.getBatch().begin();
         renderLogin(stage);
+        font_title.draw(stage.getBatch(), "Meinu Tatakai", (int)(game.getScreenX() / 4), game.getScreenY() / 5 * 4);
         //pop.render();
         stage.getBatch().end();
         stage.act();
@@ -309,6 +312,10 @@ public class LoginScreen implements Screen {
             }
         });
         stage.addActor(button_log);
+
+        font_title = new BitmapFont(Gdx.files.internal("skin/raw/font-title-export.fnt"));
+        font_title.getData().setScale(4f);
+        font_title.setColor(25, 105, 180, 255);
     }
 
 

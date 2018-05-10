@@ -17,7 +17,7 @@ import java.net.Socket;
  */
 
 public class MultiPlayer {
-    private String SERVER = "seminarkurs.pfuenzle.io";
+    private String SERVER = "meinutatakai.pfuenzle.io";
     private int PORT;
 
     private Socket socket;
@@ -111,7 +111,7 @@ public class MultiPlayer {
         setServerStatus(packet.substring(3, packet.length()));
     }
 
-    public void startMultiPlayerThread() throws IOException, ClassNotFoundException {
+    public void startMultiPlayerThread() throws IOException, ClassNotFoundException, InterruptedException {
         socket = new Socket(SERVER,PORT); //verbinde zu server
         multiplayerRunning = true;
 
@@ -148,7 +148,7 @@ public class MultiPlayer {
                         System.out.println(packet);
                     if(packet != null)
                         parsePacket(packet);
-                    if(!init || enemy.getUsername().equals("null"))
+                    if(!init/* || enemy.getUsername().equals("null")*/)
                     {
                         try {
                             outToClient.writeBytes("19x\n");
@@ -192,7 +192,11 @@ public class MultiPlayer {
         enemy.setX(0);
         enemy.setX(0);*/
 
-        startMultiPlayerThread();
+        try {
+            startMultiPlayerThread();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void moveLeft(float num) throws IOException, InterruptedException {
