@@ -156,7 +156,6 @@ public class CareerScreen implements Screen {
         butBack = new TextButton("<----", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
-        //butBack.setSize(input_width / 3, input_height);
         butBack.setPosition(game.getScreenX()/25, game.getScreenY()/15*13);
         butBack.addListener(new InputListener(){
             @Override

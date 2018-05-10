@@ -123,7 +123,6 @@ public class NetworkPlayer {
                     Gdx.app.log("UserPacket", e.toString());
                     return;
                 }
-                //Gdx.app.log("UserPacket", resp);
                 UserPacket user = new UserPacket(resp);
                 if(user.getRet()) {
                     setRP(user.getRP());

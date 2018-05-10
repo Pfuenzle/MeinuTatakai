@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -30,23 +31,21 @@ import java.io.InputStreamReader;
 
 public class LoginScreen implements Screen {
 
-    final MyGdxGame game;
+    private final MyGdxGame game;
 
     private Stage stage;
 
     private Skin uiSkin;
 
-    Button button_reg;
-    Button button_log;
-
-    private BitmapFont font_msg;
+    private Button button_reg;
+    private Button button_log;
 
     private int ret_type = 0;
     private String ret_text = "";
 
+    private BitmapFont font_msg;
     private BitmapFont font_title;
-
-    //PopUp pop = new PopUp(stage, "text");
+    private BitmapFont font_japanese;
 
     @Override
     public void show() {
@@ -56,9 +55,9 @@ public class LoginScreen implements Screen {
     @Override
     public void render(float delta) {
         stage.getBatch().begin();
-        renderLogin(stage);
-        font_title.draw(stage.getBatch(), "Meinu Tatakai", (int)(game.getScreenX() / 4), game.getScreenY() / 5 * 4);
-        //pop.render();
+        renderLogin();
+        font_title.draw(stage.getBatch(), "Meinu Tatakai", (int)(game.getScreenX() / 4.5), (int)(game.getScreenY() / 5 * 4)); //Rendere Titel
+        font_japanese.draw(stage.getBatch(), "雌犬戦い", (int)(game.getScreenX() / 2 * 1.5), (int)(game.getScreenY() / 5 * 4)); //Rendere Titel
         stage.getBatch().end();
         stage.act();
         stage.draw();
@@ -93,19 +92,17 @@ public class LoginScreen implements Screen {
     {
         this.game = game;
 
-        font_msg = new BitmapFont();
-        font_msg.setColor(Color.RED);
-        font_msg.getData().setScale(3f);
-
         stage = game.getStage();
         uiSkin = game.getSkin();
 
-        setupInterfaces();
+        initFont();
+
+        initInterfaces();
 
         Gdx.input.setInputProcessor(stage);
     }
 
-    public void renderLogin(Stage stage)
+    public void renderLogin()
     {
         int msg_x = game.getScreenX()/3;
         int msg_y = game.getScreenY()/12*2;
@@ -121,7 +118,24 @@ public class LoginScreen implements Screen {
 
     }
 
-    private void setupInterfaces()
+    public void initFont()
+    {
+        font_msg = new BitmapFont();
+        font_msg.setColor(Color.RED);
+        font_msg.getData().setScale(3f);
+
+        font_title = new BitmapFont(Gdx.files.internal("skin/raw/font-title-export.fnt"));
+        font_title.getData().setScale(4f);
+        font_title.setColor(25, 105, 180, 255);
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("japanese.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 12;
+        font_japanese = generator.generateFont(parameter); // font size 12 pixels
+        generator.dispose();
+    }
+
+    private void initInterfaces()
     {
         float input_width = game.getScreenX()/3;
         float input_height = game.getScreenY()/12;
@@ -169,7 +183,7 @@ public class LoginScreen implements Screen {
         button_reg.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                button_reg.setDisabled(true);
+                button_reg.setDisabled(true); //Deaktiviere Buttons, um mehrmaliges Klicken zu verhindern
                 button_log.setDisabled(true);
                 String packettype = "0x2";
                 String username = usernameTextField.getText();
@@ -186,7 +200,7 @@ public class LoginScreen implements Screen {
                 {
                     ret_type = 1;
                     ret_text = "Server unreachable";
-                    button_reg.setDisabled(false);
+                    button_reg.setDisabled(false); //Aktviere Buttons wieder
                     button_log.setDisabled(false);
                     return false;
                 }
@@ -211,9 +225,6 @@ public class LoginScreen implements Screen {
                         }
                         RegisterPacket packet_ret = new RegisterPacket(resp);
                         ret_text = packet_ret.getMsg();
-                        //Gdx.app.log("AccountPacket", resp);
-                        //Gdx.app.log("AccountPacket", String.valueOf(packet_ret.getReturn()));
-                        //Gdx.app.log("AccountPacket", packet_ret.getMsg());
                         ret_type = 2;
                         button_reg.setDisabled(false);
                         button_log.setDisabled(false);
@@ -243,7 +254,7 @@ public class LoginScreen implements Screen {
                 {
                     socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
                 }
-                catch(com.badlogic.gdx.utils.GdxRuntimeException e)
+                catch(com.badlogic.gdx.utils.GdxRuntimeException e) //Verbindung fehlgeschlagen
                 {
                     ret_type = 1;
                     ret_text = "Server unreachable";
@@ -277,12 +288,8 @@ public class LoginScreen implements Screen {
                         LoginPacket packet_ret = new LoginPacket(resp);
                         ret_text = packet_ret.getMsg();
                         ret_type = 1;
-                        //Gdx.app.log("LoginPacket", resp);
-                        //Gdx.app.log("LoginPacket", String.valueOf(packet_ret.getReturn()));
-                        //Gdx.app.log("LoginPacket", packet_ret.getMsg());
                         if(packet_ret.getReturn())
                         {
-                            //game.sOldScreen = new LoginScreen(game);
                             if(userCheckBox.isChecked())
                             {
                                 Settings.setUsername(username);
@@ -302,7 +309,7 @@ public class LoginScreen implements Screen {
                                 Settings.setPassword("");
                                 Settings.setSavePass(false);
                             }
-                            NetworkPlayer.update();
+                            NetworkPlayer.update(); //Update Stats von Spieler
                             dispose();
                             game.setScreen(new MainScreen(game));
                         }
@@ -312,10 +319,6 @@ public class LoginScreen implements Screen {
             }
         });
         stage.addActor(button_log);
-
-        font_title = new BitmapFont(Gdx.files.internal("skin/raw/font-title-export.fnt"));
-        font_title.getData().setScale(4f);
-        font_title.setColor(25, 105, 180, 255);
     }
 
 
