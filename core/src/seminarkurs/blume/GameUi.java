@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -21,40 +22,36 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 public class GameUi {
     private final MyGdxGame game;
     private final Skin uiSkin;
+    Stage stage;
 
-    private int screen_width;
-    private int screen_height;
-
-
+    ProgressBar healthBar;
+    Touchpad touchpad;
     private ImageButton butAttack;
     private Button butBack;
-
-
-    private BitmapFont font_Name;
-
-
-    private Touchpad touchpad;
     private Touchpad.TouchpadStyle touchpadStyle;
     private Skin touchpadSkin;
     private Drawable touchBackground;
     private Drawable touchKnob;
 
-    private Texture playerTexture;
-    private Sprite playerSprite;
-    private Texture enemyTexture;
-    private Sprite enemySprite;
-
-
-
-    private ProgressBar healthBar;
-
-    GameUi(MyGdxGame game){
+    GameUi(MyGdxGame game) {
         this.game = game;
+        this.stage = game.getStage();
         this.uiSkin = game.getSkin();
+
+        setupInterface();
 
     }
 
-    ImageButton initAttackButton() {
+    void setupInterface() {
+        stage.addActor(initTouchpad());
+        stage.addActor(initHealthBar(500, 1000));
+
+        stage.addActor(initAttackButton());
+        stage.addActor(initPauseButton());
+
+    }
+
+    private ImageButton initAttackButton() {
         butAttack = new ImageButton(uiSkin);
         butAttack.setTransform(true);
         butAttack.setScale(2f);
@@ -70,7 +67,8 @@ public class GameUi {
         });
         return butAttack;
     }
-    ProgressBar initHealthBar(int x, int y) {
+
+    private ProgressBar initHealthBar(int x, int y) {
         healthBar = new ProgressBar(0, 1000, 10, false, uiSkin);
         healthBar.setPosition(x, y);
         healthBar.setScale(1);
@@ -78,26 +76,7 @@ public class GameUi {
         return healthBar;
     }
 
-    Sprite initPlayerSprite() {
-        //Create block sprite
-        playerTexture = new Texture(Gdx.files.internal("player/bild1.png"));
-        playerSprite = new Sprite(playerTexture);
-        //Set position to centre of the screen
-        playerSprite.setPosition(500, 50);
-        playerSprite.scale(0.1f);
-        return playerSprite;
-    }
-    Sprite initEnemy() {
-        //Create block sprite
-        enemyTexture = new Texture(Gdx.files.internal("player/enemySprite.png"));
-        enemySprite = new Sprite(enemyTexture);
-        //Set position to centre of the screen
-        enemySprite.setPosition(500, 50);
-        enemySprite.scale(0.1f);
-        return enemySprite;
-    }
-
-    Touchpad initTouchpad() {
+    private Touchpad initTouchpad() {
         //Create a touchpad skin
         touchpadSkin = new Skin();
         //Set background image
@@ -122,7 +101,7 @@ public class GameUi {
 
     }
 
-    Button initPauseButton() {
+    private Button initPauseButton() {
         butBack = new TextButton("||", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);

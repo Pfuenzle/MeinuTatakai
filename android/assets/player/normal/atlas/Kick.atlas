@@ -1,0 +1,34 @@
+
+Kick.png
+size: 2048,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Kick00
+  rotate: false
+  xy: 788, 2
+  size: 320, 802
+  orig: 320, 802
+  offset: 0, 0
+  index: -1
+Kick01
+  rotate: false
+  xy: 411, 25
+  size: 375, 779
+  orig: 375, 779
+  offset: 0, 0
+  index: -1
+Kick03
+  rotate: false
+  xy: 411, 25
+  size: 375, 779
+  orig: 375, 779
+  offset: 0, 0
+  index: -1
+Kick02
+  rotate: false
+  xy: 2, 15
+  size: 407, 789
+  orig: 407, 789
+  offset: 0, 0
+  index: -1
