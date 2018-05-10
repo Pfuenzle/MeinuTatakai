@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -45,7 +46,8 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
     private BitmapFont statusFont;
 
-
+    Texture texture1;
+    private Sprite sprite;
 
     Animation runningAnimation;
     float animationDuration = 0.115f;
@@ -67,10 +69,24 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         currentFrame = (TextureRegion) runningAnimation.getKeyFrame(elapsed_time);
 
         stage.getBatch().begin();
-        stage.getBatch().draw(currentFrame, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY(), 600, 600);
+        //sprite.setPosition((float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
+        //sprite.draw(stage.getBatch());
+        //stage.getBatch().draw(currentFrame, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY(), 600, 600);
+        String enemy = "Enemy";
+        String you = "You";
+        if(MP.getEnemy().getDirection() == -1)
+            enemy = "<-- GEGNER";
+        else
+            enemy = "GEGNER -->";
+        if(MP.getLocalPlayer().getDirection() == -1)
+            you = "<-- DU";
+        else
+            you = "DU -->";
         game.font_yellow.draw(stage.getBatch(), "Server status: " + MP.getServerStatus(), screen_width/3, screen_height/20*16);
-        game.font_yellow.draw(stage.getBatch(), "Your X: " + MP.getLocalPlayer().getX() + " Y: " + MP.getLocalPlayer().getY(), screen_width/3, screen_height/20*13);
-        game.font_yellow.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + " Y: " + MP.getEnemy().getY(), screen_width/3, screen_height/20*10);
+        game.font_yellow.draw(stage.getBatch(), "Your X: " + MP.getLocalPlayer().getX() + " Y: " + MP.getLocalPlayer().getY() + " Direction: " + you, screen_width/3, screen_height/20*13);
+        game.font_yellow.draw(stage.getBatch(), enemy, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
+        game.font_yellow.draw(stage.getBatch(), you, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
+        game.font_yellow.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + " Y: " + MP.getEnemy().getY() + " Direction: " + enemy, screen_width/3, screen_height/20*10);
         stage.getBatch().end();
         stage.act();
         stage.draw();
@@ -119,6 +135,8 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         //statusFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
 
+        texture1 = new Texture(Gdx.files.internal("tritt/tritt_1.png"));
+        sprite = new Sprite(texture1);
 
         //Animation
         atlas = new TextureAtlas(Gdx.files.internal("tritt/tritt.atlas"));
