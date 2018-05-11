@@ -56,8 +56,8 @@ public class LoginScreen implements Screen {
     public void render(float delta) {
         stage.getBatch().begin();
         renderLogin();
-        font_title.draw(stage.getBatch(), "Meinu Tatakai", (int)(game.getScreenX() / 4.5), (int)(game.getScreenY() / 5 * 4)); //Rendere Titel
-        font_japanese.draw(stage.getBatch(), "雌犬戦い", (int)(game.getScreenX() / 2 * 1.5), (int)(game.getScreenY() / 5 * 4)); //Rendere Titel
+        font_title.draw(stage.getBatch(), "Meinu Tatakai", (int)(game.getScreenX() / 7), (int)(game.getScreenY() / 5 * 4.4)); //Rendere Titel
+        font_japanese.draw(stage.getBatch(), "雌犬戦い", (int)(game.getScreenX() / 2), (int)(game.getScreenY() / 5 * 3.5)); //Rendere Titel
         stage.getBatch().end();
         stage.act();
         stage.draw();
@@ -124,14 +124,33 @@ public class LoginScreen implements Screen {
         font_msg.setColor(Color.RED);
         font_msg.getData().setScale(3f);
 
-        font_title = new BitmapFont(Gdx.files.internal("skin/raw/font-title-export.fnt"));
+       /* font_title = new BitmapFont(Gdx.files.internal("skin/raw/font-title-export.fnt"));
         font_title.getData().setScale(4f);
         font_title.setColor(25, 105, 180, 255);
+        font_title.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);*/
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("japanese.ttf"));
+        String TITLE_FONT_CHARS = "Meinu Tatakai";
+
+        final String TITLE_FONT_PATH = "Action_Man.ttf";
+        FreeTypeFontGenerator title_generator = new FreeTypeFontGenerator(Gdx.files.internal(TITLE_FONT_PATH));
+        FreeTypeFontGenerator.FreeTypeFontParameter title_parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        title_parameter.characters = TITLE_FONT_CHARS;
+        title_parameter.size = 200;
+        title_parameter.borderColor = Color.BLACK;
+        title_parameter.borderWidth = 3;
+        title_parameter.color = Color.BLUE;
+        font_title = title_generator.generateFont(title_parameter);
+        title_generator.dispose();
+
+        String FONT_CHARS = "雌犬戦い";
+
+        final String FONT_PATH = "japanese.ttf";
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 12;
-        font_japanese = generator.generateFont(parameter); // font size 12 pixels
+        parameter.characters = FONT_CHARS;
+        parameter.size = 160;
+        parameter.color = Color.PINK;
+        font_japanese = generator.generateFont(parameter);
         generator.dispose();
     }
 
@@ -147,7 +166,7 @@ public class LoginScreen implements Screen {
         if(Settings.isSaveUser())
             usernameTextField.setText(Settings.getUsername());
         stage.addActor(usernameTextField);
-
+        
         final TextField passwordTextField = new TextField("", uiSkin);
         passwordTextField.setPosition(input_width,input_height*4.5f );
         passwordTextField.setSize(input_width, input_height);

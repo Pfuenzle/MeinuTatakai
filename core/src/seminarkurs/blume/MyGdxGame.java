@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -104,15 +105,19 @@ public class MyGdxGame extends Game {
 
 	private void initFPS()
 	{
-		font_yellow = new BitmapFont();
-		font_yellow.getData().setScale(4f);
-		font_yellow.setColor(Color.YELLOW);
+		final String FONT_PATH = "OpenSans.ttf";
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 65;
+		parameter.color = Color.YELLOW;
+		font_yellow = generator.generateFont(parameter);
+		generator.dispose();
 	}
 
 	private void renderFPS()
 	{
 		if(!deviceName.equals("nicisilver")) {
-			font_yellow.draw(stage.getBatch(), "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), screen_width / 20 * 18, screen_height / 20 * 19);
+			font_yellow.draw(stage.getBatch(), "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), screen_width / 20 * 17, screen_height / 20 * 19);
 			font_yellow.draw(stage.getBatch(), "SESSION: " + NetworkPlayer.getSESSION(), screen_width / 20 * 10, screen_height / 20 * 19);
 		}
 	}
