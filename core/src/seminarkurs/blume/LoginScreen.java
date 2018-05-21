@@ -213,7 +213,7 @@ public class LoginScreen implements Screen {
                 Socket socket = null;
                 try
                 {
-                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
+                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "89.245.247.244", 1337, socketHints);
                 }
                 catch(com.badlogic.gdx.utils.GdxRuntimeException e)
                 {
@@ -271,7 +271,7 @@ public class LoginScreen implements Screen {
                 Socket socket = null;
                 try
                 {
-                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
+                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "89.245.247.244", 1337, socketHints);
                 }
                 catch(com.badlogic.gdx.utils.GdxRuntimeException e) //Verbindung fehlgeschlagen
                 {

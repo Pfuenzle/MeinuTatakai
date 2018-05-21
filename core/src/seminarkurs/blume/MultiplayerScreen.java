@@ -208,7 +208,7 @@ public class MultiplayerScreen implements Screen {
             public void run() {
                 inQueue = true;
                 try {
-                    rankedSocket = new Socket("seminarkurs.pfuenzle.io", 1337);
+                    rankedSocket = new Socket("89.245.247.244", 1337);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

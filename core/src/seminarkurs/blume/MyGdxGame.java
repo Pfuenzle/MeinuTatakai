@@ -7,8 +7,11 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -16,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Array;
 
 public class MyGdxGame extends Game {
 
@@ -33,6 +37,7 @@ public class MyGdxGame extends Game {
 	private static Sprite backgroundSprite;
 
 	private String deviceName;
+
 	@Override
 	public void create () {
 		stage = new Stage();
@@ -46,6 +51,8 @@ public class MyGdxGame extends Game {
 		initBackground();
 
 		initFPS();
+
+		seminarkurs.blume.Animation.initPlayer2();
 
 		this.screen_width = Gdx.graphics.getWidth();
 		this.screen_height = Gdx.graphics.getHeight();
@@ -109,7 +116,7 @@ public class MyGdxGame extends Game {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 65;
-		parameter.color = Color.YELLOW;
+		parameter.color = Color.BLACK;
 		font_yellow = generator.generateFont(parameter);
 		generator.dispose();
 	}
@@ -142,5 +149,6 @@ public class MyGdxGame extends Game {
 		NetworkPlayer.setHWID(HWID);
 		this.deviceName = deviceName;
 	}
+
 
 }

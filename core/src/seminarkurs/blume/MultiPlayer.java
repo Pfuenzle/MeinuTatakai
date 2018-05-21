@@ -17,7 +17,7 @@ import java.net.Socket;
  */
 
 public class MultiPlayer {
-    private String SERVER = "meinutatakai.pfuenzle.io";
+    private String SERVER = "89.245.247.244";
     private int PORT;
 
     private Socket socket;
@@ -57,13 +57,21 @@ public class MultiPlayer {
     }
 
     private static void parsePacket(String packet) {
+        if(packet.length() < 2)
+            return;
         if (packet.substring(0, 2).equals("10")) {
             enemy.setUsername(packet.substring(3));
             System.out.println("Set enemy username to " + packet.substring(3));
             init = true;
         }
         else if (packet.substring(0, 2).equals("11")) {
-            enemy.setRP(Integer.parseInt(packet.substring(3)));
+            try{
+                enemy.setRP(Integer.parseInt(packet.substring(3)));
+            }
+            catch (Exception e)
+            {
+
+            }
             init = true;
         }
         else if (packet.substring(0, 2).equals("12")) {
