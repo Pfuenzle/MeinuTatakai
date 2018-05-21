@@ -80,10 +80,8 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             you = "<-- DU";
         else
             you = "DU -->";
-        game.font_yellow.draw(stage.getBatch(), "Dir: " + MP.getLocalPlayer().getDirection(), screen_width/3, screen_height/20*16);
+        game.font_yellow.draw(stage.getBatch(), "Dir: " + MP.getLocalPlayer().getDirection() + " NR: " + MultiPlayer.getPlayerNr(), screen_width/3, screen_height/20*16);
         game.font_yellow.draw(stage.getBatch(), "Your X: " + MP.getLocalPlayer().getX() + " Y: " + MP.getLocalPlayer().getY() + " Direction: " + you, screen_width/3, screen_height/20*13);
-        game.font_yellow.draw(stage.getBatch(), enemy, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
-        game.font_yellow.draw(stage.getBatch(), you, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
         game.font_yellow.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + " Y: " + MP.getEnemy().getY() + " Direction: " + enemy, screen_width/3, screen_height/20*10);
         stage.getBatch().end();
         stage.act();
@@ -92,7 +90,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
     private void animatePlayer1() throws IOException, InterruptedException {
         boolean animation_done = false;
-        if(butRight.isPressed() && MP.getLocalPlayer().getX() + walk_width < 1920)
+        if(butRight.isPressed() && MP.getLocalPlayer().getX() + walk_width < 1660)
         {
             moveright = true;
             Animation.player1_walk_elapsed_time += Gdx.graphics.getDeltaTime();
@@ -139,16 +137,15 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 animation_done = true;
             }
             if(!player1_hasSentJump) {
-                MP.jump(250);
+                MP.moveUp(250);
                 player1_hasSentJump = true;
             }
             sprung++;
             if(sprung > 24/* && seminarkurs.blume.Animation.player1_jumpAnimation.isAnimationFinished(seminarkurs.blume.Animation.player1_jump_elapsed_time)*/)
             {
-                MP.jump(-250);
+                MP.moveDown(250);
                 player1_hasSentJump = false;
                 sprung = 0;
-                MP.getLocalPlayer().setY(MP.getLocalPlayer().getY() - 250);
                 seminarkurs.blume.Animation.player1_jump_elapsed_time = 0;
                 isInJump = false;
             }
@@ -310,7 +307,6 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(!isInJump) {
-                    MP.getLocalPlayer().setY(MP.getLocalPlayer().getY() + 250);
                     isInJump = true;
                 }
                 return true;

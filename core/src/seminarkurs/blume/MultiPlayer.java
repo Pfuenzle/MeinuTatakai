@@ -28,7 +28,7 @@ public class MultiPlayer {
         MultiPlayer.playerNr = playerNr;
     }
 
-    static int playerNr = 0;
+    private static int playerNr = 0;
 
     private Socket socket;
 
@@ -161,6 +161,7 @@ public class MultiPlayer {
             init = true;
         }
         else if (packet.substring(0, 2).equals("20")) {
+            System.out.println("PlayerNr: " + packet.substring(3));
             try {
                 playerNr = Integer.parseInt(packet.substring(3));
             }
@@ -218,10 +219,13 @@ public class MultiPlayer {
                     try {
                         packet = inFromServer.readLine();
                         if(getPlayerNr() == 2 && !hasStartPos) {
-                            getLocalPlayer().setX(1000);
+                            getLocalPlayer().setX(1660);
+                            getLocalPlayer().sendUpdate(socket);
                             hasStartPos = true;
                         }
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     System.out.println("Packet received: ");
@@ -260,7 +264,7 @@ public class MultiPlayer {
         localPlayer.setPlayer(1);
         localPlayer.setSkin(0);
         localPlayer.setX(0);
-        localPlayer.setX(0);
+        localPlayer.setY(0);
 
         enemy = new GamePlayer();
 
@@ -271,7 +275,7 @@ public class MultiPlayer {
         enemy.setPlayer(1);
         enemy.setSkin(0);
         enemy.setX(0);
-        enemy.setX(0);*/
+        enemy.setY(0);*/
 
         try {
             startMultiPlayerThread();
@@ -292,8 +296,13 @@ public class MultiPlayer {
         localPlayer.sendUpdate(socket);
     }
 
-    public void jump(float num) throws IOException, InterruptedException {
+    public void moveUp(float num) throws IOException, InterruptedException {
         localPlayer.setY(localPlayer.getY() + num);
+        localPlayer.sendUpdate(socket);
+    }
+
+    public void moveDown(float num) throws IOException, InterruptedException {
+        localPlayer.setY(localPlayer.getY() - num);
         localPlayer.sendUpdate(socket);
     }
 
