@@ -20,6 +20,16 @@ public class MultiPlayer {
     private String SERVER = "89.245.247.244";
     private int PORT;
 
+    public static int getPlayerNr() {
+        return playerNr;
+    }
+
+    public static void setPlayerNr(int playerNr) {
+        MultiPlayer.playerNr = playerNr;
+    }
+
+    static int playerNr = 0;
+
     private Socket socket;
 
     private GamePlayer localPlayer;
@@ -60,7 +70,13 @@ public class MultiPlayer {
         if(packet.length() < 2)
             return;
         if (packet.substring(0, 2).equals("10")) {
-            enemy.setUsername(packet.substring(3));
+            try {
+                enemy.setUsername(packet.substring(3));
+            }
+            catch(Exception e)
+            {
+
+            }
             System.out.println("Set enemy username to " + packet.substring(3));
             init = true;
         }
@@ -75,31 +91,83 @@ public class MultiPlayer {
             init = true;
         }
         else if (packet.substring(0, 2).equals("12")) {
-            enemy.setHealth(Double.parseDouble(packet.substring(3)));
+            try {
+                enemy.setHealth(Double.parseDouble(packet.substring(3)));
+            }
+            catch(Exception e)
+            {
+
+            }
             init = true;
         }
         else if (packet.substring(0, 2).equals("13")) {
-            enemy.setSpeed(Double.parseDouble(packet.substring(3)));
+            try {
+                enemy.setSpeed(Double.parseDouble(packet.substring(3)));
+            }
+            catch(Exception e)
+            {
+
+            }
             init = true;
         }
         else if (packet.substring(0, 2).equals("14")) {
-            enemy.setPlayer(Integer.parseInt(packet.substring(3)));
+            try {
+                enemy.setPlayer(Integer.parseInt(packet.substring(3)));
+            }
+            catch(Exception e)
+            {
+
+            }
             init = true;
         }
         else if (packet.substring(0, 2).equals("15")) {
-            enemy.setSkin(Integer.parseInt(packet.substring(3)));
+            try {
+                enemy.setSkin(Integer.parseInt(packet.substring(3)));
+            }
+            catch(Exception e)
+            {
+
+            }
             init = true;
         }
         else if (packet.substring(0, 2).equals("16")) {
-            enemy.setX(Double.parseDouble(packet.substring(3)));
+            try {
+                enemy.setX(Double.parseDouble(packet.substring(3)));
+            }
+            catch(Exception e)
+            {
+
+            }
             init = true;
         }
         else if (packet.substring(0, 2).equals("17")) {
-            enemy.setY(Double.parseDouble(packet.substring(3)));
+            try {
+                enemy.setY(Double.parseDouble(packet.substring(3)));
+            }
+            catch(Exception e)
+            {
+
+            }
             init = true;
         }
         else if (packet.substring(0, 2).equals("18")) {
-            enemy.setDirection(Integer.parseInt(packet.substring(3)));
+            try {
+                enemy.setDirection(Integer.parseInt(packet.substring(3)));
+            }
+            catch(Exception e)
+            {
+
+            }
+            init = true;
+        }
+        else if (packet.substring(0, 2).equals("20")) {
+            try {
+                playerNr = Integer.parseInt(packet.substring(3));
+            }
+            catch(Exception e)
+            {
+
+            }
             init = true;
         }
     }
@@ -137,6 +205,7 @@ public class MultiPlayer {
 
         new Thread(new Runnable() {
             public void run() {
+                boolean hasStartPos = false;
                 BufferedReader inFromServer = null;
                 try {
                     inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -148,6 +217,10 @@ public class MultiPlayer {
                 {
                     try {
                         packet = inFromServer.readLine();
+                        if(getPlayerNr() == 2 && !hasStartPos) {
+                            getLocalPlayer().setX(1000);
+                            hasStartPos = true;
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -216,6 +289,11 @@ public class MultiPlayer {
     public void moveRight(float num) throws IOException, InterruptedException {
         localPlayer.setX(localPlayer.getX() + num);
         localPlayer.setDirection(1);
+        localPlayer.sendUpdate(socket);
+    }
+
+    public void jump(float num) throws IOException, InterruptedException {
+        localPlayer.setY(localPlayer.getY() + num);
         localPlayer.sendUpdate(socket);
     }
 

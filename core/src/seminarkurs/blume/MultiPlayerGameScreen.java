@@ -47,6 +47,10 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
     boolean schlag = false;
     int sprung = 0;
 
+    int walk_width = 10;
+
+    boolean player1_hasSentJump = false;
+
     @Override
     public void show() {
 
@@ -56,7 +60,13 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
     public void render(float delta) {
         stage.getBatch().begin();
 
-        animatePlayer1();
+        try {
+            animatePlayer1();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         animatePlayer2();
 
@@ -80,23 +90,18 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         stage.draw();
     }
 
-    private void animatePlayer1()
-    {
-    }
-
-    private void animatePlayer2()
-    {
+    private void animatePlayer1() throws IOException, InterruptedException {
         boolean animation_done = false;
-        if(butRight.isPressed())
+        if(butRight.isPressed() && MP.getLocalPlayer().getX() + walk_width < 1920)
         {
             moveright = true;
-            Animation.player2_walk_elapsed_time += Gdx.graphics.getDeltaTime();
-            Animation.player2_walkCurrentFrame = (TextureRegion) Animation.player2_walkAnimation.getKeyFrame(Animation.player2_walk_elapsed_time);
-            stage.getBatch().draw(Animation.player2_walkCurrentFrame, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
+            Animation.player1_walk_elapsed_time += Gdx.graphics.getDeltaTime();
+            Animation.player1_walkCurrentFrame = (TextureRegion) Animation.player1_walkAnimation.getKeyFrame(Animation.player1_walk_elapsed_time);
+            stage.getBatch().draw(Animation.player1_walkCurrentFrame, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
             animation_done = true;
 
             try {
-                MP.moveRight(10);
+                MP.moveRight(walk_width);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -104,20 +109,20 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             }
         }
 
-        if(butLeft.isPressed())
+        if(butLeft.isPressed() && MP.getLocalPlayer().getX() - walk_width > 0)
         {
             moveleft = true;
-            Animation.player2_walk_elapsed_time += Gdx.graphics.getDeltaTime();
-            Animation.player2_walkCurrentFrame = (TextureRegion) Animation.player2_walkAnimation.getKeyFrame(Animation.player2_walk_elapsed_time);
-            Animation.player2_walkCurrentFrame.flip(true, false);
+            Animation.player1_walk_elapsed_time += Gdx.graphics.getDeltaTime();
+            Animation.player1_walkCurrentFrame = (TextureRegion) Animation.player1_walkAnimation.getKeyFrame(Animation.player1_walk_elapsed_time);
+            Animation.player1_walkCurrentFrame.flip(true, false);
             if(!animation_done) {
-                stage.getBatch().draw(Animation.player2_walkCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                stage.getBatch().draw(Animation.player1_walkCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
                 animation_done = true;
             }
-            Animation.player2_walkCurrentFrame.flip(true, false);
+            Animation.player1_walkCurrentFrame.flip(true, false);
 
             try {
-                MP.moveLeft(10);
+                MP.moveLeft(walk_width);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -127,54 +132,70 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
         if(isInJump)
         {
-            seminarkurs.blume.Animation.player2_jump_elapsed_time += Gdx.graphics.getDeltaTime();
-            seminarkurs.blume.Animation.player2_jumpCurrentFrame = (TextureRegion) seminarkurs.blume.Animation.player2_jumpAnimation.getKeyFrame(seminarkurs.blume.Animation.player2_jump_elapsed_time);
+            seminarkurs.blume.Animation.player1_jump_elapsed_time += Gdx.graphics.getDeltaTime();
+            seminarkurs.blume.Animation.player1_jumpCurrentFrame = (TextureRegion) seminarkurs.blume.Animation.player1_jumpAnimation.getKeyFrame(seminarkurs.blume.Animation.player1_jump_elapsed_time);
             if(!animation_done) {
-                stage.getBatch().draw(seminarkurs.blume.Animation.player2_jumpCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                stage.getBatch().draw(seminarkurs.blume.Animation.player1_jumpCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
                 animation_done = true;
             }
+            if(!player1_hasSentJump) {
+                MP.jump(250);
+                player1_hasSentJump = true;
+            }
             sprung++;
-            if(sprung > 24 && seminarkurs.blume.Animation.player2_jumpAnimation.isAnimationFinished(seminarkurs.blume.Animation.player2_jump_elapsed_time))
+            if(sprung > 24/* && seminarkurs.blume.Animation.player1_jumpAnimation.isAnimationFinished(seminarkurs.blume.Animation.player1_jump_elapsed_time)*/)
             {
+                MP.jump(-250);
+                player1_hasSentJump = false;
                 sprung = 0;
                 MP.getLocalPlayer().setY(MP.getLocalPlayer().getY() - 250);
-                seminarkurs.blume.Animation.player2_jump_elapsed_time = 0;
+                seminarkurs.blume.Animation.player1_jump_elapsed_time = 0;
                 isInJump = false;
             }
         }
 
         if(schlag)
         {
-            Animation.player2_schlag_elapsed_time += Gdx.graphics.getDeltaTime();
-            Animation.player2_schlagCurrentFrame = (TextureRegion) Animation.player2_schlagAnimation.getKeyFrame(Animation.player2_schlag_elapsed_time);
+            Animation.player1_schlag_elapsed_time += Gdx.graphics.getDeltaTime();
+            Animation.player1_schlagCurrentFrame = (TextureRegion) Animation.player1_schlagAnimation.getKeyFrame(Animation.player1_schlag_elapsed_time);
             int direction = MP.getLocalPlayer().getDirection();
             if(direction == -1) {
-                Animation.player2_schlagCurrentFrame.flip(true, false);
+                Animation.player1_schlagCurrentFrame.flip(true, false);
                 if(!animation_done)
                 {
-                    stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                    stage.getBatch().draw(Animation.player1_schlagCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
                     animation_done = true;
                 }
-                Animation.player2_schlagCurrentFrame.flip(true, false);
+                Animation.player1_schlagCurrentFrame.flip(true, false);
             }
             else if(direction == 1) {
                 if(!animation_done)
                 {
-                    stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                    stage.getBatch().draw(Animation.player1_schlagCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
                     animation_done = true;
                 }
             }
 
-            if(Animation.player2_schlagAnimation.isAnimationFinished(Animation.player2_schlag_elapsed_time)) {
+            if(Animation.player1_schlagAnimation.isAnimationFinished(Animation.player1_schlag_elapsed_time)) {
                 schlag = false;
-                Animation.player2_schlag_elapsed_time = 0;
+                Animation.player1_schlag_elapsed_time = 0;
             }
         }
 
         if(!animation_done)
         {
-            stage.getBatch().draw(Animation.sprite_player2_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
+            stage.getBatch().draw(Animation.sprite_player1_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
         }
+    }
+
+    private void animatePlayer2()
+    {
+        boolean animation_done = false;
+        if(!animation_done)
+        {
+            stage.getBatch().draw(Animation.sprite_player1_still, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
+        }
+
     }
 
     @Override
