@@ -24,10 +24,11 @@ public class GameUi {
     private final Skin uiSkin;
     Stage stage;
 
-    ProgressBar healthBar;
-    Touchpad touchpad;
+
+    private Touchpad touchpad;
     private ImageButton butAttack;
     private Button butBack;
+
     private Touchpad.TouchpadStyle touchpadStyle;
     private Skin touchpadSkin;
     private Drawable touchBackground;
@@ -37,46 +38,31 @@ public class GameUi {
         this.game = game;
         this.stage = game.getStage();
         this.uiSkin = game.getSkin();
-
-        setupInterface();
-
     }
 
-    void setupInterface() {
-        stage.addActor(initTouchpad());
-        stage.addActor(initHealthBar(500, 1000));
 
-        stage.addActor(initAttackButton());
-        stage.addActor(initPauseButton());
-
-    }
-
-    private ImageButton initAttackButton() {
+    public ImageButton initAttackButton() {
         butAttack = new ImageButton(uiSkin);
         butAttack.setTransform(true);
         butAttack.setScale(2f);
         butAttack.setPosition(game.getScreenX() / 25 * 20, game.getScreenY() / 15 * 3);
-        butAttack.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                //dispose();
-                //game.setScreen(new MainScreen(game));
-                //Add pause-code
-                return true;
-            }
-        });
+
         return butAttack;
     }
 
-    private ProgressBar initHealthBar(int x, int y) {
+ public ProgressBar initHealthBar(boolean enemy){
+        ProgressBar healthBar;
+        float width = 400;
+
         healthBar = new ProgressBar(0, 1000, 10, false, uiSkin);
-        healthBar.setPosition(x, y);
-        healthBar.setScale(1);
+        if(enemy)healthBar.setPosition(game.getScreenX()/3*2-width/2, game.getScreenY()-250);
+           else healthBar.setPosition(game.getScreenX()/3-width/2, game.getScreenY()-250);
+        healthBar.setSize(width,200);
 
         return healthBar;
     }
 
-    private Touchpad initTouchpad() {
+    public Touchpad initTouchpad() {
         //Create a touchpad skin
         touchpadSkin = new Skin();
         //Set background image
@@ -101,7 +87,7 @@ public class GameUi {
 
     }
 
-    private Button initPauseButton() {
+    public Button initPauseButton() {
         butBack = new TextButton("||", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);

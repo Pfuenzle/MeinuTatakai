@@ -16,10 +16,13 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 
 
 /**
@@ -29,12 +32,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class GameScreen implements Screen {
 
     private MyGdxGame game;
-
     private Stage stage;
 
     private Skin uiSkin;
 
-    private GamePlayer gamePlayer;
 
     private boolean bMapError = false;
 
@@ -43,19 +44,21 @@ public class GameScreen implements Screen {
     private int screen_width;
     private int screen_height;
 
+    private ProgressBar healthBar,enemyHealthBar;
+    private Touchpad touchpad;
+    private Button butBack,butAttack;
 
-    private ProgressBar healthBar;
 
-    GameUi ui;
-    private GamePlayerActor playerActor;
 
+
+    float SCALE= 1f;
     Box2DDebugRenderer b2dr;
     OrthographicCamera camera;
     Matrix4 debugMatrix;
 
     World world;
     GamePlayer player, enemy;
-    Body ground;
+    Body ground, wallRight,wallLeft;
     float PixelInMeter = 0.0025f;
 
     public GameScreen(MyGdxGame game) {
@@ -79,10 +82,30 @@ public class GameScreen implements Screen {
             bMapError = true;
         }
 
-        ui = new GameUi(game);
+
+        healthBar = new GameUi(game).initHealthBar(false);
+        stage.addActor(healthBar);
+        enemyHealthBar = new GameUi(game).initHealthBar(true);
+        stage.addActor(enemyHealthBar);
+
+        touchpad = new GameUi(game).initTouchpad();
+        stage.addActor(touchpad);
+
+        butBack = new GameUi(game).initPauseButton();
+        stage.addActor(butBack);
+
+        butAttack = new GameUi(game).initAttackButton();
+        butAttack.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                enemy.doKick();
+                return true;
+            }
+        });
+        stage.addActor(butAttack);
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, screen_width,screen_height);
+        camera.setToOrtho(false, screen_width*SCALE,screen_height*SCALE);
 
         debugMatrix = new Matrix4(camera.combined);
 
@@ -95,11 +118,8 @@ public class GameScreen implements Screen {
         enemy = new GamePlayer(stage, world,"normal");
 
         ground = new GameBodies(world).createGround();
-
-
-
-
-
+        wallRight = new GameBodies(world).createWall(true);
+        wallLeft = new GameBodies(world).createWall(false);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -111,16 +131,12 @@ public class GameScreen implements Screen {
 
 
         stage.getBatch().begin();
-        player.act(delta);
-        stage.act();
-        if (bMapError)
-            font_error.draw(stage.getBatch(), "ERROR LOADING MAP!", screen_width / 3, screen_height / 20 * 18);
-        else
-            font_error.draw(stage.getBatch(), "DONE LOADING MAP " + LocalPlayer.getMap().getName(), screen_width / 3, screen_height / 20 * 18);
-
-        stage.addActor(player.actor);
         stage.act(Gdx.graphics.getDeltaTime());
+        player.act(delta);
 
+
+        //if (bMapError) font_error.draw(stage.getBatch(), "ERROR LOADING MAP!", screen_width / 3, screen_height / 20 * 18);
+        //else font_error.draw(stage.getBatch(), "DONE LOADING MAP " + LocalPlayer.getMap().getName(), screen_width / 3, screen_height / 20 * 18);
 
         stage.getBatch().end();
         stage.draw();
@@ -135,12 +151,12 @@ public class GameScreen implements Screen {
 
 
         //Anzeigen aktualisieren
-        ui.healthBar.setValue((float) player.getHealth());
+        healthBar.setValue((float) player.getHealth());
 
         world.step(1/60f,6,2);
 
         //Camerafokus auf Spieler
-        cameraUpdate(delta);
+        //cameraUpdate(delta);
     }
 
     private void cameraUpdate(float delta) {
@@ -153,30 +169,30 @@ public class GameScreen implements Screen {
 
     private void updateMovement(float delta){
         //Move playerSprite with TouchPad
-        if (ui.touchpad.getKnobPercentX() > 0) {
+        if (touchpad.getKnobPercentX() > 0) {
             //Rechts laufen
             //playerActor.setFlip(false, false);
-            //playerActor.setX(playerActor.getX() + ui.touchpad.getKnobPercentX() * (int) gamePlayer.getSpeed() * delta);
+
             //player.applyLinearImpulse(new Vector2(0,4), player.getPosition(),true);
 
-            player.doWalking(true, ui.touchpad.getKnobPercentX());
+            player.doWalking(true, touchpad.getKnobPercentX());
 
 
 
-        } else if (ui.touchpad.getKnobPercentX() < 0) {
+        } else if (touchpad.getKnobPercentX() < 0) {
             //Links laufen
             //playerActor.setFlip(true, false);
             //playerActor.setX(playerActor.getX() + ui.touchpad.getKnobPercentX() * (int) gamePlayer.getSpeed() * delta);
-            player.doWalking(false, ui.touchpad.getKnobPercentX());
+            player.doWalking(false, touchpad.getKnobPercentX());
         }
-        if (0.7 < ui.touchpad.getKnobPercentY()) {
+        if (0.7 < touchpad.getKnobPercentY()) {
             //springen
             //playerActor.setY(playerActor.getY() + ui.touchpad.getKnobPercentY() * (int) gamePlayer.getSpeed() * delta);
             player.doJumping();
-        } else if (-0.7 > ui.touchpad.getKnobPercentY()) {
+        } else if (-0.7 > touchpad.getKnobPercentY()) {
             //ducken
         }
-        if(ui.touchpad.getKnobPercentX()==0 && ui.touchpad.getKnobPercentY()==0) {
+        if(touchpad.getKnobPercentX()==0 && touchpad.getKnobPercentY()==0) {
             //Stehen bleiben
             player.doNothing();
         }

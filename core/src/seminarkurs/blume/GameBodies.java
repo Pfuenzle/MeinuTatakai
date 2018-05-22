@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class GameBodies {
 
     private final World world;
-    Body player,ground;
+    Body player,ground,wall;
     float hight, width;
 
     GameBodies(World world){
@@ -28,8 +28,27 @@ public class GameBodies {
         ground.createFixture(shape,1f);
         shape.dispose();
 
+
         return ground;
     }
+    Body createWall(boolean right) {
+        BodyDef wallDef = new BodyDef();
+        wallDef.type = BodyDef.BodyType.StaticBody;
+        if(right)wallDef.position.set(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()/2);
+            else wallDef.position.set(0,Gdx.graphics.getHeight()/2);
+        wallDef.fixedRotation = true;
+        // groundDef.angle = 90;
+        wall = world.createBody(wallDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(20,Gdx.graphics.getHeight()/2);
+        wall.createFixture(shape,1f);
+        shape.dispose();
+
+
+        return wall;
+    }
+
     Body createPlayer(int posX,int posY){
         BodyDef playerDef = new BodyDef();
         playerDef.type = BodyDef.BodyType.DynamicBody;

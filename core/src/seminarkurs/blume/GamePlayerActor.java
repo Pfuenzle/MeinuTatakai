@@ -32,29 +32,33 @@ public class GamePlayerActor extends Actor{
     float drawX,drawY;
     int regionHight;
     int regionWidth;
-    boolean facingRight;
+    boolean facingRight = true;
+
+    char doing;
 
     GamePlayerActor(GamePlayer gamePlayer) {
         super();
         this.gamePlayer = gamePlayer;
         this.stage = gamePlayer.getGamePlayerStage();
         loadAnimations();
+        doing = 'n';
     }
 
     void doWalking(boolean isRight){
-        if(isRight) facingRight=true;
-        else facingRight=false;
+        //change Direction
+        if(facingRight&&!isRight){
+            textureRegion.flip(true,false);
+            facingRight=false;
+        }else if(!facingRight&&isRight){
+            textureRegion.flip(true,false);
+            facingRight=true;
+        }
     }
     //Todo: make Kick
     void doKick(){
-        if(facingRight){
-            //Kick nach rechts
-        }else{
-            //Kick nach links
-        }
+
     }
     void doJumping(){
-
     }
 
 
@@ -62,15 +66,21 @@ public class GamePlayerActor extends Actor{
     public void act(float delta) {
         float time =+ delta;
 
+        switch(doing) {
+            case 'n': textureRegion = walkAnimation.getKeyFrame(0);
+            case 'w': textureRegion = walkAnimation.getKeyFrame(time);
 
-        textureRegion = walkAnimation.getKeyFrame(time, true);
-        regionHight = textureRegion.getRegionY();
-        regionWidth = textureRegion.getRegionX();
+        }
+        //textureRegion = walkAnimation.getKeyFrame(time, true);
+
+        regionHight = textureRegion.getRegionHeight();
+        regionWidth = textureRegion.getRegionWidth();
         super.act(delta);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+
 
         stage.getBatch().draw(textureRegion,drawX ,drawY-150);
 

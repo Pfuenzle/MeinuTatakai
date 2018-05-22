@@ -1,6 +1,7 @@
 package seminarkurs.blume;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -33,9 +34,6 @@ public class GamePlayer implements Serializable {
         return stage;
     }
 
-    public void setGamePlayerStage(Stage stage) {
-        this.stage = stage;
-    }
 
     Body body;
     GamePlayerActor actor;
@@ -49,11 +47,12 @@ public class GamePlayer implements Serializable {
 
         actor = new GamePlayerActor(this);
 
-        body = new GameBodies(world).createPlayer(302,802);
+        body = new GameBodies(world).createPlayer(200,400);
 
     }
     void act(float delta){
         update();
+
 
         //body = new GameBodies(world).resizePlayer(body, actor.getRegionHight(),actor.getRegionWidth());
         actor.act(delta);
@@ -65,7 +64,7 @@ public class GamePlayer implements Serializable {
         this.y = body.getPosition().y;
 
         actor.drawX = body.getPosition().x- actor.getRegionWidth()/2;
-        actor.drawY = body.getPosition().y - actor.getRegionHight()/2;
+        actor.drawY = body.getPosition().y- actor.getRegionHight()/3;
     }
 
     void doNothing(){
@@ -75,13 +74,20 @@ public class GamePlayer implements Serializable {
     void doWalking(boolean isRight, float percX){
         actor.doWalking(isRight);
         //Todo: Body bewegen
-        body.setLinearVelocity(speed*percX,body.getLinearVelocity().y);
+        Vector2 velocity = body.getLinearVelocity().cpy();
+        velocity.set(speed*percX, velocity.y);
+        body.setLinearVelocity(velocity);
+
+        //body.setLinearVelocity(, body.getLinearVelocity().y);
     }
     void doJumping(){
         actor.doJumping();
-        body.applyLinearImpulse(0,20000000,(float) x,(float) y+100,false);
-        //body.applyForce();
+        body.applyLinearImpulse(0,2000000,(float) x,(float) y,false);
     }
+    void doKick(){
+        actor.doKick();
+    }
+
 
     public double getHealth() {
         return health;
