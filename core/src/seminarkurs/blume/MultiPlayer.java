@@ -17,7 +17,11 @@ import java.net.Socket;
  */
 
 public class MultiPlayer {
-    private String SERVER = "89.245.247.244";
+    private MyGdxGame game;
+
+    private MultiPlayerGameScreen mpgs;
+
+    private String SERVER = NetworkPlayer.getGameServer();
     private int PORT;
 
     public static int getPlayerNr() {
@@ -66,18 +70,47 @@ public class MultiPlayer {
         this.enemy = enemy;
     }
 
-    private static void parsePacket(String packet) {
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public String getLooser() {
+        return looser;
+    }
+
+    public void setLooser(String looser) {
+        this.looser = looser;
+    }
+
+    public void dispose()
+    {
+        multiplayerRunning = false;
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String winner = "";
+    private String looser = "";
+
+    private void parsePacket(String packet) {
         if(packet.length() < 2)
             return;
         if (packet.substring(0, 2).equals("10")) {
             try {
                 enemy.setUsername(packet.substring(3));
+                System.out.println("Set enemy username to " + packet.substring(3));
             }
             catch(Exception e)
             {
 
             }
-            System.out.println("Set enemy username to " + packet.substring(3));
             init = true;
         }
         else if (packet.substring(0, 2).equals("11")) {
@@ -91,8 +124,13 @@ public class MultiPlayer {
             init = true;
         }
         else if (packet.substring(0, 2).equals("12")) {
+            //12x1x88
+            int player = Integer.parseInt(packet.substring(3, 4));
             try {
-                enemy.setHealth(Double.parseDouble(packet.substring(3)));
+                if(player == getPlayerNr())
+                    localPlayer.setHealth(Double.parseDouble(packet.substring(5)));
+                else
+                    enemy.setHealth(Double.parseDouble(packet.substring(5)));
             }
             catch(Exception e)
             {
@@ -171,6 +209,23 @@ public class MultiPlayer {
             }
             init = true;
         }
+        else if (packet.substring(0, 2).equals("99")) {
+            //99x0000xuserx0000xuser2
+            int winner_pos_start = 8;
+            int winner_pos_end = winner_pos_start + Integer.parseInt(packet.substring(3, 7));
+            int looser_pos_start = winner_pos_end + 6;
+            int looser_pos_end = looser_pos_start + Integer.parseInt(packet.substring(winner_pos_end + 1, winner_pos_end + 5));
+            try
+            {
+                this.setWinner(packet.substring(winner_pos_start, winner_pos_end));
+                this.setLooser(packet.substring(looser_pos_start, looser_pos_end));
+            }
+            catch(Exception e)
+            {
+
+            }
+            multiplayerRunning = false;
+        }
     }
 
     private void handleEnemyPacket(String packet)
@@ -192,25 +247,29 @@ public class MultiPlayer {
         socket = new Socket(SERVER,PORT); //verbinde zu server
         multiplayerRunning = true;
 
-        final DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
+        final DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
 
-        outToClient.writeBytes("11x" + String.valueOf(localPlayer.getRP()) + "\n");
-        outToClient.writeBytes("12x" + String.valueOf(localPlayer.getHealth()) + "\n");
-        outToClient.writeBytes("13x" + String.valueOf(localPlayer.getSpeed()) + "\n");
-        outToClient.writeBytes("14x" + String.valueOf(localPlayer.getPlayer()) + "\n");
-        outToClient.writeBytes("15x" + String.valueOf(localPlayer.getSkin()) + "\n");
-        outToClient.writeBytes("16x" + String.valueOf(localPlayer.getX()) + "\n");
-        outToClient.writeBytes("17x" + String.valueOf(localPlayer.getY()) + "\n");
-        outToClient.writeBytes("18x" + String.valueOf(localPlayer.getDirection()) + "\n");
-        outToClient.writeBytes("10x" + localPlayer.getUsername() + "\n");
+        outToServer.writeBytes("11x" + String.valueOf(localPlayer.getRP()) + "\n");
+        outToServer.writeBytes("12x" + String.valueOf(localPlayer.getHealth()) + "\n");
+        outToServer.writeBytes("13x" + String.valueOf(localPlayer.getSpeed()) + "\n");
+        outToServer.writeBytes("14x" + String.valueOf(localPlayer.getPlayer()) + "\n");
+        outToServer.writeBytes("15x" + String.valueOf(localPlayer.getSkin()) + "\n");
+        outToServer.writeBytes("16x" + String.valueOf(localPlayer.getX()) + "\n");
+        outToServer.writeBytes("17x" + String.valueOf(localPlayer.getY()) + "\n");
+        outToServer.writeBytes("18x" + String.valueOf(localPlayer.getDirection()) + "\n");
+        outToServer.writeBytes("10x" + localPlayer.getUsername() + "\n");
 
         new Thread(new Runnable() {
             public void run() {
+                mpgs.exitLoadingScreen();
                 boolean hasStartPos = false;
                 BufferedReader inFromServer = null;
                 try {
                     inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 } catch (IOException e) {
+                    mpgs.dispose();
+                    game.setScreen(new MainScreen(game));
+                    dispose();
                     e.printStackTrace();
                 }
                 String packet = null;
@@ -224,8 +283,14 @@ public class MultiPlayer {
                             hasStartPos = true;
                         }
                     } catch (IOException e) {
+                        mpgs.dispose();
+                        game.setScreen(new MainScreen(game));
+                        dispose();
                         e.printStackTrace();
                     } catch (InterruptedException e) {
+                        mpgs.dispose();
+                        game.setScreen(new MainScreen(game));
+                        dispose();
                         e.printStackTrace();
                     }
                     System.out.println("Packet received: ");
@@ -236,7 +301,7 @@ public class MultiPlayer {
                     if(!init/* || enemy.getUsername().equals("null")*/)
                     {
                         try {
-                            outToClient.writeBytes("19x\n");
+                            outToServer.writeBytes("19x\n");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -245,6 +310,7 @@ public class MultiPlayer {
                 try {
                     socket.close();
                 } catch (IOException e) {
+                    dispose();
                     e.printStackTrace();
                 }
                 //packet = null;
@@ -252,7 +318,10 @@ public class MultiPlayer {
         }).start();
     }
 
-    public MultiPlayer(int PORT) throws IOException, ClassNotFoundException {
+    public MultiPlayer(int PORT, MultiPlayerGameScreen mpgs) throws IOException, ClassNotFoundException {
+
+        this.game = mpgs.getGame();
+        this.mpgs = mpgs;
         this.PORT = PORT;
 
         localPlayer = new GamePlayer();
@@ -261,7 +330,7 @@ public class MultiPlayer {
         localPlayer.setUsername(NetworkPlayer.getUsername());
         localPlayer.setHealth(100);
         localPlayer.setSpeed(10);
-        localPlayer.setPlayer(1);
+        localPlayer.setPlayer(NetworkPlayer.Player);
         localPlayer.setSkin(0);
         localPlayer.setX(0);
         localPlayer.setY(0);
@@ -304,6 +373,11 @@ public class MultiPlayer {
     public void moveDown(float num) throws IOException, InterruptedException {
         localPlayer.setY(localPlayer.getY() - num);
         localPlayer.sendUpdate(socket);
+    }
+
+    public void doTritt() throws IOException, InterruptedException {
+        final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
+        outToClient.writeBytes("31x" + "\n");
     }
 
 }

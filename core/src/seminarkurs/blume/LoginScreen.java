@@ -60,7 +60,13 @@ public class LoginScreen implements Screen {
         font_japanese.draw(stage.getBatch(), "雌犬戦い", (int)(game.getScreenX() / 2), (int)(game.getScreenY() / 5 * 3.5)); //Rendere Titel
         stage.getBatch().end();
         stage.act();
-        stage.draw();
+        try {
+            stage.draw();
+        }
+        catch(Exception e)
+        {
+
+        }
     }
 
     @Override
@@ -213,7 +219,7 @@ public class LoginScreen implements Screen {
                 Socket socket = null;
                 try
                 {
-                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "89.245.247.244", 1337, socketHints);
+                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, NetworkPlayer.getMainServer(), 1337, socketHints);
                 }
                 catch(com.badlogic.gdx.utils.GdxRuntimeException e)
                 {
@@ -271,7 +277,7 @@ public class LoginScreen implements Screen {
                 Socket socket = null;
                 try
                 {
-                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "89.245.247.244", 1337, socketHints);
+                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, NetworkPlayer.getMainServer(), 1337, socketHints);
                 }
                 catch(com.badlogic.gdx.utils.GdxRuntimeException e) //Verbindung fehlgeschlagen
                 {

@@ -14,6 +14,18 @@ import java.io.InputStreamReader;
  */
 
 public class NetworkPlayer {
+    public static String getMainServer() {
+        return MAIN_SERVER;
+    }
+
+    public static String getGameServer() {
+        return GAME_SERVER;
+    }
+
+    private static final String MAIN_SERVER = "seminarkurs.pfuenzle.io";
+
+    private static final String GAME_SERVER = "meinutatakai.pfuenzle.io";
+
     public static String getUsername() {
         return username;
     }
@@ -133,5 +145,7 @@ public class NetworkPlayer {
             }
         }).start();
     }
+
+    static int Player = 1;
 
 }

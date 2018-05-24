@@ -21,8 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 
-import static seminarkurs.blume.Animation.initplayer1;
-
 public class MyGdxGame extends Game {
 
 	private Stage stage;
@@ -54,9 +52,7 @@ public class MyGdxGame extends Game {
 
 		initFPS();
 
-		seminarkurs.blume.Animation.initplayer1();
-
-		seminarkurs.blume.Animation.initPlayer2();
+		seminarkurs.blume.Animation.initAll();
 
 		this.screen_width = Gdx.graphics.getWidth();
 		this.screen_height = Gdx.graphics.getHeight();

@@ -58,7 +58,13 @@ public class UserPacket {
         //points Länge: 5
         //wins Laenge: 5
         //loose Laenge: 5
-        String sRet = data.substring(2, 3);
+        String sRet = "0";
+        try {
+            sRet = data.substring(2, 3);
+        }
+        catch(Exception e)
+        {
+        }
         if(Integer.parseInt(sRet) == 1)
         {
             ret = true;

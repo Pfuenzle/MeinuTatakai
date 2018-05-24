@@ -5,13 +5,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -178,6 +183,40 @@ public class MultiplayerScreen implements Screen {
             }
         });
         stage.addActor(butSearch);
+
+        Texture playTexture1 = new Texture(Gdx.files.internal("char1_standing.png"));
+        Drawable char1_but = new TextureRegionDrawable(new TextureRegion(playTexture1));
+
+        ImageButton imgBtn1 = new ImageButton(char1_but);
+
+        imgBtn1.setTransform(true);
+        imgBtn1.setScale(1f);
+        imgBtn1.setPosition(1920 / 10, 1080 / 10);
+        imgBtn1.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                NetworkPlayer.Player = 1;
+                return true;
+            }
+        });
+        stage.addActor(imgBtn1);
+
+        Texture playTexture2 = new Texture(Gdx.files.internal("char2_standing.png"));
+        Drawable char2_but = new TextureRegionDrawable(new TextureRegion(playTexture2));
+
+        ImageButton imgBtn2 = new ImageButton(char2_but);
+
+        imgBtn2.setTransform(true);
+        imgBtn2.setScale(1f);
+        imgBtn2.setPosition(1920 / 4 * 3, 1080 / 10);
+        imgBtn2.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                NetworkPlayer.Player = 2;
+                return true;
+            }
+        });
+        stage.addActor(imgBtn2);
     }
 
     private void startRanked() throws IOException {
@@ -208,7 +247,7 @@ public class MultiplayerScreen implements Screen {
             public void run() {
                 inQueue = true;
                 try {
-                    rankedSocket = new Socket("89.245.247.244", 1337);
+                    rankedSocket = new Socket(NetworkPlayer.getMainServer(), 1337);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -221,7 +260,6 @@ public class MultiplayerScreen implements Screen {
                 try {
                     rankedOutputStream.writeBytes(enterPacket); //send packet to enter queue
                 } catch (IOException e) {
-                    System.exit(1);
                     e.printStackTrace();
                 }
 
@@ -229,7 +267,6 @@ public class MultiplayerScreen implements Screen {
                 try {
                     inFromServer = new BufferedReader(new InputStreamReader(rankedSocket.getInputStream()));
                 } catch (IOException e) {
-                    System.exit(1);
                     e.printStackTrace();
                 }
 
@@ -237,16 +274,24 @@ public class MultiplayerScreen implements Screen {
 
                 while(inQueue)
                 {
-                String response = null;
+                String response = "";
                     try {
                         response = inFromServer.readLine();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Gdx.app.debug("PACKET", response);
+                    if(response != null)
+                        Gdx.app.debug("PACKET", response);
                     if(response != null) {
                         if (response.substring(0, 3).equalsIgnoreCase("5x2")) {
-                            int queueing_players_str = Integer.parseInt(response.substring(4, 8));
+                            int queueing_players_str = 0;
+                            try {
+                                queueing_players_str = Integer.parseInt(response.substring(4, 8));
+                            }
+                            catch(Exception e)
+                            {
+                                e.printStackTrace();
+                            }
                             queueing_players = Integer.parseInt(String.valueOf(queueing_players_str));
                         } else if (response.substring(0, 3).equals("5x1")) {
                             Gdx.app.debug("Game found", response);
