@@ -25,7 +25,15 @@ public class Settings {
         prefs = Gdx.app.getPreferences("Settings");
     }
 
-    private static int settings_count = 4;
+    public static int getSettingsNumber() {
+        return settingsNumber;
+    }
+
+    public static void setSettingsNumber(int settingsNumber) {
+        Settings.settingsNumber = settingsNumber;
+    }
+
+    private static int settingsNumber = 4;
 
 
     public static boolean isSaveUser() {
