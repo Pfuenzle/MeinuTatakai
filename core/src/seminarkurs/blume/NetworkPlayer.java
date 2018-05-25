@@ -14,21 +14,21 @@ import java.io.InputStreamReader;
  */
 
 public class NetworkPlayer {
-    public static String getMainServer() {
+    public static String getMainServer() { //Bekomme IP des Hautpservers
         return MAIN_SERVER;
     }
 
-    public static String getGameServer() {
+    public static String getGameServer() { //Bekomme IP des Spieleserver
         return GAME_SERVER;
     }
 
-    private static final String MAIN_SERVER = "seminarkurs.pfuenzle.io";
+    private static final String MAIN_SERVER = "seminarkurs.pfuenzle.io"; //IP des Hautpservers
 
-    private static final String GAME_SERVER = "meinutatakai.pfuenzle.io";
+    private static final String GAME_SERVER = "meinutatakai.pfuenzle.io"; //IP des Spieleservers
 
     public static String getUsername() {
         return username;
-    }
+    } //Bekomme Username
 
     public static void setUsername(String username_in) {
         username = username_in;
@@ -36,7 +36,7 @@ public class NetworkPlayer {
 
     public static  int getRP() {
         return RP;
-    }
+    } //Bekomme RP des Spielers
 
     public static void setRP(int RP_in) {
         RP = RP_in;
@@ -44,7 +44,7 @@ public class NetworkPlayer {
 
     public static int getWins() {
         return wins;
-    }
+    } //Bekomme Wins des Spielers
 
     public static void setWins(int wins_in) {
         wins = wins_in;
@@ -52,7 +52,7 @@ public class NetworkPlayer {
 
     public static int getLosses() {
         return losses;
-    }
+    } //Bekomme Niederlagen des Spielers
 
     public static void setLosses(int losses_in) {
         losses = losses_in;
@@ -71,7 +71,7 @@ public class NetworkPlayer {
 
     public static String getSESSION() {
         return SESSION;
-    }
+    } //Bekomme aktuelle Session des Spielers
 
     public static void setSESSION(String SESSION) {
         NetworkPlayer.SESSION = SESSION;
@@ -79,13 +79,13 @@ public class NetworkPlayer {
 
     public static String getHWID() {
         return HWID;
-    }
+    } //Bekomme HWID des Geräts
 
     public static void setHWID(String HWID) {
         NetworkPlayer.HWID = HWID;
     }
 
-    public static String fill(int number, int length)
+    public static String fill(int number, int length) //Füllt 'number' zu 'length' stellen auf (5 -> 0005)
     {
         String ret = "";
         String number_str = String.valueOf(number);
@@ -146,6 +146,14 @@ public class NetworkPlayer {
         }).start();
     }
 
-    static int Player = 1;
+    public static int getCharID() { //Bekomme ID des Characters des Spielers
+        return charID;
+    }
+
+    public static void setCharID(int charID) {
+        NetworkPlayer.charID = charID;
+    }
+
+    private static int charID = 1; //ID des Characters, den der Spieler ausgewählt hat
 
 }

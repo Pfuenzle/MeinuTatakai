@@ -2,7 +2,6 @@ package seminarkurs.blume;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,15 +23,12 @@ import java.io.InputStreamReader;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.Charset;
-
-import static java.nio.charset.StandardCharsets.*;
 
 /**
  * Created by Leon on 01.02.2018.
  */
 
-public class MultiplayerScreen implements Screen {
+public class MultiPlayerScreen implements Screen {
 
 
     private MyGdxGame game;
@@ -108,7 +104,7 @@ public class MultiplayerScreen implements Screen {
         stage.clear();
     }
 
-    public MultiplayerScreen(MyGdxGame game)
+    public MultiPlayerScreen(MyGdxGame game)
     {
         this.game = game;
         stage = game.getStage();
@@ -178,7 +174,7 @@ public class MultiplayerScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new MultiplayerScreen(game));
+                game.setScreen(new MultiPlayerScreen(game));
                 return true;
             }
         });
@@ -195,7 +191,7 @@ public class MultiplayerScreen implements Screen {
         imgBtn1.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                NetworkPlayer.Player = 1;
+                NetworkPlayer.setCharID(1);
                 return true;
             }
         });
@@ -212,7 +208,7 @@ public class MultiplayerScreen implements Screen {
         imgBtn2.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                NetworkPlayer.Player = 2;
+                NetworkPlayer.setCharID(2);
                 return true;
             }
         });
@@ -236,7 +232,7 @@ public class MultiplayerScreen implements Screen {
                     e.printStackTrace();
                 }
                 dispose();
-                game.setScreen(new MultiplayerScreen(game));
+                game.setScreen(new MultiPlayerScreen(game));
                 return true;
             }
         });

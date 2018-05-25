@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,9 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
  */
 
 public class CharSelectScreen implements Screen {
-
-
-
     private MyGdxGame game;
 
     private Stage stage;
@@ -30,7 +28,7 @@ public class CharSelectScreen implements Screen {
 
     private Button butBack;
 
-    private BitmapFont font_Name;
+    private BitmapFont textFont;
     @Override
     public void show() {
 
@@ -78,10 +76,23 @@ public class CharSelectScreen implements Screen {
 
         initBackButton();
 
+        initFont();
+
         setupInterface();
 
         this.screen_width = Gdx.graphics.getWidth();
         this.screen_height = Gdx.graphics.getHeight();
+    }
+
+    public void initFont() //Initialisiert die Schriftart
+    {
+        final String FONT_PATH = "OpenSans.ttf";
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 12; //Schriftart
+        parameter.color = Color.BLACK;
+        textFont = generator.generateFont(parameter);
+        generator.dispose();
     }
 
     public void initBackButton()

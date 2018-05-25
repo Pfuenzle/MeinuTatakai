@@ -1,15 +1,9 @@
 package seminarkurs.blume;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
-import com.badlogic.gdx.net.SocketHints;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
@@ -330,7 +324,7 @@ public class MultiPlayer {
         localPlayer.setUsername(NetworkPlayer.getUsername());
         localPlayer.setHealth(100);
         localPlayer.setSpeed(10);
-        localPlayer.setPlayer(NetworkPlayer.Player);
+        localPlayer.setPlayer(NetworkPlayer.getCharID());
         localPlayer.setSkin(0);
         localPlayer.setX(0);
         localPlayer.setY(0);

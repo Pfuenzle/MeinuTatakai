@@ -3,23 +3,13 @@ package seminarkurs.blume;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Array;
 
 public class MyGdxGame extends Game {
 
@@ -28,7 +18,7 @@ public class MyGdxGame extends Game {
 	private Skin uiSkin;
 
 	private BitmapFont font;
-	public BitmapFont font_yellow;
+	public BitmapFont font_debug;
 
 	private int screen_width;
 	private int screen_height;
@@ -117,15 +107,15 @@ public class MyGdxGame extends Game {
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 65;
 		parameter.color = Color.BLACK;
-		font_yellow = generator.generateFont(parameter);
+		font_debug = generator.generateFont(parameter);
 		generator.dispose();
 	}
 
 	private void renderFPS()
 	{
-		if(!deviceName.equals("nicisilver")) {
-			font_yellow.draw(stage.getBatch(), "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), screen_width / 20 * 17, screen_height / 20 * 19);
-			font_yellow.draw(stage.getBatch(), "SESSION: " + NetworkPlayer.getSESSION(), screen_width / 20 * 10, screen_height / 20 * 19);
+		if(!deviceName.equals("nicisilver")) { //Zeige keine FPS wenn es das Handy von Nicole ist
+			font_debug.draw(stage.getBatch(), "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), screen_width / 20 * 17, screen_height / 20 * 19);
+			font_debug.draw(stage.getBatch(), "SESSION: " + NetworkPlayer.getSESSION(), screen_width / 20 * 10, screen_height / 20 * 19);
 		}
 	}
 
