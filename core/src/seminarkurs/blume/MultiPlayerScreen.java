@@ -4,25 +4,19 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import java.io.*;
-import java.net.*;
+import java.net.Socket;
 
 /**
  * Created by Leon on 01.02.2018.
@@ -58,7 +52,8 @@ public class MultiPlayerScreen implements Screen {
 
     private int queueing_players = 0;
 
-    private String debug = "";
+    private static boolean hasError = false;
+    private static String errormsg = "";
 
     String enemy;
     String port;
@@ -74,6 +69,7 @@ public class MultiPlayerScreen implements Screen {
             font.draw(stage.getBatch(), "In Queue with " + NetworkPlayer.getRP()+ " RP. Players in Queue: " + String.valueOf(queueing_players), screen_width/20*6, screen_height/20*10);
         if(inGame)
             font.draw(stage.getBatch(), "Found match against " + enemy + " on Port " + port, screen_width/20*6, screen_height/20*7);
+        game.font_debug.draw(stage.getBatch(), errormsg, 1920 * 0.5f - (errormsg.length() * 15), 1080 * 0.2f);
         stage.getBatch().end();
         stage.act();
         stage.draw();
@@ -179,40 +175,6 @@ public class MultiPlayerScreen implements Screen {
             }
         });
         stage.addActor(butSearch);
-
-        Texture playTexture1 = new Texture(Gdx.files.internal("char1_standing.png"));
-        Drawable char1_but = new TextureRegionDrawable(new TextureRegion(playTexture1));
-
-        ImageButton imgBtn1 = new ImageButton(char1_but);
-
-        imgBtn1.setTransform(true);
-        imgBtn1.setScale(1f);
-        imgBtn1.setPosition(1920 / 10, 1080 / 10);
-        imgBtn1.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                NetworkPlayer.setCharID(1);
-                return true;
-            }
-        });
-        stage.addActor(imgBtn1);
-
-        Texture playTexture2 = new Texture(Gdx.files.internal("char2_standing.png"));
-        Drawable char2_but = new TextureRegionDrawable(new TextureRegion(playTexture2));
-
-        ImageButton imgBtn2 = new ImageButton(char2_but);
-
-        imgBtn2.setTransform(true);
-        imgBtn2.setScale(1f);
-        imgBtn2.setPosition(1920 / 4 * 3, 1080 / 10);
-        imgBtn2.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                NetworkPlayer.setCharID(2);
-                return true;
-            }
-        });
-        stage.addActor(imgBtn2);
     }
 
     private void startRanked() throws IOException {
@@ -241,34 +203,58 @@ public class MultiPlayerScreen implements Screen {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                boolean shouldExit = false;
                 inQueue = true;
                 try {
                     rankedSocket = new Socket(NetworkPlayer.getMainServer(), 1337);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    inQueue = false;
+                    shouldExit = true;
+                    errormsg = "Failed to contact Server";
+                    dispose();
+                    game.setScreen(new MultiPlayerScreen(game));
                 }
-                try {
-                    rankedOutputStream = new DataOutputStream(rankedSocket.getOutputStream());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(!shouldExit) {
+                    try {
+                        rankedOutputStream = new DataOutputStream(rankedSocket.getOutputStream());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        inQueue = false;
+                        shouldExit = true;
+                        errormsg = "Failed to talk to server";
+                        dispose();
+                        game.setScreen(new MultiPlayerScreen(game));
+                    }
                 }
-
-                try {
-                    rankedOutputStream.writeBytes(enterPacket); //send packet to enter queue
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(!shouldExit) {
+                    try {
+                        rankedOutputStream.writeBytes(enterPacket); //send packet to enter queue
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        inQueue = false;
+                        shouldExit = true;
+                        errormsg = "Failed to send message to server";
+                        dispose();
+                        game.setScreen(new MultiPlayerScreen(game));
+                    }
                 }
-
                 BufferedReader inFromServer = null;
-                try {
-                    inFromServer = new BufferedReader(new InputStreamReader(rankedSocket.getInputStream()));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(!shouldExit) {
+                    try {
+                        inFromServer = new BufferedReader(new InputStreamReader(rankedSocket.getInputStream()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        inQueue = false;
+                        shouldExit = true;
+                        errormsg = "Failed to read from Server";
+                        dispose();
+                        game.setScreen(new MultiPlayerScreen(game));
+                    }
                 }
-
                 Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-                while(inQueue)
+                while(inQueue && !shouldExit)
                 {
                 String response = "";
                     try {

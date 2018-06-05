@@ -5,8 +5,18 @@ package seminarkurs.blume;
  */
 
 public class LocalPlayer {
+    private static boolean bIsSelecting = false;
     private static boolean bIsIngame = false;
     private static Map currentMap;
+
+    public static boolean isSelecting()
+    {
+        return bIsSelecting;
+    }
+
+    public static void setbIsSelecting(boolean IsSelecting) {
+        bIsSelecting = IsSelecting;
+    }
 
     public static boolean isIngame()
     {
