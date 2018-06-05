@@ -67,7 +67,7 @@ public class MyGdxGame extends Game {
 
 		MusicPlayer.startPlaylist();
 
-		this.setScreen(new MainScreen(this));
+		this.setScreen(new LoginScreen(this));
 	}
 
 	@Override

@@ -32,6 +32,8 @@ public class MapSelectScreen implements Screen {
     private int screen_width;
     private int screen_height;
 
+    private Screen next_screen;
+
     private Button butBack;
 
     private Label[] mapList;
@@ -97,8 +99,10 @@ public class MapSelectScreen implements Screen {
         stage.clear();
     }
 
-    public MapSelectScreen(MyGdxGame game)
+    public MapSelectScreen(MyGdxGame game, Screen screen)
     {
+        next_screen = screen;
+
         this.game = game;
         stage = game.getStage();
 
@@ -172,7 +176,7 @@ public class MapSelectScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 LocalPlayer.setbIsSelecting(false);
                 dispose();
-                game.setScreen(new CharSelectScreen(game));
+                game.setScreen(new CharSelectScreen(game, next_screen));
                 return true;
             }
         });
@@ -190,7 +194,7 @@ public class MapSelectScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 LocalPlayer.setbIsSelecting(false);
                 dispose();
-                game.setScreen(new MainScreen(game));
+                game.setScreen(next_screen);
                 return true;
             }
         });

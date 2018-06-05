@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class CharSelectScreen implements Screen {
     private MyGdxGame game;
 
+    private Screen next_screen;
+
     private Stage stage;
     private String name[] ={"Sakura","Yuki"};
     private Skin uiSkin;
@@ -100,8 +102,10 @@ switch(NetworkPlayer.getCharID()){
         stage.clear();
     }
 
-    public CharSelectScreen(MyGdxGame game)
+    public CharSelectScreen(MyGdxGame game, Screen screen)
     {
+        next_screen = screen;
+
         this.game = game;
         stage = game.getStage();
 
@@ -192,7 +196,7 @@ switch(NetworkPlayer.getCharID()){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new MapSelectScreen(game));
+                game.setScreen(new MapSelectScreen(game, next_screen));
                 return true;
             }
         });
