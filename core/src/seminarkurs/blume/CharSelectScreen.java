@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class CharSelectScreen implements Screen {
     private MyGdxGame game;
 
-    private Screen next_screen;
+    private int next_screen;
 
     private Stage stage;
     private String name[] ={"Sakura","Yuki"};
@@ -102,7 +102,7 @@ switch(NetworkPlayer.getCharID()){
         stage.clear();
     }
 
-    public CharSelectScreen(MyGdxGame game, Screen screen)
+    public CharSelectScreen(MyGdxGame game, int screen)
     {
         next_screen = screen;
 

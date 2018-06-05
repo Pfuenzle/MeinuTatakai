@@ -91,7 +91,7 @@ public class MainScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new CharSelectScreen(game, new MainScreen(game)));
+                game.setScreen(new CharSelectScreen(game, 0));
                 return true;
             }
         });
@@ -106,7 +106,7 @@ public class MainScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new CharSelectScreen(game, new MultiPlayerScreen(game)));
+                game.setScreen(new CharSelectScreen(game, 1));
                 return true;
             }
         });
