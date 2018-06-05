@@ -1,0 +1,62 @@
+
+loading.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+frame_0_delay-0.1s
+  rotate: false
+  xy: 815, 2
+  size: 811, 431
+  orig: 811, 431
+  offset: 0, 0
+  index: -1
+frame_1_delay-0.1s
+  rotate: false
+  xy: 2, 435
+  size: 811, 431
+  orig: 811, 431
+  offset: 0, 0
+  index: -1
+frame_2_delay-0.1s
+  rotate: false
+  xy: 815, 435
+  size: 811, 431
+  orig: 811, 431
+  offset: 0, 0
+  index: -1
+frame_3_delay-0.1s
+  rotate: false
+  xy: 815, 1301
+  size: 811, 431
+  orig: 811, 431
+  offset: 0, 0
+  index: -1
+frame_4_delay-0.1s
+  rotate: false
+  xy: 2, 2
+  size: 811, 431
+  orig: 811, 431
+  offset: 0, 0
+  index: -1
+frame_5_delay-0.1s
+  rotate: false
+  xy: 2, 868
+  size: 811, 431
+  orig: 811, 431
+  offset: 0, 0
+  index: -1
+frame_6_delay-0.1s
+  rotate: false
+  xy: 815, 868
+  size: 811, 431
+  orig: 811, 431
+  offset: 0, 0
+  index: -1
+frame_7_delay-0.1s
+  rotate: false
+  xy: 2, 1301
+  size: 811, 431
+  orig: 811, 431
+  offset: 0, 0
+  index: -1
