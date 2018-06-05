@@ -10,6 +10,11 @@ public class LoginPacket {
     private String msg;
     private String SESSION;
 
+    private boolean bIsBroken = false;
+
+    public boolean isBroken()
+    {return bIsBroken;}
+
     public boolean getReturn()
     {
         return this.ret;
@@ -27,22 +32,25 @@ public class LoginPacket {
         richtig: 0x1x1x40847549x20xLogin was successful
         falsch: 0x1x0x14xwrong password
          */
-        String sRet = data.substring(4, 5);
-        this.ret = sRet.equals("1");
-        if(ret)
-        {
-            SESSION = data.substring(6, 14);
-            NetworkPlayer.setSESSION(SESSION);
-            int length_end = 17;
-            this.length = Integer.parseInt(data.substring(15, length_end));
-            int msg_start = 15 + String.valueOf(this.length).length() + 1;
-            int msg_end = msg_start + this.length;
-            this.msg = data.substring(msg_start, msg_end);
+        try {
+            String sRet = data.substring(4, 5);
+            this.ret = sRet.equals("1");
+            if (ret) {
+                SESSION = data.substring(6, 14);
+                NetworkPlayer.setSESSION(SESSION);
+                int length_end = 17;
+                this.length = Integer.parseInt(data.substring(15, length_end));
+                int msg_start = 15 + String.valueOf(this.length).length() + 1;
+                int msg_end = msg_start + this.length;
+                this.msg = data.substring(msg_start, msg_end);
+            } else {
+                int msg_length = Integer.parseInt(data.substring(6, 10));
+                this.msg = data.substring(11, 11 + msg_length);
+            }
         }
-        else
+        catch(Exception e)
         {
-            int msg_length = Integer.parseInt(data.substring(6, 10));
-            this.msg = data.substring(11, 11+msg_length);
+            this.bIsBroken = true;
         }
     }
 }

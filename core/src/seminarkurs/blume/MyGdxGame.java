@@ -20,11 +20,27 @@ public class MyGdxGame extends Game {
 	private BitmapFont font;
 	public BitmapFont font_debug;
 
+	public BitmapFont getCharSelectFont() {
+		return charSelectFont;
+	}
+
+	private BitmapFont charSelectFont;
+
+	public BitmapFont getCharSelectFontTitle() {
+		return charSelectFontTitle;
+	}
+
+
+	private BitmapFont charSelectFontTitle;
+
 	private int screen_width;
 	private int screen_height;
 
 	private static Texture backgroundTexture;
 	private static Sprite backgroundSprite;
+
+	private static Texture back_selectTexture;
+	private static Sprite back_selectSprite;
 
 	private String deviceName;
 
@@ -42,14 +58,16 @@ public class MyGdxGame extends Game {
 
 		initFPS();
 
-		seminarkurs.blume.Animation.initAll();
+		//seminarkurs.blume.Animation.initAll();
 
 		this.screen_width = Gdx.graphics.getWidth();
 		this.screen_height = Gdx.graphics.getHeight();
 
 		Settings.init();
 
-		this.setScreen(new LoginScreen(this));
+		MusicPlayer.startPlaylist();
+
+		this.setScreen(new MainScreen(this));
 	}
 
 	@Override
@@ -90,12 +108,20 @@ public class MyGdxGame extends Game {
 		float background_origin_x = 0;
 		float background_origin_y = 0;
 		backgroundSprite.setOrigin(background_origin_x, background_origin_y);
+
+
+		back_selectTexture = new Texture("background/background_select.png");
+		back_selectSprite = new Sprite(back_selectTexture);
+		//back_selectSprite.setScale(1.5f);
+		back_selectSprite.setOrigin(background_origin_x, background_origin_y);
 	}
 
 	private void renderBackground()
 	{
-		if(!LocalPlayer.isIngame() || LocalPlayer.getMap() == null)
+		if((!LocalPlayer.isIngame() || LocalPlayer.getMap() == null) && !LocalPlayer.isSelecting())
 			backgroundSprite.draw(stage.getBatch());
+		else if(LocalPlayer.isSelecting())
+			back_selectSprite.draw(stage.getBatch());
 		else
 			LocalPlayer.getMap().drawMap(stage);
 	}
@@ -109,6 +135,21 @@ public class MyGdxGame extends Game {
 		parameter.color = Color.BLACK;
 		font_debug = generator.generateFont(parameter);
 		generator.dispose();
+
+		final String FONT_PATH_CHARSELECT = "PERRYGOT.TTF";
+		FreeTypeFontGenerator charselect_generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH_CHARSELECT));
+		FreeTypeFontGenerator.FreeTypeFontParameter charSelectParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		charSelectParameter.size = 12; //Schriftart
+		charSelectParameter.color = Color.WHITE;
+		charSelectFont = charselect_generator.generateFont(parameter);
+		charselect_generator.dispose();
+
+		FreeTypeFontGenerator charselect_generator_title = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH_CHARSELECT));
+		FreeTypeFontGenerator.FreeTypeFontParameter charSelectParameterTitle = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		charSelectParameterTitle.size = 36; //Schriftart
+		charSelectParameterTitle.color = Color.BLACK;
+		charSelectFontTitle = charselect_generator_title.generateFont(parameter);
+		charselect_generator_title.dispose();
 	}
 
 	private void renderFPS()

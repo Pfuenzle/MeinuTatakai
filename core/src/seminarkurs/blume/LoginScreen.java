@@ -1,13 +1,10 @@
 package seminarkurs.blume;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
@@ -249,10 +246,19 @@ public class LoginScreen implements Screen {
                             e.printStackTrace();
                         }
                         RegisterPacket packet_ret = new RegisterPacket(resp);
-                        ret_text = packet_ret.getMsg();
-                        ret_type = 2;
-                        button_reg.setDisabled(false);
-                        button_log.setDisabled(false);
+                        if(!packet_ret.isBroken())
+                        {
+                            ret_text = packet_ret.getMsg();
+                            ret_type = 2;
+                            button_reg.setDisabled(false);
+                            button_log.setDisabled(false);
+                        }
+                        else
+                        {
+                            InputEvent event1 = new InputEvent();
+                            event1.setType(InputEvent.Type.touchDown);
+                            button_reg.fire(event1);
+                        }
                     }
                 }).start();
                 return true;
@@ -311,32 +317,40 @@ public class LoginScreen implements Screen {
                             e.printStackTrace();
                         }
                         LoginPacket packet_ret = new LoginPacket(resp);
-                        ret_text = packet_ret.getMsg();
-                        ret_type = 1;
-                        if(packet_ret.getReturn())
+                        if(!packet_ret.isBroken()){
+                            ret_text = packet_ret.getMsg();
+                            ret_type = 1;
+                            if(packet_ret.getReturn())
+                            {
+                                if(userCheckBox.isChecked())
+                                {
+                                    Settings.setUsername(username);
+                                   Settings.setSaveUser(true);
+                               }
+                               else
+                                {
+                                    Settings.setUsername("");
+                                    Settings.setSaveUser(false);
+                                }
+                                if(passCheckBox.isChecked())
+                                {
+                                   Settings.setPassword(password);
+                                   Settings.setSavePass(true);
+                               }
+                               else{
+                                  Settings.setPassword("");
+                                  Settings.setSavePass(false);
+                              }
+                              NetworkPlayer.update(); //Update Stats von Spieler
+                              dispose();
+                              game.setScreen(new MainScreen(game));
+                            }
+                        }
+                        else
                         {
-                            if(userCheckBox.isChecked())
-                            {
-                                Settings.setUsername(username);
-                                Settings.setSaveUser(true);
-                            }
-                            else
-                            {
-                                Settings.setUsername("");
-                                Settings.setSaveUser(false);
-                            }
-                            if(passCheckBox.isChecked())
-                            {
-                                Settings.setPassword(password);
-                                Settings.setSavePass(true);
-                            }
-                            else{
-                                Settings.setPassword("");
-                                Settings.setSavePass(false);
-                            }
-                            NetworkPlayer.update(); //Update Stats von Spieler
-                            dispose();
-                            game.setScreen(new MainScreen(game));
+                            InputEvent event1 = new InputEvent();
+                            event1.setType(InputEvent.Type.touchDown);
+                            button_log.fire(event1);
                         }
                     }
                 }).start();

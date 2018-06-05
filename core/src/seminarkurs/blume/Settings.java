@@ -4,15 +4,6 @@ package seminarkurs.blume;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Properties;
-
 /**
  * Created by Leon on 22.01.2018.
  */
@@ -56,22 +47,22 @@ public class Settings {
     }
 
 
-    public static int getVolume_music() {
-        return prefs.getInteger("volume_music");
+    public static Boolean isMusicEnabled() {
+        return prefs.getBoolean("volume_music");
     }
 
-    public static void setVolume_music(int volume_music) {
-        prefs.putInteger("volume_sound", volume_music);
+    public static void setMusicEnabled(boolean volume_music) {
+        prefs.putBoolean("volume_music", volume_music);
         prefs.flush();
     }
 
 
-    public static int getVolume_sound() {
-        return prefs.getInteger("volume_sound");
+    public static boolean isSoundEnabled() {
+        return prefs.getBoolean("volume_sound");
     }
 
-    public static void setVolume_sound(int volume_sound) {
-        prefs.putInteger("volume_sound", volume_sound);
+    public static void setSoundEnabled(boolean volume_sound) {
+        prefs.putBoolean("volume_sound", volume_sound);
         prefs.flush();
     }
 

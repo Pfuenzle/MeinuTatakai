@@ -91,8 +91,7 @@ public class MainScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                //LocalPlayer.setMap(new MapCastle());
-                //game.setScreen(new /*CharSelectScreen(game)*/GameScreen(game));
+                game.setScreen(new CharSelectScreen(game));
                 return true;
             }
         });
@@ -127,6 +126,21 @@ public class MainScreen implements Screen {
             }
         });
         stage.addActor(butCareer);
+
+        TextButton button = new TextButton("Settings",uiSkin);
+        button.setScale(2f);
+        button.setTransform(true);
+        button.setPosition(game.getScreenX()*0.75f, game.getScreenY()*0.9f);
+        button.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                dispose();
+                game.setScreen(new SettingsScreen(game));
+                return true;
+            }
+        });
+        stage.addActor(button);
+
     }
 
 }
