@@ -58,7 +58,7 @@ public class MyGdxGame extends Game {
 
 		initFPS();
 
-		//seminarkurs.blume.Animation.initAll();
+		seminarkurs.blume.Animation.initAll();
 
 		this.screen_width = Gdx.graphics.getWidth();
 		this.screen_height = Gdx.graphics.getHeight();

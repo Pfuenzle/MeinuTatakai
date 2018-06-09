@@ -261,7 +261,7 @@ public class MultiPlayer {
                 try {
                     inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 } catch (IOException e) {
-                    mpgs.dispose();
+                    dispose();
                     game.setScreen(new MainScreen(game));
                     dispose();
                     e.printStackTrace();
@@ -277,12 +277,12 @@ public class MultiPlayer {
                             hasStartPos = true;
                         }
                     } catch (IOException e) {
-                        mpgs.dispose();
+                        dispose();
                         game.setScreen(new MainScreen(game));
                         dispose();
                         e.printStackTrace();
                     } catch (InterruptedException e) {
-                        mpgs.dispose();
+                        dispose();
                         game.setScreen(new MainScreen(game));
                         dispose();
                         e.printStackTrace();
@@ -313,7 +313,7 @@ public class MultiPlayer {
     }
 
     public MultiPlayer(int PORT, MultiPlayerGameScreen mpgs) throws IOException, ClassNotFoundException {
-
+        System.out.println("Initializing Multiplayer");
         this.game = mpgs.getGame();
         this.mpgs = mpgs;
         this.PORT = PORT;
@@ -331,7 +331,7 @@ public class MultiPlayer {
 
         enemy = new GamePlayer();
 
-        /*enemy.setRP(12344321);
+        /*(enemy.setRP(12344321);
         enemy.setUsername("gegnername");
         enemy.setHealth(100);
         enemy.setSpeed(10);

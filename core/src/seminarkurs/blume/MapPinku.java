@@ -8,13 +8,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  * Created by Leon on 22.02.2018.
  */
 
-public class MapCastle extends Map { //deprecated
+public class MapPinku extends Map {
 
-    public MapCastle()
+    public MapPinku()
     {
         super();
-        setName("Castle");
-        initBackground("background/map_castle.png");
+        setName("Pinku");
+        initBackground("maps/map_1.png");
+        setScale(2);
     }
 
 }

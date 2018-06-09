@@ -53,8 +53,8 @@ public class CharSelectScreen implements Screen {
     @Override
     public void render(float delta) {
         stage.getBatch().setProjectionMatrix(cam.combined);
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        stage.getBatch().begin();
+        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 switch(NetworkPlayer.getCharID()){
     case 0:
         shapeRenderer.setColor(Color.RED);
@@ -67,8 +67,15 @@ switch(NetworkPlayer.getCharID()){
 
         shapeRenderer.rect(VIRTUAL_WIDTH * 0.60f, VIRTUAL_HEIGHT / 6, VIRTUAL_WIDTH / 4, VIRTUAL_HEIGHT / 3 * 1.9f);
         shapeRenderer.rect(VIRTUAL_WIDTH * 0.30f, VIRTUAL_HEIGHT / 6, VIRTUAL_WIDTH / 4, VIRTUAL_HEIGHT / 3 * 1.9f);
-        shapeRenderer.end();
-        stage.getBatch().begin();
+        shapeRenderer.end();*/
+        switch(NetworkPlayer.getCharID()) {
+            case 1:
+                stage.getBatch().draw(Animation.texture_char1_still, VIRTUAL_WIDTH * 0.45f, VIRTUAL_HEIGHT * 0.1f);
+                break;
+            case 2:
+                stage.getBatch().draw(Animation.texture_char2_still, VIRTUAL_WIDTH * 0.45f, VIRTUAL_HEIGHT * 0.1f);
+                break;
+        }
         font_titel.draw(stage.getBatch(), "Charakterauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7));
 
         drawLabels();
@@ -154,7 +161,7 @@ switch(NetworkPlayer.getCharID()){
             playerList[i].addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                NetworkPlayer.setCharID(temp);
+                NetworkPlayer.setCharID(temp + 1);
             }
         });
             stage.addActor(playerList[i]);

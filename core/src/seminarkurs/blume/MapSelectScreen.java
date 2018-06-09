@@ -32,6 +32,8 @@ public class MapSelectScreen implements Screen {
     private int screen_width;
     private int screen_height;
 
+    private int current_selection;
+
     private int next_screen;
 
     private Button butBack;
@@ -151,6 +153,7 @@ public class MapSelectScreen implements Screen {
             mapList[i].addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    current_selection = temp;
                     NetworkPlayer.setMapID(temp);
                 }
             });
@@ -192,6 +195,7 @@ public class MapSelectScreen implements Screen {
         button_weiter.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                LocalPlayer.setMap(current_selection); //TODO Auswahl mit Sever machen
                 LocalPlayer.setbIsSelecting(false);
                 dispose();
 

@@ -9,6 +9,8 @@ public class LocalPlayer {
     private static boolean bIsIngame = false;
     private static Map currentMap;
 
+    private static Map[] maps = {new MapPinku(), new MapKiseki()};
+
     public static boolean isSelecting()
     {
         return bIsSelecting;
@@ -37,5 +39,10 @@ public class LocalPlayer {
     public static void setMap(Map map)
     {
         currentMap = map;
+    }
+
+    public static void setMap(int map)
+    {
+        currentMap = maps[map];
     }
 }

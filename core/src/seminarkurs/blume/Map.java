@@ -1,10 +1,8 @@
 package seminarkurs.blume;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,8 +18,8 @@ public class Map {
     private boolean bLoadMapError = false;
 
 
-    private Texture backgroundTexture;
-    private Sprite backgroundSprite;
+    private Texture mapTexture;
+    private Sprite mapSprite;
 
     private int screen_width;
     private int screen_height;
@@ -40,12 +38,11 @@ public class Map {
     {
         try
         {
-            backgroundTexture = new Texture(mapImage);
-            backgroundSprite = new Sprite(backgroundTexture);
-            backgroundSprite.setScale(2f);
+            mapTexture = new Texture(mapImage);
+            mapSprite = new Sprite(mapTexture);
             float background_origin_x = 0;
             float background_origin_y = 0;
-            backgroundSprite.setOrigin(background_origin_x, background_origin_y);
+            mapSprite.setOrigin(background_origin_x, background_origin_y);
         }
         catch(Exception e)
         {
@@ -55,10 +52,15 @@ public class Map {
 
     }
 
+    void setScale(float scale)
+    {
+        mapSprite.setScale(scale);
+    }
+
     public void drawMap(Stage stage)
     {
         if(!bLoadMapError)
-            backgroundSprite.draw(stage.getBatch());
+            mapSprite.draw(stage.getBatch());
         else
             font_error.draw(stage.getBatch(), "ERROR DRAWING MAP " + this.getName(), screen_width/3, screen_height/20*18);
     }

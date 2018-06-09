@@ -100,7 +100,8 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         if(isLoading)
         {
             game.font_debug.draw(stage.getBatch(), "Connecting to Server", screen_width/2, screen_height / 4 * 3);
-            Animation.loadingCurrentFrame = (TextureRegion) Animation.char2_trittAnimation.getKeyFrame(Animation.player1_tritt_elapsed_time);
+            Animation.loading_elapsed_time += delta;
+            Animation.loadingCurrentFrame = (TextureRegion) Animation.char2_trittAnimation.getKeyFrame(Animation.loading_elapsed_time);
             stage.getBatch().draw(Animation.loadingCurrentFrame, screen_width / 2, screen_height / 5 * 2);
         }
         else if(showWinningScreen)
@@ -152,10 +153,10 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 you = "<-- DU";
             else
                 you = "DU -->";
-            game.font_debug.draw(stage.getBatch(), "Dir: " + MP.getLocalPlayer().getDirection() + " NR: " + MultiPlayer.getPlayerNr() + "PNR: " + MP.getLocalPlayer().getPlayer(), screen_width / 3, screen_height / 20 * 16);
+            /*7game.font_debug.draw(stage.getBatch(), "Dir: " + MP.getLocalPlayer().getDirection() + " NR: " + MultiPlayer.getPlayerNr() + "PNR: " + MP.getLocalPlayer().getPlayer(), screen_width / 3, screen_height / 20 * 16);
             game.font_debug.draw(stage.getBatch(), "Your X: " + MP.getLocalPlayer().getX() + " Y: " + MP.getLocalPlayer().getY() + " Direction: " + you, screen_width / 3, screen_height / 20 * 13);
             game.font_debug.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + "/" + player2_x_old + " Y: " + MP.getEnemy().getY() + " Direction: " + enemy, screen_width / 3, screen_height / 20 * 10);
-
+*/
 
             game.font_debug.draw(stage.getBatch(), "Your HP: " + MP.getLocalPlayer().getHealth(), screen_width / 12, screen_height / 12);
             game.font_debug.draw(stage.getBatch(), "Enemy HP: " + MP.getEnemy().getHealth(), screen_width / 2, screen_height / 12);

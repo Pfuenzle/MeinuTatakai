@@ -154,7 +154,7 @@ public class NetworkPlayer {
         NetworkPlayer.charID = charID;
     }
 
-    private static int charID = 0; //ID des Characters, den der Spieler ausgewählt hat
+    private static int charID = 1; //ID des Characters, den der Spieler ausgewählt hat
 
     public static int getMapID() { //Bekomme ID des Characters des Spielers
         return mapID;

@@ -153,7 +153,7 @@ public class MultiPlayerScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 try {
                     startRanked();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return true;
@@ -177,7 +177,7 @@ public class MultiPlayerScreen implements Screen {
         stage.addActor(butSearch);
     }
 
-    private void startRanked() throws IOException {
+    private void startRanked(){
         butRank.remove();
         butSearch.remove();
         butCancel = new TextButton("Cancel", uiSkin);
@@ -261,6 +261,7 @@ public class MultiPlayerScreen implements Screen {
                         response = inFromServer.readLine();
                     } catch (IOException e) {
                         e.printStackTrace();
+                        shouldExit = true;
                     }
                     if(response != null)
                         Gdx.app.debug("PACKET", response);
