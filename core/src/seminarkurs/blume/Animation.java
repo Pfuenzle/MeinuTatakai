@@ -133,7 +133,7 @@ public class Animation {
         char2_trittStateTime = 10f;
 
         texture_char2_still = new Texture(Gdx.files.internal("char2_standing.png"));
-        sprite_char2_still = new Sprite(texture_char2_still, 225, 668);
+        sprite_char2_still = new Sprite(texture_char2_still, 604, 715);
     }
 
     static com.badlogic.gdx.graphics.g2d.Animation loadingAnimation;

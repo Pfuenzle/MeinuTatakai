@@ -285,7 +285,7 @@ public class MultiPlayer {
                     try {
                             packet = inFromServer.readLine();
                         if(getPlayerNr() == 2 && !hasStartPos) {
-                            getLocalPlayer().setX(1660);
+                            getLocalPlayer().setX(1460);
                             getLocalPlayer().sendUpdate(socket);
                             hasStartPos = true;
                         }

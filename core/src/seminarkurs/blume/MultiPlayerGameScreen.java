@@ -136,7 +136,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
             animatePlayer2();
 
-/* //TODO debug code
+ //TODO debug code
             String enemy = "Enemy";
             String you = "You";
             if (MP.getEnemy().getDirection() == -1)
@@ -149,8 +149,8 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 you = "DU -->";
             game.font_debug.draw(stage.getBatch(), "Dir: " + MP.getLocalPlayer().getDirection() + " NR: " + MultiPlayer.getPlayerNr() + "PNR: " + MP.getLocalPlayer().getPlayer(), screen_width / 3, screen_height / 20 * 16);
             game.font_debug.draw(stage.getBatch(), "Your X: " + MP.getLocalPlayer().getX() + " Y: " + MP.getLocalPlayer().getY() + " Direction: " + you, screen_width / 3, screen_height / 20 * 13);
-            game.font_debug.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + "/" + player2_x_old + " Y: " + MP.getEnemy().getY() + " Direction: " + enemy, screen_width / 3, screen_height / 20 * 10);
-*/
+            game.font_debug.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + " Y: " + MP.getEnemy().getY() + " Direction: " + enemy, screen_width / 3, screen_height / 20 * 10);
+
 
             game.font_debug.draw(stage.getBatch(), "Your HP: " + MP.getLocalPlayer().getHealth(), screen_width / 12, screen_height / 12);
             game.font_debug.draw(stage.getBatch(), "Enemy HP: " + MP.getEnemy().getHealth(), screen_width / 2, screen_height / 12);
@@ -162,7 +162,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
     private void animatePlayer1() throws IOException{
         boolean animation_done = false;
-        if(butRight.isPressed() && MP.getLocalPlayer().getX() + walk_width < 1660)
+        if(butRight.isPressed() && MP.getLocalPlayer().getX() + walk_width < 1460)
         {
             moveright = true;
             Animation.player1_walk_elapsed_time += Gdx.graphics.getDeltaTime();
@@ -184,7 +184,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             }
         }
 
-        if(butLeft.isPressed() && MP.getLocalPlayer().getX() - walk_width > 0)
+        if(butLeft.isPressed() && MP.getLocalPlayer().getX() - walk_width > -180)
         {
             moveleft = true;
             Animation.player1_walk_elapsed_time += Gdx.graphics.getDeltaTime();
