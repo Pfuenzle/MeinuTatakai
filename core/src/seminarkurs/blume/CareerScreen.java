@@ -116,6 +116,7 @@ public class CareerScreen implements Screen {
         this.screen_height = Gdx.graphics.getHeight();
 
         username = NetworkPlayer.getUsername();
+
         RP = NetworkPlayer.getRP();
         wins = NetworkPlayer.getWins();
         losses = NetworkPlayer.getLosses();

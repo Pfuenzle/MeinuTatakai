@@ -61,8 +61,8 @@ public class NetworkPlayer {
 
     private static String username = "Fehler";
     private static int RP = 1337;
-    private static int wins = 88;
-    private static int losses = -2;
+    private static int wins = 0;
+    private static int losses = 0;
 
 
     //Network
