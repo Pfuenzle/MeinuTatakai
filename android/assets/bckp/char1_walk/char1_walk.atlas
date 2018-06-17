@@ -1,0 +1,62 @@
+
+char1_walk.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+laufen
+  rotate: false
+  xy: 2, 720
+  size: 477, 716
+  orig: 477, 716
+  offset: 0, 0
+  index: 1
+laufen
+  rotate: false
+  xy: 2, 2
+  size: 477, 716
+  orig: 477, 716
+  offset: 0, 0
+  index: 2
+laufen
+  rotate: false
+  xy: 481, 720
+  size: 477, 716
+  orig: 477, 716
+  offset: 0, 0
+  index: 3
+laufen
+  rotate: false
+  xy: 481, 2
+  size: 477, 716
+  orig: 477, 716
+  offset: 0, 0
+  index: 6
+laufen
+  rotate: false
+  xy: 960, 720
+  size: 477, 716
+  orig: 477, 716
+  offset: 0, 0
+  index: 8
+laufen
+  rotate: false
+  xy: 960, 3
+  size: 477, 715
+  orig: 477, 715
+  offset: 0, 0
+  index: 4
+laufen
+  rotate: false
+  xy: 1439, 721
+  size: 477, 715
+  orig: 477, 715
+  offset: 0, 0
+  index: 5
+laufen
+  rotate: false
+  xy: 1439, 4
+  size: 477, 715
+  orig: 477, 715
+  offset: 0, 0
+  index: 7

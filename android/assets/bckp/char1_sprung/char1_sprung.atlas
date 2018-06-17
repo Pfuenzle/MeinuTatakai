@@ -1,13 +1,13 @@
 
-char2_sprung.png
-size: 1024,1024
+char1_sprung.png
+size: 512,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-1
+sprung
   rotate: false
   xy: 2, 2
-  size: 604, 715
-  orig: 604, 715
+  size: 477, 716
+  orig: 477, 716
   offset: 0, 0
-  index: -1
+  index: 1

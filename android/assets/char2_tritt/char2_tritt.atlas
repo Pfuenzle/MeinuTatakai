@@ -1,48 +1,41 @@
 
 char2_tritt.png
-size: 2048,1024
+size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-farbe figur2.tritt.2
+1
+  rotate: false
+  xy: 2, 719
+  size: 601, 715
+  orig: 601, 715
+  offset: 0, 0
+  index: -1
+2
   rotate: false
   xy: 2, 2
-  size: 477, 715
-  orig: 477, 715
+  size: 601, 715
+  orig: 601, 715
   offset: 0, 0
   index: -1
-farbe figur2.tritt.7
+3
   rotate: false
-  xy: 2, 2
-  size: 477, 715
-  orig: 477, 715
+  xy: 605, 719
+  size: 601, 715
+  orig: 601, 715
   offset: 0, 0
   index: -1
-farbe figur2.tritt.3
+5
   rotate: false
-  xy: 481, 2
-  size: 477, 715
-  orig: 477, 715
+  xy: 605, 719
+  size: 601, 715
+  orig: 601, 715
   offset: 0, 0
   index: -1
-farbe figur2.tritt.4
+4
   rotate: false
-  xy: 960, 2
-  size: 477, 715
-  orig: 477, 715
-  offset: 0, 0
-  index: -1
-farbe figur2.tritt.6
-  rotate: false
-  xy: 960, 2
-  size: 477, 715
-  orig: 477, 715
-  offset: 0, 0
-  index: -1
-farbe figur2.tritt.5
-  rotate: false
-  xy: 1439, 2
-  size: 477, 715
-  orig: 477, 715
+  xy: 605, 2
+  size: 601, 715
+  orig: 601, 715
   offset: 0, 0
   index: -1

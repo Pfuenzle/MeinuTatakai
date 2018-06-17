@@ -1,48 +1,41 @@
 
 char1_tritt.png
-size: 2048,1024
+size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-tritt
+1
+  rotate: false
+  xy: 632, 4
+  size: 605, 715
+  orig: 605, 715
+  offset: 0, 0
+  index: -1
+2
+  rotate: false
+  xy: 632, 721
+  size: 628, 715
+  orig: 628, 715
+  offset: 0, 0
+  index: -1
+3
+  rotate: false
+  xy: 2, 720
+  size: 628, 716
+  orig: 628, 716
+  offset: 0, 0
+  index: -1
+5
+  rotate: false
+  xy: 2, 720
+  size: 628, 716
+  orig: 628, 716
+  offset: 0, 0
+  index: -1
+4
   rotate: false
   xy: 2, 2
-  size: 477, 716
-  orig: 477, 716
+  size: 628, 716
+  orig: 628, 716
   offset: 0, 0
-  index: 1
-tritt
-  rotate: false
-  xy: 2, 2
-  size: 477, 716
-  orig: 477, 716
-  offset: 0, 0
-  index: 6
-tritt
-  rotate: false
-  xy: 481, 2
-  size: 477, 716
-  orig: 477, 716
-  offset: 0, 0
-  index: 3
-tritt
-  rotate: false
-  xy: 481, 2
-  size: 477, 716
-  orig: 477, 716
-  offset: 0, 0
-  index: 5
-tritt
-  rotate: false
-  xy: 960, 2
-  size: 477, 716
-  orig: 477, 716
-  offset: 0, 0
-  index: 4
-tritt
-  rotate: false
-  xy: 1439, 3
-  size: 477, 715
-  orig: 477, 715
-  offset: 0, 0
-  index: 2
+  index: -1

@@ -401,7 +401,6 @@ public class MultiPlayer {
     }
 
     public void doNothing() throws IOException{
-        final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
         localPlayer.setAction(0);
         localPlayer.sendUpdate(socket);
     }
