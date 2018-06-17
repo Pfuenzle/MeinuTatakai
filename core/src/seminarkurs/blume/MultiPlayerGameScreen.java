@@ -69,15 +69,8 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
     private boolean isLoading = false;
 
-    private double player2_x_old = 0;
-
-    private final static int PING_RANGE = 20;
-    private boolean player2_shouldWalkLeft = false;
-    private boolean player2_shouldWalkRight = false;
-    private int player2_walkLeft = PING_RANGE;
-    private int player2_walkRight = PING_RANGE;
-
     private boolean canTritt = true;
+    private boolean canSchlag = true;
 
     private boolean showWinningScreen = false;
     private int winningScreenFrames = 240;
@@ -247,7 +240,6 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
         if(schlag)
         {
-            MP.doSchlag();
             Animation.player1_schlag_elapsed_time += Gdx.graphics.getDeltaTime();
 
             if(player1_char == 2)
@@ -273,7 +265,8 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 }
             }
 
-            if(Animation.char1_schlagAnimation.isAnimationFinished(Animation.player1_schlag_elapsed_time)) {
+            if(Animation.char1_schlagAnimation.isAnimationFinished(Animation.player1_schlag_elapsed_time) || Animation.char2_schlagAnimation.isAnimationFinished(Animation.player1_schlag_elapsed_time)) {
+                canSchlag = true;
                 schlag = false;
                 Animation.player1_schlag_elapsed_time = 0;
             }
@@ -281,7 +274,6 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
         if(tritt)
         {
-            MP.doTritt();
             Animation.player1_tritt_elapsed_time += Gdx.graphics.getDeltaTime();
 
             if(player1_char == 2)
@@ -341,26 +333,6 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         boolean animation_done = false;
         int direction;
 
-        if(player2_walkLeft < PING_RANGE)
-        {
-            player2_walkRight = PING_RANGE;
-            player2_shouldWalkLeft = true;
-            player2_shouldWalkRight = false;
-        }
-       else if(player2_walkRight < PING_RANGE)
-        {
-            player2_walkLeft = PING_RANGE;
-            player2_shouldWalkRight = true;
-            player2_shouldWalkLeft = false;
-        }
-        else
-        {
-            player2_walkLeft = PING_RANGE;
-            player2_walkRight = PING_RANGE;
-            player2_shouldWalkRight = false;
-            player2_shouldWalkLeft = false;
-        }
-
         if(MP.getEnemy().getAction() == 2)
         {
             Animation.player2_walk_elapsed_time += Gdx.graphics.getDeltaTime();
@@ -372,12 +344,6 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
             stage.getBatch().draw(Animation.player2_walkCurrentFrame, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
             animation_done = true;
-            if(player2_shouldWalkRight)
-            {
-                player2_walkRight++;
-            }
-            else
-                player2_walkRight = 0;
         }
 
         if(MP.getEnemy().getAction() == 1)
@@ -396,12 +362,6 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 animation_done = true;
                 Animation.player2_walkCurrentFrame.flip(true, false);
             }
-            if(player2_shouldWalkLeft)
-            {
-                player2_walkLeft++;
-            }
-            else
-                player2_walkLeft = 0;
         }
 
         player2_isInJump = MP.getEnemy().getAction() == 3;
@@ -450,6 +410,19 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                     animation_done = true;
                 }
             }
+
+            if(player2_char == 2)
+            {
+                if(Animation.char2_trittAnimation.isAnimationFinished(Animation.player2_tritt_elapsed_time)) {
+                    Animation.player2_tritt_elapsed_time = 0;
+                }
+            }
+            else
+            {
+                if(Animation.char1_trittAnimation.isAnimationFinished(Animation.player2_tritt_elapsed_time)) {
+                    Animation.player2_tritt_elapsed_time = 0;
+                }
+            }
         }
         if (MP.getEnemy().getAction() == 6) {
             Animation.player2_schlag_elapsed_time += Gdx.graphics.getDeltaTime();
@@ -462,14 +435,39 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             if (direction == -1) {
                 Animation.player2_schlagCurrentFrame.flip(true, false);
                 if (!animation_done) {
-                    stage.getBatch().draw(Animation.player1_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    try {
+                        stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
                     animation_done = true;
                 }
                 Animation.player2_schlagCurrentFrame.flip(true, false);
             } else if (direction == 1) {
                 if (!animation_done) {
-                    stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    try {
+                        stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
                     animation_done = true;
+                }
+            }
+
+            if(player2_char == 2)
+            {
+                if(Animation.char2_schlagAnimation.isAnimationFinished(Animation.player2_schlag_elapsed_time)) {
+                    Animation.player2_schlag_elapsed_time = 0;
+                }
+            }
+            else
+            {
+                if(Animation.char1_schlagAnimation.isAnimationFinished(Animation.player2_schlag_elapsed_time)) {
+                    Animation.player2_schlag_elapsed_time = 0;
                 }
             }
         }
@@ -488,8 +486,6 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                     stage.getBatch().draw(Animation.sprite_char1_still, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
             }
         }
-
-        player2_x_old = MP.getEnemy().getX();
     }
 
     @Override
@@ -634,7 +630,17 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         butSchlag.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                schlag = true;
+                if(canSchlag) {
+                    canSchlag = false;
+                    try {
+                        MP.doSchlag();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    schlag = true;
+                }
                 return true;
             }
         });

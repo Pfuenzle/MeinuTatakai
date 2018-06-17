@@ -215,18 +215,21 @@ public class MultiPlayer {
         }
         else if (packet.substring(0, 2).equals("99")) {
             //99x0000xuserx0000xuser2
-            int winner_pos_start = 8;
-            int winner_pos_end = winner_pos_start + Integer.parseInt(packet.substring(3, 7));
-            int looser_pos_start = winner_pos_end + 6;
-            int looser_pos_end = looser_pos_start + Integer.parseInt(packet.substring(winner_pos_end + 1, winner_pos_end + 5));
-            try
-            {
-                this.setWinner(packet.substring(winner_pos_start, winner_pos_end));
-                this.setLooser(packet.substring(looser_pos_start, looser_pos_end));
+            try {
+                int winner_pos_start = 8;
+                int winner_pos_end = winner_pos_start + Integer.parseInt(packet.substring(3, 7));
+                int looser_pos_start = winner_pos_end + 6;
+                int looser_pos_end = looser_pos_start + Integer.parseInt(packet.substring(winner_pos_end + 1, winner_pos_end + 5));
+                try {
+                    this.setWinner(packet.substring(winner_pos_start, winner_pos_end));
+                    this.setLooser(packet.substring(looser_pos_start, looser_pos_end));
+                } catch (Exception e) {
+
+                }
             }
             catch(Exception e)
             {
-
+                game.setScreen(new MainScreen(game));
             }
             multiplayerRunning = false;
         }
