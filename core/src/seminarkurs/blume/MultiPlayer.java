@@ -32,7 +32,7 @@ public class MultiPlayer {
 
     private GamePlayer localPlayer;
 
-    public static GamePlayer enemy;
+    private static GamePlayer enemy;
 
     private static String serverStatus;
 
@@ -44,8 +44,8 @@ public class MultiPlayer {
         return serverStatus;
     }
 
-    private void setServerStatus(String serverStatus) {
-        this.serverStatus = serverStatus;
+    private void setServerStatus(String serverStatusArg) {
+        serverStatus = serverStatusArg;
     }
 
     public GamePlayer getLocalPlayer() {
@@ -60,8 +60,8 @@ public class MultiPlayer {
         return enemy;
     }
 
-    public void setEnemy(GamePlayer enemy) {
-        this.enemy = enemy;
+    public void setEnemy(GamePlayer enemyArg) {
+        enemy = enemyArg;
     }
 
     public String getWinner() {
@@ -192,7 +192,17 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("20")) {
+        else if (packet.substring(0, 2).equals("19")) {
+            try {
+                enemy.setAction(Integer.parseInt(packet.substring(3)));
+            }
+            catch(Exception e)
+            {
+
+            }
+            init = true;
+        }
+        else if (packet.substring(0, 2).equals("21")) {
             System.out.println("PlayerNr: " + packet.substring(3));
             try {
                 playerNr = Integer.parseInt(packet.substring(3));
@@ -237,7 +247,7 @@ public class MultiPlayer {
         setServerStatus(packet.substring(3, packet.length()));
     }
 
-    public void startMultiPlayerThread() throws IOException, ClassNotFoundException, InterruptedException {
+    public void startMultiPlayerThread() throws IOException{
         socket = new Socket(SERVER,PORT); //verbinde zu server
         multiplayerRunning = true;
 
@@ -270,7 +280,7 @@ public class MultiPlayer {
                 while(multiplayerRunning)
                 {
                     try {
-                        packet = inFromServer.readLine();
+                            packet = inFromServer.readLine();
                         if(getPlayerNr() == 2 && !hasStartPos) {
                             getLocalPlayer().setX(1660);
                             getLocalPlayer().sendUpdate(socket);
@@ -281,7 +291,7 @@ public class MultiPlayer {
                         game.setScreen(new MainScreen(game));
                         dispose();
                         e.printStackTrace();
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         dispose();
                         game.setScreen(new MainScreen(game));
                         dispose();
@@ -295,7 +305,7 @@ public class MultiPlayer {
                     if(!init/* || enemy.getUsername().equals("null")*/)
                     {
                         try {
-                            outToServer.writeBytes("19x\n");
+                            outToServer.writeBytes("20x\n");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -312,7 +322,7 @@ public class MultiPlayer {
         }).start();
     }
 
-    public MultiPlayer(int PORT, MultiPlayerGameScreen mpgs) throws IOException, ClassNotFoundException {
+    public MultiPlayer(int PORT, MultiPlayerGameScreen mpgs){
         System.out.println("Initializing Multiplayer");
         this.game = mpgs.getGame();
         this.mpgs = mpgs;
@@ -342,36 +352,56 @@ public class MultiPlayer {
 
         try {
             startMultiPlayerThread();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void moveLeft(float num) throws IOException, InterruptedException {
+    public void moveLeft(float num) throws IOException{
         localPlayer.setX(localPlayer.getX() - num);
         localPlayer.setDirection(-1);
+        localPlayer.setAction(1);
         localPlayer.sendUpdate(socket);
     }
 
-    public void moveRight(float num) throws IOException, InterruptedException {
+    public void moveRight(float num) throws IOException{
         localPlayer.setX(localPlayer.getX() + num);
         localPlayer.setDirection(1);
+        localPlayer.setAction(2);
         localPlayer.sendUpdate(socket);
     }
 
-    public void moveUp(float num) throws IOException, InterruptedException {
+    public void jump(float num) throws IOException{
         localPlayer.setY(localPlayer.getY() + num);
+        localPlayer.setAction(3);
         localPlayer.sendUpdate(socket);
     }
 
-    public void moveDown(float num) throws IOException, InterruptedException {
+    public void onGround(float num) throws IOException{
         localPlayer.setY(localPlayer.getY() - num);
+        localPlayer.setAction(4);
         localPlayer.sendUpdate(socket);
     }
 
-    public void doTritt() throws IOException, InterruptedException {
+    public void doTritt() throws IOException{
         final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
-        outToClient.writeBytes("31x" + "\n");
+        localPlayer.setAction(5); //Setze Action auf Tritt
+        outToClient.writeBytes("31x" + "\n"); //Sende Attacke-Paket //TODO BESSER
+        localPlayer.sendUpdate(socket);
     }
+
+    public void doSchlag() throws IOException{
+        final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
+        localPlayer.setAction(6); //Setze Action auf Schlag
+        outToClient.writeBytes("31x" + "\n"); //Sende Attacke-Paket //TODO BESSER
+        localPlayer.sendUpdate(socket);
+    }
+
+    public void doNothing() throws IOException{
+        final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
+        localPlayer.setAction(0);
+        localPlayer.sendUpdate(socket);
+    }
+
 
 }

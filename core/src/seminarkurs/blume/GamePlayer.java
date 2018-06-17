@@ -27,6 +27,16 @@ public class GamePlayer{
 
     private int direction;
 
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
+    }
+
+    private int action; //0 = none, 1 == left, 2 == right, 3 == jump, 4 == jump_down, 5 = tritt, 6 = schlag
+
     public String getUsername() {
         return username;
     }
@@ -105,7 +115,7 @@ public class GamePlayer{
         this.direction = direction;
     }
 
-    public void sendUpdate(Socket s) throws IOException, InterruptedException
+    public void sendUpdate(Socket s) throws IOException
     {
         Socket socket = s;
         final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
@@ -128,6 +138,8 @@ public class GamePlayer{
         System.out.println("Sent y");
         outToClient.writeBytes("18x" + String.valueOf(getDirection()) + "\n");
         System.out.println("Sent direction");
+        outToClient.writeBytes("19x" + String.valueOf(getAction()) + "\n");
+        System.out.println("Sent action");
 
     }
 

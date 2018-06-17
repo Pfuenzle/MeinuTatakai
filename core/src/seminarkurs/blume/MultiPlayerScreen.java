@@ -42,8 +42,8 @@ public class MultiPlayerScreen implements Screen {
     private Button butSearch;
     private Button butCancel;
 
-    Socket rankedSocket = null;
-    DataOutputStream rankedOutputStream = null;
+    private Socket rankedSocket = null;
+    private DataOutputStream rankedOutputStream = null;
 
     private BitmapFont font;
 
@@ -55,8 +55,8 @@ public class MultiPlayerScreen implements Screen {
     private static boolean hasError = false;
     private static String errormsg = "";
 
-    String enemy;
-    String port;
+    private String enemy;
+    private String port;
     @Override
     public void show() {
 
@@ -119,7 +119,7 @@ public class MultiPlayerScreen implements Screen {
         font.setColor(Color.BLACK);
     }
 
-    public void initBackButton()
+    private void initBackButton()
     {
         butBack = new TextButton("<----", uiSkin);
         butBack.setTransform(true);
@@ -128,6 +128,14 @@ public class MultiPlayerScreen implements Screen {
         butBack.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                if(inQueue) {
+                    inQueue = false;
+                    try {
+                        rankedOutputStream.writeBytes("x5x9");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 dispose();
                 game.setScreen(new MainScreen(game));
                 return true;
@@ -293,9 +301,7 @@ public class MultiPlayerScreen implements Screen {
                             dispose();
                             try {
                                 game.setScreen(new MultiPlayerGameScreen(game, Integer.parseInt(port)));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (ClassNotFoundException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }

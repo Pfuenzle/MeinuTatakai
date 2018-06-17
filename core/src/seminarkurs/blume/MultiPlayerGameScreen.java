@@ -37,7 +37,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
     private int screen_width;
     private int screen_height;
 
-    OrthographicCamera cam;
+    private OrthographicCamera cam;
 
     private final float VIRTUAL_WIDTH = 1920;
     private final float VIRTUAL_HEIGHT = 1080;
@@ -51,24 +51,23 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
     private BitmapFont statusFont;
 
-    boolean player1_isInJump = false;
-    boolean moveleft = false;
-    boolean moveright = false;
-    boolean schlag = false;
-    boolean tritt = false;
-    int player1_sprung = 0;
+    private boolean player1_isInJump = false;
+    private boolean moveleft = false;
+    private boolean moveright = false;
+    private boolean schlag = false;
+    private boolean tritt = false;
+    private int player1_sprung = 0;
 
-    int player2_sprung = 0;
-    boolean player2_isInJump = false;
+    private boolean player2_isInJump = false;
 
-    int walk_width = 10;
+    private static int walk_width = 10;
 
-    boolean player1_hasSentJump = false;
+   private boolean player1_hasSentJump = false;
 
-    int player1_char;
-    int player2_char;
+    private int player1_char;
+    private int player2_char;
 
-    boolean isLoading = false;
+    private boolean isLoading = false;
 
     private double player2_x_old = 0;
 
@@ -127,6 +126,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             if(winningScreenFrames == 0) {
                 dispose();
                 game.setScreen(new MainScreen(game));
+                LocalPlayer.setMap(0);
                 MP.dispose();
             }
         }
@@ -137,12 +137,13 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 animatePlayer1();
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
             animatePlayer2();
 
+/* //TODO debug code
             String enemy = "Enemy";
             String you = "You";
             if (MP.getEnemy().getDirection() == -1)
@@ -153,7 +154,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 you = "<-- DU";
             else
                 you = "DU -->";
-            /*7game.font_debug.draw(stage.getBatch(), "Dir: " + MP.getLocalPlayer().getDirection() + " NR: " + MultiPlayer.getPlayerNr() + "PNR: " + MP.getLocalPlayer().getPlayer(), screen_width / 3, screen_height / 20 * 16);
+            game.font_debug.draw(stage.getBatch(), "Dir: " + MP.getLocalPlayer().getDirection() + " NR: " + MultiPlayer.getPlayerNr() + "PNR: " + MP.getLocalPlayer().getPlayer(), screen_width / 3, screen_height / 20 * 16);
             game.font_debug.draw(stage.getBatch(), "Your X: " + MP.getLocalPlayer().getX() + " Y: " + MP.getLocalPlayer().getY() + " Direction: " + you, screen_width / 3, screen_height / 20 * 13);
             game.font_debug.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + "/" + player2_x_old + " Y: " + MP.getEnemy().getY() + " Direction: " + enemy, screen_width / 3, screen_height / 20 * 10);
 */
@@ -166,7 +167,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         stage.draw();
     }
 
-    private void animatePlayer1() throws IOException, InterruptedException {
+    private void animatePlayer1() throws IOException{
         boolean animation_done = false;
         if(butRight.isPressed() && MP.getLocalPlayer().getX() + walk_width < 1660)
         {
@@ -185,7 +186,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 MP.moveRight(walk_width);
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -211,7 +212,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 MP.moveLeft(walk_width);
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -230,13 +231,13 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 animation_done = true;
             }
             if(!player1_hasSentJump) {
-                MP.moveUp(250);
+                MP.jump(250);
                 player1_hasSentJump = true;
             }
             player1_sprung++;
             if(player1_sprung > 24/* && seminarkurs.blume.Animation.char1_jumpAnimation.isAnimationFinished(seminarkurs.blume.Animation.player1_jump_elapsed_time)*/)
             {
-                MP.moveDown(250);
+                MP.onGround(250);
                 player1_hasSentJump = false;
                 player1_sprung = 0;
                 seminarkurs.blume.Animation.player1_jump_elapsed_time = 0;
@@ -246,6 +247,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
         if(schlag)
         {
+            MP.doSchlag();
             Animation.player1_schlag_elapsed_time += Gdx.graphics.getDeltaTime();
 
             if(player1_char == 2)
@@ -279,6 +281,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
         if(tritt)
         {
+            MP.doTritt();
             Animation.player1_tritt_elapsed_time += Gdx.graphics.getDeltaTime();
 
             if(player1_char == 2)
@@ -329,12 +332,14 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 stage.getBatch().draw(Animation.sprite_char2_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
             else
                 stage.getBatch().draw(Animation.sprite_char1_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
+            MP.doNothing();
         }
     }
 
     private void animatePlayer2()
     {
         boolean animation_done = false;
+        int direction;
 
         if(player2_walkLeft < PING_RANGE)
         {
@@ -356,7 +361,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             player2_shouldWalkLeft = false;
         }
 
-        if(MP.getEnemy().getX() > player2_x_old || player2_shouldWalkRight)
+        if(MP.getEnemy().getAction() == 2)
         {
             Animation.player2_walk_elapsed_time += Gdx.graphics.getDeltaTime();
 
@@ -375,7 +380,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 player2_walkRight = 0;
         }
 
-        if((MP.getEnemy().getX() < player2_x_old) && !animation_done || player2_shouldWalkLeft)
+        if(MP.getEnemy().getAction() == 1)
         {
             Animation.player2_walk_elapsed_time += Gdx.graphics.getDeltaTime();
 
@@ -399,10 +404,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 player2_walkLeft = 0;
         }
 
-        if(MP.getEnemy().getY() == 250)
-            player2_isInJump = true;
-        else
-            player2_isInJump = false;
+        player2_isInJump = MP.getEnemy().getAction() == 3;
 
         if(player2_isInJump)
         {
@@ -424,6 +426,52 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 seminarkurs.blume.Animation.player1_jump_elapsed_time = 0;
                 player2_isInJump = false;
             }*/
+        }
+
+        if(MP.getEnemy().getAction() == 5) {
+            Animation.player2_tritt_elapsed_time += Gdx.graphics.getDeltaTime();
+
+            if (player2_char == 2)
+                Animation.player2_trittCurrentFrame = (TextureRegion) Animation.char2_trittAnimation.getKeyFrame(Animation.player2_tritt_elapsed_time);
+            else
+                Animation.player2_trittCurrentFrame = (TextureRegion) Animation.char1_trittAnimation.getKeyFrame(Animation.player2_tritt_elapsed_time);
+
+            direction = MP.getEnemy().getDirection();
+            if (direction == -1) {
+                Animation.player2_trittCurrentFrame.flip(true, false);
+                if (!animation_done) {
+                    stage.getBatch().draw(Animation.player2_trittCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    animation_done = true;
+                }
+                Animation.player2_trittCurrentFrame.flip(true, false);
+            } else if (direction == 1) {
+                if (!animation_done) {
+                    stage.getBatch().draw(Animation.player2_trittCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    animation_done = true;
+                }
+            }
+        }
+        if (MP.getEnemy().getAction() == 6) {
+            Animation.player2_schlag_elapsed_time += Gdx.graphics.getDeltaTime();
+            if (player2_char == 2)
+                Animation.player2_schlagCurrentFrame = (TextureRegion) Animation.char2_schlagAnimation.getKeyFrame(Animation.player2_schlag_elapsed_time);
+            else
+                Animation.player2_schlagCurrentFrame = (TextureRegion) Animation.char1_schlagAnimation.getKeyFrame(Animation.player2_schlag_elapsed_time);
+
+            direction = MP.getEnemy().getDirection();
+            if (direction == -1) {
+                Animation.player2_schlagCurrentFrame.flip(true, false);
+                if (!animation_done) {
+                    stage.getBatch().draw(Animation.player1_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    animation_done = true;
+                }
+                Animation.player2_schlagCurrentFrame.flip(true, false);
+            } else if (direction == 1) {
+                if (!animation_done) {
+                    stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    animation_done = true;
+                }
+            }
         }
 
         if(!animation_done)
@@ -463,7 +511,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
     }
 
-    public void showLoadingScreen()
+    private void showLoadingScreen()
     {
         isLoading = true;
     }
@@ -512,13 +560,13 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         stage.clear();
     }
 
-    public MultiPlayerGameScreen(MyGdxGame game, int PORT) throws IOException, ClassNotFoundException {
+    public MultiPlayerGameScreen(MyGdxGame game, int PORT){
         this.game = game;
         MP = new MultiPlayer(PORT, this);
         create();
     }
 
-    public void initPauseButton()
+    private void initPauseButton()
     {
         butBack = new TextButton("||", uiSkin);
         butBack.setTransform(true);
@@ -536,7 +584,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         stage.addActor(butBack);
     }
 
-    public void setupInterface()
+    private void setupInterface()
     {
         butLeft = new TextButton("<--", uiSkin);
         butLeft.setTransform(true);
@@ -606,7 +654,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                         MP.doTritt();
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (InterruptedException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     tritt = true;
