@@ -264,6 +264,7 @@ public class MultiPlayer {
         outToServer.writeBytes("16x" + String.valueOf(localPlayer.getX()) + "\n");
         outToServer.writeBytes("17x" + String.valueOf(localPlayer.getY()) + "\n");
         outToServer.writeBytes("18x" + String.valueOf(localPlayer.getDirection()) + "\n");
+        outToServer.writeBytes("19x" + String.valueOf(localPlayer.getAction()) + "\n");
         outToServer.writeBytes("10x" + localPlayer.getUsername() + "\n");
 
         new Thread(new Runnable() {
