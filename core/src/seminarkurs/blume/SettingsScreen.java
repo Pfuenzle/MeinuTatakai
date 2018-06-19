@@ -84,6 +84,8 @@ public class SettingsScreen implements Screen{
         button_music = new TextButton("",uiSkin);
         button_music.setTransform(true);
         button_music.setScale(2f);
+        button_music.setHeight(100);
+        button_music.setWidth(200);
         button_music.setPosition(game.getScreenX() / 2 - button_music.getWidth(), game.getScreenY() * 0.6f);
         button_music.addListener(new InputListener(){
             @Override
@@ -101,6 +103,8 @@ public class SettingsScreen implements Screen{
         button_sound = new TextButton("",uiSkin);
         button_sound.setTransform(true);
         button_sound.setScale(2f);
+        button_sound.setHeight(100);
+        button_sound.setWidth(200);
         button_sound.setPosition(game.getScreenX() / 2 - button_sound.getWidth(), game.getScreenY() * 0.3f);
         button_sound.addListener(new InputListener(){
             @Override
@@ -120,7 +124,7 @@ public class SettingsScreen implements Screen{
 
     public void initBackButton()
     {
-        butBack = new TextButton("<----", uiSkin);
+        butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition((int)(1920 * 0.01f), (int)(1080 * 0.85));
@@ -138,9 +142,10 @@ public class SettingsScreen implements Screen{
 
     private void updateButtons()
     {
-        String sound_text = (Settings.isSoundEnabled()) ? "Disable Sound" : "Enable Sound";
+
+        String sound_text = (Settings.isSoundEnabled()) ? "Disable\nSound" : "Enable\nSound";
         button_sound.setText(sound_text);
-        String music_text = (Settings.isMusicEnabled()) ? "Disable Music" : "Enable Music";
+        String music_text = (Settings.isMusicEnabled()) ? "Disable\nMusic" : "Enable\nMusic";
         button_music.setText(music_text);
         MusicPlayer.updateVolume();
     }

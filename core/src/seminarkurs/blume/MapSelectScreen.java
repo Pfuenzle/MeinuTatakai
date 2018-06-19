@@ -170,7 +170,7 @@ public class MapSelectScreen implements Screen {
 
     public void initBackButton()
     {
-        butBack = new TextButton("<----", uiSkin);
+        butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition((int)(VIRTUAL_WIDTH * 0.01f), (int)(VIRTUAL_HEIGHT * 0.85));
@@ -188,7 +188,7 @@ public class MapSelectScreen implements Screen {
 
     public void setupInterface()
     {
-        TextButton button_weiter = new TextButton("Weiter",uiSkin);
+        TextButton button_weiter = new TextButton("continue",uiSkin);
         button_weiter.setTransform(true);
         button_weiter.setScale(2);
         button_weiter.setPosition((int)(VIRTUAL_WIDTH * 0.8f), (int)(VIRTUAL_HEIGHT*0.02f));

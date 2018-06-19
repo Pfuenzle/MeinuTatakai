@@ -28,19 +28,19 @@ import java.io.InputStreamReader;
 
 public class LoginScreen implements Screen {
 
-    private final MyGdxGame game;
+    private final MyGdxGame game;// hauptklasse als argumment zB dür setscreenn//neuen screnn aufrufen skin holen
 
-    private Stage stage;
+    private Stage stage; //Alles rendern /drauf zeichen
 
-    private Skin uiSkin;
+    private Skin uiSkin; // Ausssehen
 
-    private Button button_reg;
-    private Button button_log;
+    private Button button_reg; // registriren
+    private Button button_log; // einloggen
 
     private int ret_type = 0;
     private String ret_text = "";
 
-    private BitmapFont font_msg;
+    private BitmapFont font_msg; //textart
     private BitmapFont font_title;
     private BitmapFont font_japanese;
 
@@ -51,16 +51,16 @@ public class LoginScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        stage.getBatch().begin();
-        renderLogin();
+        stage.getBatch().begin(); // rendern anfangen
+        renderLogin();             //Statusnachrichten
         font_title.draw(stage.getBatch(), "Meinu Tatakai", (int)(game.getScreenX() / 7), (int)(game.getScreenY() / 5 * 4.4)); //Rendere Titel
         font_japanese.draw(stage.getBatch(), "雌犬戦い", (int)(game.getScreenX() / 2), (int)(game.getScreenY() / 5 * 3.5)); //Rendere Titel
-        stage.getBatch().end();
+        stage.getBatch().end(); // rendern enden
         stage.act();
         try {
-            stage.draw();
+            stage.draw(); //Auf dem Bildschirm zeigen
         }
-        catch(Exception e)
+        catch(Exception e) //Fehlermeldung abfangen
         {
 
         }
@@ -109,12 +109,12 @@ public class LoginScreen implements Screen {
     {
         int msg_x = game.getScreenX()/3;
         int msg_y = game.getScreenY()/12*2;
-        if(ret_type == 1) //Draw Login Message
+        if(ret_type == 1) //hat sich eingeloggt
         {
             font_msg.draw(stage.getBatch(), ret_text, msg_x, msg_y);
         }
 
-        if(ret_type == 2) //Draw Register Message
+        if(ret_type == 2) //hat sich registriert
         {
             font_msg.draw(stage.getBatch(), ret_text, msg_x, msg_y);
         }
@@ -132,9 +132,10 @@ public class LoginScreen implements Screen {
         font_title.setColor(25, 105, 180, 255);
         font_title.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);*/
 
-        String TITLE_FONT_CHARS = "Meinu Tatakai";
+         String TITLE_FONT_CHARS = "Meinu Tatakai";
 
         final String TITLE_FONT_PATH = "Action_Man.ttf";
+
         FreeTypeFontGenerator title_generator = new FreeTypeFontGenerator(Gdx.files.internal(TITLE_FONT_PATH));
         FreeTypeFontGenerator.FreeTypeFontParameter title_parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         title_parameter.characters = TITLE_FONT_CHARS;

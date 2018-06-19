@@ -121,7 +121,7 @@ public class MultiPlayerScreen implements Screen {
 
     private void initBackButton()
     {
-        butBack = new TextButton("<----", uiSkin);
+        butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition(game.getScreenX()/25, game.getScreenY()/15*13);
@@ -151,9 +151,11 @@ public class MultiPlayerScreen implements Screen {
 
         font = new BitmapFont();
 
-        butRank = new TextButton("Play ranked game", uiSkin);
+        butRank = new TextButton("Ranked game", uiSkin);
         butRank.setTransform(true);
         butRank.setScale(2f);
+        butRank.setHeight(150);
+        butRank.setWidth(230);
         butRank.setSize(input_width / 3, input_height);
         butRank.setPosition((game.getScreenX() / 2) - butRank.getWidth(), input_height * 7);
         butRank.addListener(new InputListener() {
@@ -169,9 +171,11 @@ public class MultiPlayerScreen implements Screen {
         });
         stage.addActor(butRank);
 
-        butSearch = new TextButton("Search player", uiSkin);
+        butSearch = new TextButton("Search\nplayer", uiSkin);
         butSearch.setTransform(true);
         butSearch.setScale(2f);
+        butSearch.setHeight(80);
+        butSearch.setWidth(200);
         butSearch.setSize(input_width / 3, input_height);
         butSearch.setPosition((game.getScreenX() / 2) - butSearch.getWidth(), input_height * 4.5f);
         butSearch.addListener(new InputListener() {
