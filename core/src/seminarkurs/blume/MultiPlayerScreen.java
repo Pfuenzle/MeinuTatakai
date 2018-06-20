@@ -98,7 +98,7 @@ public class MultiPlayerScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    }
+    } // löschen nicht mehr benötigter Objekte
 
     public MultiPlayerScreen(MyGdxGame game)
     {
@@ -110,7 +110,7 @@ public class MultiPlayerScreen implements Screen {
         initBackButton();
 
         setupInterface();
-
+        //nimmt größe des Bildschirms
         this.screen_width = Gdx.graphics.getWidth();
         this.screen_height = Gdx.graphics.getHeight();
 
@@ -121,7 +121,7 @@ public class MultiPlayerScreen implements Screen {
 
     private void initBackButton()
     {
-        //back Button
+        //back Button Initialisierung
         butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
@@ -138,7 +138,7 @@ public class MultiPlayerScreen implements Screen {
                     }
                 }
                 dispose();
-                game.setScreen(new MainScreen(game));
+                game.setScreen(new MainScreen(game));// neuen Screen aufrufen
                 return true;
             }
         });
@@ -151,7 +151,7 @@ public class MultiPlayerScreen implements Screen {
         input_height = game.getScreenY() / 12;
 
         font = new BitmapFont();
-        // Ranked Button
+        // Ranked Button Initialisierung
         butRank = new TextButton("Ranked game", uiSkin);
         butRank.setTransform(true);
         butRank.setScale(2f);
@@ -171,7 +171,7 @@ public class MultiPlayerScreen implements Screen {
             }
         });
         stage.addActor(butRank);
-        // Such Button
+        // Such Button Initialisierung
         butSearch = new TextButton("Search\nplayer", uiSkin);
         butSearch.setTransform(true);
         butSearch.setScale(2f);
@@ -183,7 +183,7 @@ public class MultiPlayerScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new MultiPlayerScreen(game));
+                game.setScreen(new MultiPlayerScreen(game));// neuen Screen aufrufen
                 return true;
             }
         });

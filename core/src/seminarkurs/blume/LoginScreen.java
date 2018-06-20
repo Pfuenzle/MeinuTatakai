@@ -28,7 +28,7 @@ import java.io.InputStreamReader;
 
 public class LoginScreen implements Screen {
 
-    private final MyGdxGame game;// hauptklasse als argumment zB dür setscreenn//neuen screnn aufrufen skin holen
+    private final MyGdxGame game;// hauptklasse als argumment zB dür setscreenn//neuen screen aufrufen skin holen
 
     private Stage stage; //Alles rendern /drauf zeichen
 
@@ -51,12 +51,12 @@ public class LoginScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        stage.getBatch().begin(); // rendern anfangen
+        stage.getBatch().begin();
         renderLogin();             //Statusnachrichten
         font_title.draw(stage.getBatch(), "Meinu Tatakai", (int)(game.getScreenX() / 7), (int)(game.getScreenY() / 5 * 4.4)); //Rendere Titel
-        font_japanese.draw(stage.getBatch(), "雌犬戦い", (int)(game.getScreenX() / 2), (int)(game.getScreenY() / 5 * 3.5)); //Rendere Titel
-        stage.getBatch().end(); // rendern enden
-        stage.act();
+        font_japanese.draw(stage.getBatch(), "雌犬戦い", (int)(game.getScreenX() / 2), (int)(game.getScreenY() / 5 * 3.5)); //Rendere jap.Titel
+        stage.getBatch().end();
+        stage.act();            // Aktion des Buttons
         try {
             stage.draw(); //Auf dem Bildschirm zeigen
         }
@@ -89,7 +89,7 @@ public class LoginScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    } // Löschen
+    } // Löschen  nicht mehr benötigter Objekte
 
     public LoginScreen(final MyGdxGame game)// konstrucktor
     {
@@ -105,7 +105,7 @@ public class LoginScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    public void renderLogin()//rendern
+    public void renderLogin()//Statusnachrichten
     {
         int msg_x = game.getScreenX()/3;
         int msg_y = game.getScreenY()/12*2;
@@ -127,15 +127,12 @@ public class LoginScreen implements Screen {
         font_msg.setColor(Color.RED);
         font_msg.getData().setScale(3f);
 
-       /* font_title = new BitmapFont(Gdx.files.internal("skin/raw/font-title-export.fnt"));
-        font_title.getData().setScale(4f);
-        font_title.setColor(25, 105, 180, 255);
-        font_title.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);*/
 
-         String TITLE_FONT_CHARS = "Meinu Tatakai"; // Titel
+
+         String TITLE_FONT_CHARS = "Meinu Tatakai"; // Titelzeichen
 
         final String TITLE_FONT_PATH = "Action_Man.ttf"; // Skin
-        // titel initaliesieren
+        // titel Initialisierung
         FreeTypeFontGenerator title_generator = new FreeTypeFontGenerator(Gdx.files.internal(TITLE_FONT_PATH));
         FreeTypeFontGenerator.FreeTypeFontParameter title_parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         title_parameter.characters = TITLE_FONT_CHARS;
@@ -146,8 +143,8 @@ public class LoginScreen implements Screen {
         font_title = title_generator.generateFont(title_parameter);
         title_generator.dispose();
 
-        String FONT_CHARS = "雌犬戦い"; // jap.Titel
-        // jap.titel initalisieren
+        String FONT_CHARS = "雌犬戦い"; // jap.Titelzeichen
+        // jap.titel Initialisierung
         final String FONT_PATH = "japanese.ttf";
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -162,7 +159,7 @@ public class LoginScreen implements Screen {
     {
         float input_width = game.getScreenX()/3;
         float input_height = game.getScreenY()/12;
-        // textfeld username
+        // textfeld username Initialisierung
         final TextField usernameTextField = new TextField("", uiSkin);
         usernameTextField.setPosition(input_width,input_height*6);
         usernameTextField.setSize(input_width, input_height);
@@ -170,7 +167,7 @@ public class LoginScreen implements Screen {
         if(Settings.isSaveUser())
             usernameTextField.setText(Settings.getUsername());
         stage.addActor(usernameTextField);
-        // textfeld password
+        // textfeld password Initialisierung
         final TextField passwordTextField = new TextField("", uiSkin);
         passwordTextField.setPosition(input_width,input_height*4.5f );
         passwordTextField.setSize(input_width, input_height);
@@ -180,13 +177,13 @@ public class LoginScreen implements Screen {
         if(Settings.isSavePass())
             passwordTextField.setText(Settings.getPassword());
         stage.addActor(passwordTextField);
-        // Checkbox username
+        // Checkbox username Initialisierung
         final CheckBox userCheckBox = new CheckBox("Save Username", uiSkin);
         userCheckBox.setPosition(input_width,input_height*4f );
         userCheckBox.setScale(2f);
         userCheckBox.setChecked(Settings.isSaveUser());
         stage.addActor(userCheckBox);
-        // Checkbox password
+        // Checkbox password Initialisierung
         final CheckBox passCheckBox = new CheckBox("Save Password", uiSkin);
         passCheckBox.setPosition(input_width,input_height*3.5f );
         passCheckBox.setScale(2f);
@@ -199,7 +196,7 @@ public class LoginScreen implements Screen {
         });
         passCheckBox.setChecked(Settings.isSavePass());
         stage.addActor(passCheckBox);
-        // Button registrieren
+        // Button registrieren Initialisierung
         button_reg = new TextButton("Register",uiSkin);
         button_reg.setSize(input_width/3,input_height);
         button_reg.setPosition(input_width,input_height*2f);

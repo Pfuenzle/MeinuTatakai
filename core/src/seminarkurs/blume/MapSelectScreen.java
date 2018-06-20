@@ -60,7 +60,7 @@ public class MapSelectScreen implements Screen {
 
         stage.getBatch().begin();
         font_titel.draw(stage.getBatch(), "Mapauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7)); //Text rendern
-        map_sprite[NetworkPlayer.getMapID()].draw(stage.getBatch());
+        map_sprite[NetworkPlayer.getMapID()].draw(stage.getBatch());// holt Id der Map
         drawLabels();
         stage.getBatch().end();
         stage.act();
@@ -100,7 +100,7 @@ public class MapSelectScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    }
+    } // Löschen nicht mehr benötigter Objekte
 
     public MapSelectScreen(MyGdxGame game, int screen) //Konstruktor
     {
@@ -121,7 +121,7 @@ public class MapSelectScreen implements Screen {
         cam.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
         setupInterface();
-
+        //nimmt größe des Bildschirms
         this.screen_width = Gdx.graphics.getWidth();
         this.screen_height = Gdx.graphics.getHeight();
 
@@ -131,7 +131,7 @@ public class MapSelectScreen implements Screen {
         LocalPlayer.setbIsSelecting(true);
     }
 
-    public void initFont() //Initialisiert die Schriftart
+    public void initFont() // Initialisierung der Schriftart
     {
         font_titel = game.getCharSelectFontTitle();
         font_titel.getData().setScale(2);
@@ -139,7 +139,7 @@ public class MapSelectScreen implements Screen {
     }
 
     void initLabels()
-    {
+    {// Initialisierung der schriften
         mapList = new Label[6];
         for(int i = 0;i < name.length;i++)
         {
@@ -162,14 +162,14 @@ public class MapSelectScreen implements Screen {
         }
     }
 
-    void drawLabels()
+    void drawLabels()//ausgabe der schriften
     {
         for(int i= 0; i < name.length; i++){
             mapList[i].draw(stage.getBatch(), 255);
         }
     }
 
-    public void initBackButton() //initaliesierung backButton
+    public void initBackButton() //Initialisierung backButton
     {
         butBack = new TextButton("Back", uiSkin); // Text im Button
         butBack.setTransform(true);
@@ -179,7 +179,7 @@ public class MapSelectScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 LocalPlayer.setbIsSelecting(false);
-                dispose(); //löschen
+                dispose();
                 game.setScreen(new CharSelectScreen(game, next_screen)); // neuen Screen öffen
                 return true;
             }
@@ -188,7 +188,7 @@ public class MapSelectScreen implements Screen {
     }
 
     public void setupInterface()
-    {
+    {//Initialisierung continue Button
         TextButton button_weiter = new TextButton("continue",uiSkin); // text Button Continue
         button_weiter.setTransform(true);
         button_weiter.setScale(2); // größe
@@ -198,12 +198,12 @@ public class MapSelectScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 LocalPlayer.setMap(current_selection); //TODO Auswahl mit Sever machen
                 LocalPlayer.setbIsSelecting(false);
-                dispose(); //löschen
+                dispose();
 
                 if(next_screen == 1)
-                    game.setScreen(new MultiPlayerScreen(game));
+                    game.setScreen(new MultiPlayerScreen(game));// neuen Screen aufrufen
                 else
-                    game.setScreen(new MainScreen(game));
+                    game.setScreen(new MainScreen(game));// neuen Screen aufrufen
                 return true;
             }
         });

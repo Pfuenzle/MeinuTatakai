@@ -55,7 +55,7 @@ public class CharSelectScreen implements Screen {
     public void render(float delta) {// Rendern
         stage.getBatch().setProjectionMatrix(cam.combined);
         stage.getBatch().begin();
-
+        // switch bedingung für die ausgabe der figuren bilder
         switch(NetworkPlayer.getCharID()) {
             case 1:
                 stage.getBatch().draw(Animation.texture_char1_still, VIRTUAL_WIDTH * 0.45f, VIRTUAL_HEIGHT * 0.1f);
@@ -64,7 +64,8 @@ public class CharSelectScreen implements Screen {
                 stage.getBatch().draw(Animation.texture_char2_still, VIRTUAL_WIDTH * 0.45f, VIRTUAL_HEIGHT * 0.1f);
                 break;
         }
-        font_titel.draw(stage.getBatch(), "Charakterauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7));// titel
+        // titel ausgabe
+        font_titel.draw(stage.getBatch(), "Charakterauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7));
 
         drawLabels();
         stage.getBatch().end();
@@ -95,7 +96,7 @@ public class CharSelectScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    }// Löschen
+    }// Löschen  nicht mehr benötigter Objekte
 
     public CharSelectScreen(MyGdxGame game, int screen)// Konstruktor
     {
@@ -118,7 +119,7 @@ public class CharSelectScreen implements Screen {
         setupInterface();
 
         shapeRenderer = new ShapeRenderer();
-
+        //nimmt größe des Bildschirms
         this.screen_width = Gdx.graphics.getWidth();
         this.screen_height = Gdx.graphics.getHeight();
 
@@ -134,7 +135,7 @@ public class CharSelectScreen implements Screen {
     }
 
     void initLabels()
-    {
+    {// Initialisierung der schriften
         playerList = new Label[6];
         for(int i = 0;i < name.length;i++)
         {
@@ -156,7 +157,7 @@ public class CharSelectScreen implements Screen {
         }
     }
 
-    void drawLabels()
+    void drawLabels()//ausgabe der schriften
     {
         for(int i= 0; i < name.length; i++){
             playerList[i].draw(stage.getBatch(), 255);
@@ -164,7 +165,7 @@ public class CharSelectScreen implements Screen {
     }
 
     public void initBackButton()
-    {// Back Button
+    {// Back Button Initialisierung
         butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
@@ -174,7 +175,7 @@ public class CharSelectScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 LocalPlayer.setbIsSelecting(false);
                 dispose();
-                game.setScreen(new MainScreen(game));
+                game.setScreen(new MainScreen(game));// neuen Screen öffen
                 return true;
             }
         });
@@ -182,7 +183,7 @@ public class CharSelectScreen implements Screen {
     }
 
     public void setupInterface()
-    {// continue Button
+    {// continue Button Initialisierung
         TextButton button_weiter = new TextButton("continue",uiSkin);
         button_weiter.setTransform(true);
         button_weiter.setScale(2);
@@ -191,7 +192,7 @@ public class CharSelectScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new MapSelectScreen(game, next_screen));
+                game.setScreen(new MapSelectScreen(game, next_screen));// neuen Screen öffen
                 return true;
             }
         });

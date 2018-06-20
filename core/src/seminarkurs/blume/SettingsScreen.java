@@ -65,7 +65,7 @@ public class SettingsScreen implements Screen{
     @Override
     public void dispose() {
         stage.clear();
-    } // lösch methode
+    } // löschen nicht mehr benötigter Objekte
 
     public SettingsScreen(final MyGdxGame game) { // konstruktor
         this.game = game;
@@ -80,8 +80,8 @@ public class SettingsScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void setupInterface() { // Buttons initaliesieren
-        // Musik Buttom
+    private void setupInterface() { // Buttons Initialisierung
+        // Musik Buttom Initialisierung
         button_music = new TextButton("",uiSkin);
         button_music.setTransform(true);
         button_music.setScale(2f);
@@ -100,7 +100,7 @@ public class SettingsScreen implements Screen{
             }
         });
         stage.addActor(button_music);
-        // Sound Button
+        // Sound Button Initialisierung
         button_sound = new TextButton("",uiSkin);
         button_sound.setTransform(true);
         button_sound.setScale(2f);
@@ -124,7 +124,7 @@ public class SettingsScreen implements Screen{
     }
 
     public void initBackButton()
-    { // Back Button
+    { // Back Button Initialisierung
         butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
@@ -134,7 +134,7 @@ public class SettingsScreen implements Screen{
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 LocalPlayer.setbIsSelecting(false);
                 dispose();
-                game.setScreen(new MainScreen(game));
+                game.setScreen(new MainScreen(game)); // neuen Screen aufrufen
                 return true;
             }
         });

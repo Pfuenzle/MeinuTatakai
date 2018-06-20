@@ -98,24 +98,23 @@ public class CareerScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    } // Löschen
+    } // Löschen nicht mehr benötigter Objekte
 
     public CareerScreen(MyGdxGame game) // Konstrucktor
     {
         this.game = game;
         stage = game.getStage();
-
         uiSkin = game.getSkin();
 
         initBackButton();
 
-        setupInterfaces();
+        setupInterfaces();//nimmt größe des Bildschirms
+
 
         this.screen_width = Gdx.graphics.getWidth();
         this.screen_height = Gdx.graphics.getHeight();
-
+        //nimmt Daten für Rp,wins,losses vom server
         username = NetworkPlayer.getUsername();
-
         RP = NetworkPlayer.getRP();
         wins = NetworkPlayer.getWins();
         losses = NetworkPlayer.getLosses();
@@ -124,7 +123,7 @@ public class CareerScreen implements Screen {
     }
 
     private void setupInterfaces()
-    {
+    {   // Größe, textart und farbe für Rp,wins,losses
         font_Name = new BitmapFont();
         font_Name.getData().setScale(5f);
         font_Name.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -132,13 +131,13 @@ public class CareerScreen implements Screen {
 
         float screen_x = game.getScreenX();
         float screen_y = game.getScreenY();
-        // Textfeld Username
+        // Textfeld Username  Initialisierung
         final TextField usernameTextField = new TextField("", uiSkin);
         usernameTextField.setPosition(screen_x/3,screen_y/12*9);
         usernameTextField.setSize(screen_x/3, screen_y/12);
         usernameTextField.setMessageText("Username");
         stage.addActor(usernameTextField);
-        // Button Change User
+        // Button Change User Initialisierung
         Button button_user = new TextButton("Change User", uiSkin);
         button_user.setPosition(screen_x/2-button_user.getScaleX()/2,screen_y/12*11);
         button_user.addListener(new InputListener(){
@@ -149,10 +148,10 @@ public class CareerScreen implements Screen {
             }
         });
         stage.addActor(button_user);
-    }//https://www.youtube.com/watch?v=-Xh4lRqN8hE
+    }
 
     public void initBackButton()
-    {    // back Button
+    {    // back Button Initialisierung
         butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
@@ -161,7 +160,7 @@ public class CareerScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new MainScreen(game));
+                game.setScreen(new MainScreen(game));// neuen Screen aufrufen
                 return true;
             }
         });

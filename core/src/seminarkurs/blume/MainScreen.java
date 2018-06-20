@@ -64,7 +64,7 @@ public class MainScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    }// Löschen
+    }// Löschen  nicht mehr benötigter Objekte
 
     public MainScreen(final MyGdxGame game) {
         this.game = game;
@@ -81,7 +81,7 @@ public class MainScreen implements Screen {
     {
         input_width = game.getScreenX()/3;
         input_height = game.getScreenY()/12;
-        // Singelplayer Button
+        // Singelplayer Button Initialisierung
         butSingle = new TextButton("Singleplayer", uiSkin);
         butSingle.setTransform(true);
         butSingle.setScale(2f);
@@ -91,12 +91,12 @@ public class MainScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new CharSelectScreen(game, 0));
+                game.setScreen(new CharSelectScreen(game, 0));// neuen Screen aufrufen
                 return true;
             }
         });
         stage.addActor(butSingle);
-        // Multiplayer Button
+        // Multiplayer Button Initialisierung
         butMulti = new TextButton("Multiplayer", uiSkin);
         butMulti.setTransform(true);
         butMulti.setScale(2f);
@@ -106,12 +106,12 @@ public class MainScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new CharSelectScreen(game, 1));
+                game.setScreen(new CharSelectScreen(game, 1));// neuen Screen aufrufen
                 return true;
             }
         });
         stage.addActor(butMulti);
-        // Career Button
+        // Career Button Initialisierung
         butCareer = new TextButton("CareerScreen", uiSkin);
         butCareer.setTransform(true);
         butCareer.setScale(2f);
@@ -121,12 +121,12 @@ public class MainScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new CareerScreen(game));
+                game.setScreen(new CareerScreen(game));// neuen Screen aufrufen
                 return true;
             }
         });
         stage.addActor(butCareer);
-        // Setting Button
+        // Setting Button Initialisierung
         TextButton button = new TextButton("Settings",uiSkin);
         button.setScale(2f);
         button.setTransform(true);
@@ -135,7 +135,7 @@ public class MainScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new SettingsScreen(game));
+                game.setScreen(new SettingsScreen(game));// neuen Screen aufrufen
                 return true;
             }
         });
