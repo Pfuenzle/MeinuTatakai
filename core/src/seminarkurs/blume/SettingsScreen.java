@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
  */
 
 public class SettingsScreen implements Screen{
-
+//  deklaration
     private MyGdxGame game;
 
     private Stage stage;
@@ -35,7 +35,7 @@ public class SettingsScreen implements Screen{
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta) { // Methode zum rendern
         stage.getBatch().begin();
         stage.getBatch().end();
         stage.act();
@@ -65,9 +65,9 @@ public class SettingsScreen implements Screen{
     @Override
     public void dispose() {
         stage.clear();
-    }
+    } // lösch methode
 
-    public SettingsScreen(final MyGdxGame game) {
+    public SettingsScreen(final MyGdxGame game) { // konstruktor
         this.game = game;
         stage = game.getStage();
 
@@ -80,7 +80,8 @@ public class SettingsScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void setupInterface() {
+    private void setupInterface() { // Buttons initaliesieren
+        // Musik Buttom
         button_music = new TextButton("",uiSkin);
         button_music.setTransform(true);
         button_music.setScale(2f);
@@ -99,7 +100,7 @@ public class SettingsScreen implements Screen{
             }
         });
         stage.addActor(button_music);
-
+        // Sound Button
         button_sound = new TextButton("",uiSkin);
         button_sound.setTransform(true);
         button_sound.setScale(2f);
@@ -123,7 +124,7 @@ public class SettingsScreen implements Screen{
     }
 
     public void initBackButton()
-    {
+    { // Back Button
         butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
@@ -142,7 +143,7 @@ public class SettingsScreen implements Screen{
 
     private void updateButtons()
     {
-
+        // Schrift auf den Button updaten
         String sound_text = (Settings.isSoundEnabled()) ? "Disable\nSound" : "Enable\nSound";
         button_sound.setText(sound_text);
         String music_text = (Settings.isMusicEnabled()) ? "Disable\nMusic" : "Enable\nMusic";

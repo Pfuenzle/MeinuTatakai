@@ -19,12 +19,12 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
- * Created by Leon on 01.02.2018.
+ * Created by Leon  & Nicole on 01.02.2018.
  */
 
 public class MultiPlayerScreen implements Screen {
 
-
+// Deklaration
     private MyGdxGame game;
 
     private Stage stage;
@@ -121,6 +121,7 @@ public class MultiPlayerScreen implements Screen {
 
     private void initBackButton()
     {
+        //back Button
         butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
@@ -150,7 +151,7 @@ public class MultiPlayerScreen implements Screen {
         input_height = game.getScreenY() / 12;
 
         font = new BitmapFont();
-
+        // Ranked Button
         butRank = new TextButton("Ranked game", uiSkin);
         butRank.setTransform(true);
         butRank.setScale(2f);
@@ -170,7 +171,7 @@ public class MultiPlayerScreen implements Screen {
             }
         });
         stage.addActor(butRank);
-
+        // Such Button
         butSearch = new TextButton("Search\nplayer", uiSkin);
         butSearch.setTransform(true);
         butSearch.setScale(2f);

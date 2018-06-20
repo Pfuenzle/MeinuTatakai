@@ -16,10 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
- * Created by Leon on 04.02.2018.
+ * Created by Nicole on 04.02.2018.
  */
 
 public class CharSelectScreen implements Screen {
+   // Deklaration
     private MyGdxGame game;
 
     private int next_screen;
@@ -51,7 +52,7 @@ public class CharSelectScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta) {// Rendern
         stage.getBatch().setProjectionMatrix(cam.combined);
         stage.getBatch().begin();
 
@@ -63,7 +64,7 @@ public class CharSelectScreen implements Screen {
                 stage.getBatch().draw(Animation.texture_char2_still, VIRTUAL_WIDTH * 0.45f, VIRTUAL_HEIGHT * 0.1f);
                 break;
         }
-        font_titel.draw(stage.getBatch(), "Charakterauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7));
+        font_titel.draw(stage.getBatch(), "Charakterauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7));// titel
 
         drawLabels();
         stage.getBatch().end();
@@ -94,9 +95,9 @@ public class CharSelectScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    }
+    }// Löschen
 
-    public CharSelectScreen(MyGdxGame game, int screen)
+    public CharSelectScreen(MyGdxGame game, int screen)// Konstruktor
     {
         next_screen = screen;
 
@@ -163,7 +164,7 @@ public class CharSelectScreen implements Screen {
     }
 
     public void initBackButton()
-    {
+    {// Back Button
         butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
@@ -181,7 +182,7 @@ public class CharSelectScreen implements Screen {
     }
 
     public void setupInterface()
-    {
+    {// continue Button
         TextButton button_weiter = new TextButton("continue",uiSkin);
         button_weiter.setTransform(true);
         button_weiter.setScale(2);

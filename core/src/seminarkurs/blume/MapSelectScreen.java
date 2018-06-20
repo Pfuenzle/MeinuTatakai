@@ -21,10 +21,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  */
 
 public class MapSelectScreen implements Screen {
+    //Variablen Deklaration
     private MyGdxGame game;
 
     private Stage stage;
-    private String name[] ={"Pinku","Kiseki"};
+    private String name[] ={"Pinku","Kiseki"}; // Array damit noch weitere maps hinzugefügt werden können
     private String map_name[] = {"map_1.png", "map_2.png"};
     private Sprite map_sprite[];
     private Skin uiSkin;
@@ -58,7 +59,7 @@ public class MapSelectScreen implements Screen {
         stage.getBatch().setProjectionMatrix(cam.combined);
 
         stage.getBatch().begin();
-        font_titel.draw(stage.getBatch(), "Mapauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7));
+        font_titel.draw(stage.getBatch(), "Mapauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7)); //Text rendern
         map_sprite[NetworkPlayer.getMapID()].draw(stage.getBatch());
         drawLabels();
         stage.getBatch().end();
@@ -66,7 +67,7 @@ public class MapSelectScreen implements Screen {
         stage.draw();
     }
 
-    void mapload(){
+    void mapload(){ // Methode zum Maps Laden
         map_sprite = new Sprite[20];
         for(int i = 0; i < name.length; i++)
         {
@@ -101,7 +102,7 @@ public class MapSelectScreen implements Screen {
         stage.clear();
     }
 
-    public MapSelectScreen(MyGdxGame game, int screen)
+    public MapSelectScreen(MyGdxGame game, int screen) //Konstruktor
     {
         next_screen = screen;
 
@@ -142,13 +143,13 @@ public class MapSelectScreen implements Screen {
         mapList = new Label[6];
         for(int i = 0;i < name.length;i++)
         {
-            font_text.setColor(Color.WHITE);
-            Label.LabelStyle style = new Label.LabelStyle(font_text, Color.WHITE);
-            font_text.setColor(Color.WHITE);
+            font_text.setColor(Color.BLACK);
+            Label.LabelStyle style = new Label.LabelStyle(font_text, Color.BLACK);
+            font_text.setColor(Color.BLACK);
             style.font = font_text;
             final int temp = i;
             mapList[i] = new Label(name[i], style);
-            mapList[i].setColor(Color.WHITE);
+            mapList[i].setColor(Color.BLACK);
             mapList[i].setPosition((int)(VIRTUAL_WIDTH * 0.03f), (int)((VIRTUAL_HEIGHT) - 350) - (i * 120));
             mapList[i].addListener(new ClickListener(){
                 @Override
@@ -168,18 +169,18 @@ public class MapSelectScreen implements Screen {
         }
     }
 
-    public void initBackButton()
+    public void initBackButton() //initaliesierung backButton
     {
-        butBack = new TextButton("Back", uiSkin);
+        butBack = new TextButton("Back", uiSkin); // Text im Button
         butBack.setTransform(true);
-        butBack.setScale(2f);
-        butBack.setPosition((int)(VIRTUAL_WIDTH * 0.01f), (int)(VIRTUAL_HEIGHT * 0.85));
+        butBack.setScale(2f); // größe
+        butBack.setPosition((int)(VIRTUAL_WIDTH * 0.01f), (int)(VIRTUAL_HEIGHT * 0.85)); // Position
         butBack.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 LocalPlayer.setbIsSelecting(false);
-                dispose();
-                game.setScreen(new CharSelectScreen(game, next_screen));
+                dispose(); //löschen
+                game.setScreen(new CharSelectScreen(game, next_screen)); // neuen Screen öffen
                 return true;
             }
         });
@@ -188,16 +189,16 @@ public class MapSelectScreen implements Screen {
 
     public void setupInterface()
     {
-        TextButton button_weiter = new TextButton("continue",uiSkin);
+        TextButton button_weiter = new TextButton("continue",uiSkin); // text Button Continue
         button_weiter.setTransform(true);
-        button_weiter.setScale(2);
-        button_weiter.setPosition((int)(VIRTUAL_WIDTH * 0.8f), (int)(VIRTUAL_HEIGHT*0.02f));
+        button_weiter.setScale(2); // größe
+        button_weiter.setPosition((int)(VIRTUAL_WIDTH * 0.8f), (int)(VIRTUAL_HEIGHT*0.02f)); // Position
         button_weiter.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 LocalPlayer.setMap(current_selection); //TODO Auswahl mit Sever machen
                 LocalPlayer.setbIsSelecting(false);
-                dispose();
+                dispose(); //löschen
 
                 if(next_screen == 1)
                     game.setScreen(new MultiPlayerScreen(game));
