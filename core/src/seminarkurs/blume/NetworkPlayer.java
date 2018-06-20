@@ -141,6 +141,8 @@ public class NetworkPlayer {
                     setWins(getWins());
                     setLosses(user.getLosses());
                 }
+                else
+                    update();
 
             }
         }).start();

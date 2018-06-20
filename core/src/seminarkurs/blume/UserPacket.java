@@ -65,26 +65,28 @@ public class UserPacket {
         catch(Exception e)
         {
         }
-        if(Integer.parseInt(sRet) == 1)
-        {
-            ret = true;
-            int offset = 9;
-            int points_length = Integer.parseInt(data.substring(4, offset));
-            offset += 1;
-            this.RP = Integer.parseInt(data.substring(offset, offset + points_length));
-            offset += points_length + 1;
-            int wins_length = Integer.parseInt(data.substring(offset, offset + 5));
-            offset += 6;
-            this.wins = Integer.parseInt(data.substring(offset, offset + wins_length));
-            offset += wins_length + 1;
-            int loose_length = Integer.parseInt(data.substring(offset, offset + 5));
-            offset += 6;
-            this.losses =  Integer.parseInt(data.substring(offset, offset + loose_length));
+        try {
+            if (Integer.parseInt(sRet) == 1) {
+                ret = true;
+                int offset = 9;
+                int points_length = Integer.parseInt(data.substring(4, offset));
+                offset += 1;
+                this.RP = Integer.parseInt(data.substring(offset, offset + points_length));
+                offset += points_length + 1;
+                int wins_length = Integer.parseInt(data.substring(offset, offset + 5));
+                offset += 6;
+                this.wins = Integer.parseInt(data.substring(offset, offset + wins_length));
+                offset += wins_length + 1;
+                int loose_length = Integer.parseInt(data.substring(offset, offset + 5));
+                offset += 6;
+                this.losses = Integer.parseInt(data.substring(offset, offset + loose_length));
+            } else {
+                ret = false;
+            }
         }
-        else
+        catch(Exception e)
         {
             ret = false;
         }
-
     }
 }

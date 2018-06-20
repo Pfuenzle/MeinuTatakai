@@ -206,9 +206,11 @@ public class LoginScreen implements Screen {
                 button_reg.setDisabled(true); //Deaktiviere Buttons, um mehrmaliges Klicken zu verhindern
                 button_log.setDisabled(true);
                 String packettype = "0x2";
-                String username = usernameTextField.getText();
+                final String username = usernameTextField.getText();
                 //NetworkPlayer.setUsername(username);
                 String password = passwordTextField.getText();
+                if(!password.equals(Settings.getPassword()))
+                    password = Crypt.applyMD5(password);
                 String packet = packettype + "x" + NetworkPlayer.fill(username.length(), 4) + "x" + username + "x" + NetworkPlayer.fill(password.length(), 4) + "x" + password + "x" + NetworkPlayer.getHWID();
                 SocketHints socketHints = new SocketHints();
                 Socket socket = null;
@@ -231,6 +233,8 @@ public class LoginScreen implements Screen {
                     e.printStackTrace();
                 }
 
+                final String finalPassword = password;
+
                 final Socket finalSocket = socket;
                 new Thread(new Runnable() {
                     @Override
@@ -250,6 +254,29 @@ public class LoginScreen implements Screen {
                             ret_type = 2;
                             button_reg.setDisabled(false);
                             button_log.setDisabled(false);
+                            if(packet_ret.getReturn())
+                            {
+                                passwordTextField.setText(finalPassword);
+                                if(userCheckBox.isChecked())
+                                {
+                                    Settings.setUsername(username);
+                                    Settings.setSaveUser(true);
+                                }
+                                else
+                                {
+                                    Settings.setUsername("");
+                                    Settings.setSaveUser(false);
+                                }
+                                if(passCheckBox.isChecked())
+                                {
+                                    Settings.setPassword(finalPassword);
+                                    Settings.setSavePass(true);
+                                }
+                                else {
+                                    Settings.setPassword("");
+                                    Settings.setSavePass(false);
+                                }
+                            }
                         }
                         else
                         {
@@ -275,7 +302,9 @@ public class LoginScreen implements Screen {
                 String packettype = "0x1";
                 final String username = usernameTextField.getText();
                 NetworkPlayer.setUsername(username);
-                final String password = passwordTextField.getText();
+                String password = passwordTextField.getText();
+                if(!password.equals(Settings.getPassword()))
+                    password = Crypt.applyMD5(password);
                 String packet = packettype + "x" + NetworkPlayer.fill(username.length(), 4) + "x" + username + "x" + NetworkPlayer.fill(password.length(), 4) + "x" + password + "x" + NetworkPlayer.getHWID();
                 SocketHints socketHints = new SocketHints();
                 Socket socket = null;
@@ -303,6 +332,7 @@ public class LoginScreen implements Screen {
                 }
 
                 final Socket finalSocket = socket;
+                final String finalPassword = password;
                 new Thread(new Runnable() {
                     @Override
                     public void run () {
@@ -332,7 +362,7 @@ public class LoginScreen implements Screen {
                                 }
                                 if(passCheckBox.isChecked())
                                 {
-                                   Settings.setPassword(password);
+                                   Settings.setPassword(finalPassword);
                                    Settings.setSavePass(true);
                                }
                                else{
