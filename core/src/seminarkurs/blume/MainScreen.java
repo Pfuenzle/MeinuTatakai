@@ -10,11 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 /**
- * Created by Leon on 28.01.2018.
+ * Created by Nicole on 28.01.2018.
  */
 
 public class MainScreen implements Screen {
-
+// Deklaration
     private MyGdxGame game;
 
     private Stage stage;
@@ -34,7 +34,7 @@ public class MainScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta) {// rendern
         stage.getBatch().begin();
         stage.getBatch().end();
         stage.act();
@@ -64,7 +64,7 @@ public class MainScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    }
+    }// Löschen
 
     public MainScreen(final MyGdxGame game) {
         this.game = game;
@@ -81,7 +81,7 @@ public class MainScreen implements Screen {
     {
         input_width = game.getScreenX()/3;
         input_height = game.getScreenY()/12;
-
+        // Singelplayer Button
         butSingle = new TextButton("Singleplayer", uiSkin);
         butSingle.setTransform(true);
         butSingle.setScale(2f);
@@ -96,7 +96,7 @@ public class MainScreen implements Screen {
             }
         });
         stage.addActor(butSingle);
-
+        // Multiplayer Button
         butMulti = new TextButton("Multiplayer", uiSkin);
         butMulti.setTransform(true);
         butMulti.setScale(2f);
@@ -111,7 +111,7 @@ public class MainScreen implements Screen {
             }
         });
         stage.addActor(butMulti);
-
+        // Career Button
         butCareer = new TextButton("CareerScreen", uiSkin);
         butCareer.setTransform(true);
         butCareer.setScale(2f);
@@ -126,7 +126,7 @@ public class MainScreen implements Screen {
             }
         });
         stage.addActor(butCareer);
-
+        // Setting Button
         TextButton button = new TextButton("Settings",uiSkin);
         button.setScale(2f);
         button.setTransform(true);

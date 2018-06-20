@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
  */
 
 public class SettingsScreen implements Screen{
-
+//  deklaration
     private MyGdxGame game;
 
     private Stage stage;
@@ -35,7 +35,7 @@ public class SettingsScreen implements Screen{
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta) { // Methode zum rendern
         stage.getBatch().begin();
         stage.getBatch().end();
         stage.act();
@@ -65,9 +65,9 @@ public class SettingsScreen implements Screen{
     @Override
     public void dispose() {
         stage.clear();
-    }
+    } // lösch methode
 
-    public SettingsScreen(final MyGdxGame game) {
+    public SettingsScreen(final MyGdxGame game) { // konstruktor
         this.game = game;
         stage = game.getStage();
 
@@ -80,10 +80,13 @@ public class SettingsScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void setupInterface() {
+    private void setupInterface() { // Buttons initaliesieren
+        // Musik Buttom
         button_music = new TextButton("",uiSkin);
         button_music.setTransform(true);
         button_music.setScale(2f);
+        button_music.setHeight(100);
+        button_music.setWidth(200);
         button_music.setPosition(game.getScreenX() / 2 - button_music.getWidth(), game.getScreenY() * 0.6f);
         button_music.addListener(new InputListener(){
             @Override
@@ -97,10 +100,12 @@ public class SettingsScreen implements Screen{
             }
         });
         stage.addActor(button_music);
-
+        // Sound Button
         button_sound = new TextButton("",uiSkin);
         button_sound.setTransform(true);
         button_sound.setScale(2f);
+        button_sound.setHeight(100);
+        button_sound.setWidth(200);
         button_sound.setPosition(game.getScreenX() / 2 - button_sound.getWidth(), game.getScreenY() * 0.3f);
         button_sound.addListener(new InputListener(){
             @Override
@@ -119,8 +124,8 @@ public class SettingsScreen implements Screen{
     }
 
     public void initBackButton()
-    {
-        butBack = new TextButton("<----", uiSkin);
+    { // Back Button
+        butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition((int)(1920 * 0.01f), (int)(1080 * 0.85));
@@ -138,9 +143,10 @@ public class SettingsScreen implements Screen{
 
     private void updateButtons()
     {
-        String sound_text = (Settings.isSoundEnabled()) ? "Disable Sound" : "Enable Sound";
+        // Schrift auf den Button updaten
+        String sound_text = (Settings.isSoundEnabled()) ? "Disable\nSound" : "Enable\nSound";
         button_sound.setText(sound_text);
-        String music_text = (Settings.isMusicEnabled()) ? "Disable Music" : "Enable Music";
+        String music_text = (Settings.isMusicEnabled()) ? "Disable\nMusic" : "Enable\nMusic";
         button_music.setText(music_text);
         MusicPlayer.updateVolume();
     }

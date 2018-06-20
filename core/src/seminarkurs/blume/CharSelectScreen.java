@@ -16,10 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
- * Created by Leon on 04.02.2018.
+ * Created by Nicole on 04.02.2018.
  */
 
 public class CharSelectScreen implements Screen {
+   // Deklaration
     private MyGdxGame game;
 
     private int next_screen;
@@ -51,23 +52,10 @@ public class CharSelectScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta) {// Rendern
         stage.getBatch().setProjectionMatrix(cam.combined);
         stage.getBatch().begin();
-        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-switch(NetworkPlayer.getCharID()){
-    case 0:
-        shapeRenderer.setColor(Color.RED);
-        break;
-    case 1:
-        shapeRenderer.setColor(Color.CORAL);
-        break;
-        default:         shapeRenderer.setColor(Color.BLACK);
-}
 
-        shapeRenderer.rect(VIRTUAL_WIDTH * 0.60f, VIRTUAL_HEIGHT / 6, VIRTUAL_WIDTH / 4, VIRTUAL_HEIGHT / 3 * 1.9f);
-        shapeRenderer.rect(VIRTUAL_WIDTH * 0.30f, VIRTUAL_HEIGHT / 6, VIRTUAL_WIDTH / 4, VIRTUAL_HEIGHT / 3 * 1.9f);
-        shapeRenderer.end();*/
         switch(NetworkPlayer.getCharID()) {
             case 1:
                 stage.getBatch().draw(Animation.texture_char1_still, VIRTUAL_WIDTH * 0.45f, VIRTUAL_HEIGHT * 0.1f);
@@ -76,7 +64,7 @@ switch(NetworkPlayer.getCharID()){
                 stage.getBatch().draw(Animation.texture_char2_still, VIRTUAL_WIDTH * 0.45f, VIRTUAL_HEIGHT * 0.1f);
                 break;
         }
-        font_titel.draw(stage.getBatch(), "Charakterauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7));
+        font_titel.draw(stage.getBatch(), "Charakterauswahl",(int)(VIRTUAL_WIDTH * 0.25f), (int)(VIRTUAL_HEIGHT / 5 * 4.7));// titel
 
         drawLabels();
         stage.getBatch().end();
@@ -107,9 +95,9 @@ switch(NetworkPlayer.getCharID()){
     @Override
     public void dispose() {
         stage.clear();
-    }
+    }// Löschen
 
-    public CharSelectScreen(MyGdxGame game, int screen)
+    public CharSelectScreen(MyGdxGame game, int screen)// Konstruktor
     {
         next_screen = screen;
 
@@ -150,13 +138,13 @@ switch(NetworkPlayer.getCharID()){
         playerList = new Label[6];
         for(int i = 0;i < name.length;i++)
         {
-            font_text.setColor(Color.WHITE);
-            Label.LabelStyle style = new Label.LabelStyle(font_text, Color.WHITE);
-            font_text.setColor(Color.WHITE);
+            font_text.setColor(Color.BLACK);
+            Label.LabelStyle style = new Label.LabelStyle(font_text, Color.BLACK);
+            font_text.setColor(Color.BLACK);
             style.font = font_text;
             final int temp = i;
             playerList[i] = new Label(name[i], style);
-            playerList[i].setColor(Color.WHITE);
+            playerList[i].setColor(Color.BLACK);
             playerList[i].setPosition((int)(VIRTUAL_WIDTH * 0.03f), (int)((VIRTUAL_HEIGHT) - 350) - (i * 120));
             playerList[i].addListener(new ClickListener(){
             @Override
@@ -176,8 +164,8 @@ switch(NetworkPlayer.getCharID()){
     }
 
     public void initBackButton()
-    {
-        butBack = new TextButton("<----", uiSkin);
+    {// Back Button
+        butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition((int)(VIRTUAL_WIDTH * 0.01f), (int)(VIRTUAL_HEIGHT * 0.85));
@@ -194,8 +182,8 @@ switch(NetworkPlayer.getCharID()){
     }
 
     public void setupInterface()
-    {
-        TextButton button_weiter = new TextButton("Weiter",uiSkin);
+    {// continue Button
+        TextButton button_weiter = new TextButton("continue",uiSkin);
         button_weiter.setTransform(true);
         button_weiter.setScale(2);
         button_weiter.setPosition((int)(VIRTUAL_WIDTH * 0.8f), (int)(VIRTUAL_HEIGHT*0.02f));

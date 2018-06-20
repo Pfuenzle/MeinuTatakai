@@ -23,26 +23,26 @@ import java.io.InputStreamReader;
 
 
 /**
- * Created by Leon on 28.01.2018.
+ * Created by Leon & Nicole on 28.01.2018.
  */
 
 public class LoginScreen implements Screen {
 
-    private final MyGdxGame game;
+    private final MyGdxGame game;// hauptklasse als argumment zB dür setscreenn//neuen screnn aufrufen skin holen
 
-    private Stage stage;
+    private Stage stage; //Alles rendern /drauf zeichen
 
-    private Skin uiSkin;
+    private Skin uiSkin; // Ausssehen
 
-    private Button button_reg;
-    private Button button_log;
+    private Button button_reg; // registriren
+    private Button button_log; // einloggen
 
     private int ret_type = 0;
     private String ret_text = "";
 
-    private BitmapFont font_msg;
-    private BitmapFont font_title;
-    private BitmapFont font_japanese;
+    private BitmapFont font_msg; //textart
+    private BitmapFont font_title; // Titel
+    private BitmapFont font_japanese; // jap. Titel
 
     @Override
     public void show() {
@@ -51,16 +51,16 @@ public class LoginScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        stage.getBatch().begin();
-        renderLogin();
+        stage.getBatch().begin(); // rendern anfangen
+        renderLogin();             //Statusnachrichten
         font_title.draw(stage.getBatch(), "Meinu Tatakai", (int)(game.getScreenX() / 7), (int)(game.getScreenY() / 5 * 4.4)); //Rendere Titel
         font_japanese.draw(stage.getBatch(), "雌犬戦い", (int)(game.getScreenX() / 2), (int)(game.getScreenY() / 5 * 3.5)); //Rendere Titel
-        stage.getBatch().end();
+        stage.getBatch().end(); // rendern enden
         stage.act();
         try {
-            stage.draw();
+            stage.draw(); //Auf dem Bildschirm zeigen
         }
-        catch(Exception e)
+        catch(Exception e) //Fehlermeldung abfangen
         {
 
         }
@@ -89,9 +89,9 @@ public class LoginScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    }
+    } // Löschen
 
-    public LoginScreen(final MyGdxGame game)
+    public LoginScreen(final MyGdxGame game)// konstrucktor
     {
         this.game = game;
 
@@ -105,16 +105,16 @@ public class LoginScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    public void renderLogin()
+    public void renderLogin()//rendern
     {
         int msg_x = game.getScreenX()/3;
         int msg_y = game.getScreenY()/12*2;
-        if(ret_type == 1) //Draw Login Message
+        if(ret_type == 1) //hat sich eingeloggt
         {
             font_msg.draw(stage.getBatch(), ret_text, msg_x, msg_y);
         }
 
-        if(ret_type == 2) //Draw Register Message
+        if(ret_type == 2) //hat sich registriert
         {
             font_msg.draw(stage.getBatch(), ret_text, msg_x, msg_y);
         }
@@ -132,9 +132,10 @@ public class LoginScreen implements Screen {
         font_title.setColor(25, 105, 180, 255);
         font_title.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);*/
 
-        String TITLE_FONT_CHARS = "Meinu Tatakai";
+         String TITLE_FONT_CHARS = "Meinu Tatakai"; // Titel
 
-        final String TITLE_FONT_PATH = "Action_Man.ttf";
+        final String TITLE_FONT_PATH = "Action_Man.ttf"; // Skin
+        // titel initaliesieren
         FreeTypeFontGenerator title_generator = new FreeTypeFontGenerator(Gdx.files.internal(TITLE_FONT_PATH));
         FreeTypeFontGenerator.FreeTypeFontParameter title_parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         title_parameter.characters = TITLE_FONT_CHARS;
@@ -145,8 +146,8 @@ public class LoginScreen implements Screen {
         font_title = title_generator.generateFont(title_parameter);
         title_generator.dispose();
 
-        String FONT_CHARS = "雌犬戦い";
-
+        String FONT_CHARS = "雌犬戦い"; // jap.Titel
+        // jap.titel initalisieren
         final String FONT_PATH = "japanese.ttf";
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -161,7 +162,7 @@ public class LoginScreen implements Screen {
     {
         float input_width = game.getScreenX()/3;
         float input_height = game.getScreenY()/12;
-
+        // textfeld username
         final TextField usernameTextField = new TextField("", uiSkin);
         usernameTextField.setPosition(input_width,input_height*6);
         usernameTextField.setSize(input_width, input_height);
@@ -169,7 +170,7 @@ public class LoginScreen implements Screen {
         if(Settings.isSaveUser())
             usernameTextField.setText(Settings.getUsername());
         stage.addActor(usernameTextField);
-        
+        // textfeld password
         final TextField passwordTextField = new TextField("", uiSkin);
         passwordTextField.setPosition(input_width,input_height*4.5f );
         passwordTextField.setSize(input_width, input_height);
@@ -179,13 +180,13 @@ public class LoginScreen implements Screen {
         if(Settings.isSavePass())
             passwordTextField.setText(Settings.getPassword());
         stage.addActor(passwordTextField);
-
+        // Checkbox username
         final CheckBox userCheckBox = new CheckBox("Save Username", uiSkin);
         userCheckBox.setPosition(input_width,input_height*4f );
         userCheckBox.setScale(2f);
         userCheckBox.setChecked(Settings.isSaveUser());
         stage.addActor(userCheckBox);
-
+        // Checkbox password
         final CheckBox passCheckBox = new CheckBox("Save Password", uiSkin);
         passCheckBox.setPosition(input_width,input_height*3.5f );
         passCheckBox.setScale(2f);
@@ -198,7 +199,7 @@ public class LoginScreen implements Screen {
         });
         passCheckBox.setChecked(Settings.isSavePass());
         stage.addActor(passCheckBox);
-
+        // Button registrieren
         button_reg = new TextButton("Register",uiSkin);
         button_reg.setSize(input_width/3,input_height);
         button_reg.setPosition(input_width,input_height*2f);
@@ -292,7 +293,7 @@ public class LoginScreen implements Screen {
             }
         });
         stage.addActor(button_reg);
-
+        // Login Button
         button_log = new TextButton("Login",uiSkin);
         button_log.setSize(input_width/3,input_height);
         button_log.setPosition(input_width + 2*(input_width/3),input_height*2f);

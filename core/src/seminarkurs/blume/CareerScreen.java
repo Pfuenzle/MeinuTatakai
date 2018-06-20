@@ -1,6 +1,5 @@
 package seminarkurs.blume;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
@@ -17,18 +16,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
-import java.awt.Font;
 import java.io.BufferedReader;
-import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by Leon on 01.02.2018.
+ * Created by Leon & Nicole on 01.02.2018.
  */
 
 public class CareerScreen implements Screen {
-
+//  Deklaration
 
     private MyGdxGame game;
 
@@ -56,15 +53,17 @@ public class CareerScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta) { // render Methode
         stage.getBatch().begin();
         if(!userNotFound)
-        {
+        {   // Rp Ausgabe
             font_Name.draw(stage.getBatch(), username, screen_width/2, (screen_height/4)*3);
             String RankPointsMsg = "Your RP: " + RP;
+            // Win ausgabe
             font_Name.draw(stage.getBatch(), RankPointsMsg, screen_width/8*3, (screen_height/4)*2);
             String WinsMsg = "Your wins: " + wins;
             font_Name.draw(stage.getBatch(), WinsMsg, screen_width/4, (screen_height/4)*1);
+            // Losses Ausgabe
             String LossesMsg = "Your losses: " + losses;
             font_Name.draw(stage.getBatch(), LossesMsg, screen_width/2, (screen_height/4)*1);
         }
@@ -99,9 +98,9 @@ public class CareerScreen implements Screen {
     @Override
     public void dispose() {
         stage.clear();
-    }
+    } // Löschen
 
-    public CareerScreen(MyGdxGame game)
+    public CareerScreen(MyGdxGame game) // Konstrucktor
     {
         this.game = game;
         stage = game.getStage();
@@ -133,13 +132,13 @@ public class CareerScreen implements Screen {
 
         float screen_x = game.getScreenX();
         float screen_y = game.getScreenY();
-
+        // Textfeld Username
         final TextField usernameTextField = new TextField("", uiSkin);
         usernameTextField.setPosition(screen_x/3,screen_y/12*9);
         usernameTextField.setSize(screen_x/3, screen_y/12);
         usernameTextField.setMessageText("Username");
         stage.addActor(usernameTextField);
-
+        // Button Change User
         Button button_user = new TextButton("Change User", uiSkin);
         button_user.setPosition(screen_x/2-button_user.getScaleX()/2,screen_y/12*11);
         button_user.addListener(new InputListener(){
@@ -153,8 +152,8 @@ public class CareerScreen implements Screen {
     }//https://www.youtube.com/watch?v=-Xh4lRqN8hE
 
     public void initBackButton()
-    {
-        butBack = new TextButton("<----", uiSkin);
+    {    // back Button
+        butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition(game.getScreenX()/25, game.getScreenY()/15*13);

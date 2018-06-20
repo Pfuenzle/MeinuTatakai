@@ -19,12 +19,12 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
- * Created by Leon on 01.02.2018.
+ * Created by Leon  & Nicole on 01.02.2018.
  */
 
 public class MultiPlayerScreen implements Screen {
 
-
+// Deklaration
     private MyGdxGame game;
 
     private Stage stage;
@@ -121,7 +121,8 @@ public class MultiPlayerScreen implements Screen {
 
     private void initBackButton()
     {
-        butBack = new TextButton("<----", uiSkin);
+        //back Button
+        butBack = new TextButton("Back", uiSkin);
         butBack.setTransform(true);
         butBack.setScale(2f);
         butBack.setPosition(game.getScreenX()/25, game.getScreenY()/15*13);
@@ -150,10 +151,12 @@ public class MultiPlayerScreen implements Screen {
         input_height = game.getScreenY() / 12;
 
         font = new BitmapFont();
-
-        butRank = new TextButton("Play ranked game", uiSkin);
+        // Ranked Button
+        butRank = new TextButton("Ranked game", uiSkin);
         butRank.setTransform(true);
         butRank.setScale(2f);
+        butRank.setHeight(150);
+        butRank.setWidth(230);
         butRank.setSize(input_width / 3, input_height);
         butRank.setPosition((game.getScreenX() / 2) - butRank.getWidth(), input_height * 7);
         butRank.addListener(new InputListener() {
@@ -168,10 +171,12 @@ public class MultiPlayerScreen implements Screen {
             }
         });
         stage.addActor(butRank);
-
-        butSearch = new TextButton("Search player", uiSkin);
+        // Such Button
+        butSearch = new TextButton("Search\nplayer", uiSkin);
         butSearch.setTransform(true);
         butSearch.setScale(2f);
+        butSearch.setHeight(80);
+        butSearch.setWidth(200);
         butSearch.setSize(input_width / 3, input_height);
         butSearch.setPosition((game.getScreenX() / 2) - butSearch.getWidth(), input_height * 4.5f);
         butSearch.addListener(new InputListener() {
