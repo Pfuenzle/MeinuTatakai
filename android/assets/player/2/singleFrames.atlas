@@ -1,0 +1,26 @@
+singleFrames.png
+size: 1815, 717
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+seitlich
+  rotate: false
+  xy: 1, 1
+  size: 601, 715
+  orig: 601, 715
+  offset: 0, 0
+  index: -1
+sprung
+  rotate: false
+  xy: 604, 1
+  size: 604, 715
+  orig: 604, 715
+  offset: 0, 0
+  index: -1
+stand
+  rotate: false
+  xy: 1210, 1
+  size: 604, 715
+  orig: 604, 715
+  offset: 0, 0
+  index: -1

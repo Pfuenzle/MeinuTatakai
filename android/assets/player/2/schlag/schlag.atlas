@@ -1,0 +1,40 @@
+schlag.png
+size: 1817, 717
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+schlagen1
+  rotate: false
+  xy: 1, 1
+  size: 604, 715
+  orig: 604, 715
+  offset: 0, 0
+  index: -1
+schlagen2
+  rotate: false
+  xy: 607, 1
+  size: 603, 715
+  orig: 603, 715
+  offset: 0, 0
+  index: -1
+schlagen3
+  rotate: false
+  xy: 1212, 1
+  size: 604, 713
+  orig: 604, 713
+  offset: 0, 0
+  index: -1
+schlagen4
+  rotate: false
+  xy: 607, 1
+  size: 603, 715
+  orig: 603, 715
+  offset: 0, 0
+  index: -1
+schlagen5
+  rotate: false
+  xy: 1, 1
+  size: 604, 715
+  orig: 604, 715
+  offset: 0, 0
+  index: -1

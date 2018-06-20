@@ -1,0 +1,20 @@
+
+Walk.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Walk00
+  rotate: false
+  xy: 364, 2
+  size: 320, 802
+  orig: 320, 802
+  offset: 0, 0
+  index: -1
+Walk01
+  rotate: false
+  xy: 2, 19
+  size: 360, 785
+  orig: 360, 785
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,40 @@
+tritt.png
+size: 1809, 717
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+tritt1
+  rotate: false
+  xy: 1, 1
+  size: 601, 715
+  orig: 601, 715
+  offset: 0, 0
+  index: -1
+tritt2
+  rotate: false
+  xy: 604, 1
+  size: 601, 715
+  orig: 601, 715
+  offset: 0, 0
+  index: -1
+tritt3
+  rotate: false
+  xy: 1207, 1
+  size: 601, 715
+  orig: 601, 715
+  offset: 0, 0
+  index: -1
+tritt4
+  rotate: false
+  xy: 604, 1
+  size: 601, 715
+  orig: 601, 715
+  offset: 0, 0
+  index: -1
+tritt5
+  rotate: false
+  xy: 1, 1
+  size: 601, 715
+  orig: 601, 715
+  offset: 0, 0
+  index: -1

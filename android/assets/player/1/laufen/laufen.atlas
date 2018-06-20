@@ -1,0 +1,60 @@
+laufen-0.png
+size: 1894, 1435
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+laufen1
+  rotate: false
+  xy: 1, 718
+  size: 630, 716
+  orig: 630, 716
+  offset: 0, 0
+  index: -1
+laufen2
+  rotate: false
+  xy: 1264, 718
+  size: 629, 716
+  orig: 629, 716
+  offset: 0, 0
+  index: -1
+laufen3
+  rotate: false
+  xy: 1, 1
+  size: 629, 715
+  orig: 629, 715
+  offset: 0, 0
+  index: -1
+laufen4
+  rotate: false
+  xy: 632, 1
+  size: 629, 715
+  orig: 629, 715
+  offset: 0, 0
+  index: -1
+laufen5
+  rotate: false
+  xy: 633, 718
+  size: 629, 716
+  orig: 629, 716
+  offset: 0, 0
+  index: -1
+laufen6
+  rotate: false
+  xy: 1263, 1
+  size: 626, 715
+  orig: 626, 715
+  offset: 0, 0
+  index: -1
+
+laufen-1.png
+size: 628, 718
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+laufen7
+  rotate: false
+  xy: 1, 1
+  size: 626, 716
+  orig: 626, 716
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,48 @@
+
+char2_schlag.png
+size: 2048,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+farbe figur2.schlagen.2
+  rotate: false
+  xy: 960, 2
+  size: 477, 715
+  orig: 477, 715
+  offset: 0, 0
+  index: -1
+farbe figur2.schlagen.4
+  rotate: false
+  xy: 1439, 4
+  size: 475, 713
+  orig: 475, 713
+  offset: 0, 0
+  index: -1
+farbe figur2.schlagen.5
+  rotate: false
+  xy: 2, 2
+  size: 477, 715
+  orig: 477, 715
+  offset: 0, 0
+  index: -1
+farbe figur2.schlagen.3
+  rotate: false
+  xy: 2, 2
+  size: 477, 715
+  orig: 477, 715
+  offset: 0, 0
+  index: -1
+farbe figur2.schlagen.6
+  rotate: false
+  xy: 481, 2
+  size: 477, 715
+  orig: 477, 715
+  offset: 0, 0
+  index: -1
+farbe figur2.schlagen.1
+  rotate: false
+  xy: 481, 2
+  size: 477, 715
+  orig: 477, 715
+  offset: 0, 0
+  index: -1
