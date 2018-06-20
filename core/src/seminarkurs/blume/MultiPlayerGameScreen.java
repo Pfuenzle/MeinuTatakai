@@ -93,7 +93,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         {
             game.font_debug.draw(stage.getBatch(), "Connecting to Server", screen_width/2, screen_height / 4 * 3);
             Animation.loading_elapsed_time += delta;
-            Animation.loadingCurrentFrame = (TextureRegion) Animation.char2_trittAnimation.getKeyFrame(Animation.loading_elapsed_time);
+            Animation.loadingCurrentFrame = (TextureRegion) Animation.loadingAnimation.getKeyFrame(Animation.loading_elapsed_time);
             stage.getBatch().draw(Animation.loadingCurrentFrame, screen_width / 2, screen_height / 5 * 2);
         }
         else if(showWinningScreen)
@@ -137,7 +137,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             animatePlayer2();
 
  //TODO debug code
-            String enemy = "Enemy";
+            /*String enemy = "Enemy";
             String you = "You";
             if (MP.getEnemy().getDirection() == -1)
                 enemy = "<-- GEGNER";
@@ -149,7 +149,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 you = "DU -->";
             game.font_debug.draw(stage.getBatch(), "Dir: " + MP.getLocalPlayer().getDirection() + " NR: " + MultiPlayer.getPlayerNr() + "PNR: " + MP.getLocalPlayer().getPlayer(), screen_width / 3, screen_height / 20 * 16);
             game.font_debug.draw(stage.getBatch(), "Your X: " + MP.getLocalPlayer().getX() + " Y: " + MP.getLocalPlayer().getY() + " Direction: " + you, screen_width / 3, screen_height / 20 * 13);
-            game.font_debug.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + " Y: " + MP.getEnemy().getY() + " Direction: " + enemy, screen_width / 3, screen_height / 20 * 10);
+            game.font_debug.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + " Y: " + MP.getEnemy().getY() + " Direction: " + enemy, screen_width / 3, screen_height / 20 * 10);*/
 
 
             game.font_debug.draw(stage.getBatch(), "Your HP: " + MP.getLocalPlayer().getHealth(), screen_width / 12, screen_height / 12);
@@ -224,7 +224,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 animation_done = true;
             }
             if(!player1_hasSentJump) {
-                MP.jump(250);
+                MP.jump(250); //TODO Werte raus
                 player1_hasSentJump = true;
             }
             player1_sprung++;
@@ -333,7 +333,9 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         boolean animation_done = false;
         int direction;
 
-        if(MP.getEnemy().getAction() == 2)
+        int enemy_action = MP.getEnemy().getAction();
+
+        if(enemy_action == 2)
         {
             Animation.player2_walk_elapsed_time += Gdx.graphics.getDeltaTime();
 
@@ -346,7 +348,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             animation_done = true;
         }
 
-        if(MP.getEnemy().getAction() == 1)
+        if(enemy_action == 1)
         {
             Animation.player2_walk_elapsed_time += Gdx.graphics.getDeltaTime();
 
@@ -388,7 +390,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             }*/
         }
 
-        if(MP.getEnemy().getAction() == 5) {
+        if(enemy_action == 5) {
             Animation.player2_tritt_elapsed_time += Gdx.graphics.getDeltaTime();
 
             if (player2_char == 2)
@@ -411,7 +413,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 }
             }
 
-            if(player2_char == 2)
+            if(enemy_action == 2)
             {
                 if(Animation.char2_trittAnimation.isAnimationFinished(Animation.player2_tritt_elapsed_time)) {
                     Animation.player2_tritt_elapsed_time = 0;
@@ -424,7 +426,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 }
             }
         }
-        if (MP.getEnemy().getAction() == 6) {
+        if (enemy_action == 6) {
             Animation.player2_schlag_elapsed_time += Gdx.graphics.getDeltaTime();
             if (player2_char == 2)
                 Animation.player2_schlagCurrentFrame = (TextureRegion) Animation.char2_schlagAnimation.getKeyFrame(Animation.player2_schlag_elapsed_time);

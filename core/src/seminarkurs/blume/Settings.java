@@ -10,22 +10,10 @@ import com.badlogic.gdx.Preferences;
 
 public class Settings {
     private static Preferences prefs;
-
     public static void init()
     {
         prefs = Gdx.app.getPreferences("Settings");
     }
-
-    public static int getSettingsNumber() {
-        return settingsNumber;
-    }
-
-    public static void setSettingsNumber(int settingsNumber) {
-        Settings.settingsNumber = settingsNumber;
-    }
-
-    private static int settingsNumber = 4;
-
 
     public static boolean isSaveUser() {
         return prefs.getBoolean("isSaveUser");
@@ -78,15 +66,12 @@ public class Settings {
 
 
     public static String getPassword() {
-        String encrypted_password = prefs.getString("password");
-        String decrypted_password = Crypt.decrypt(encrypted_password, "Katze");
-        return decrypted_password;
+        String password = prefs.getString("password");
+        return password;
     }
 
     public static void setPassword(String password) {
-        String decrypted_pw = password;
-        String encrypted_pw = Crypt.encrypt(decrypted_pw, "Katze");
-        prefs.putString("password", encrypted_pw);
+        prefs.putString("password", password);
         prefs.flush();
     }
 

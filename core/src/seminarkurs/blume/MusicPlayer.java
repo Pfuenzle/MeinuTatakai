@@ -6,7 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Created by Nicole on 05.06.2018.
+ * Created by Nicole on 05.06.2018. //TODO wer
  */
 
 /*
@@ -65,7 +65,7 @@ public class MusicPlayer {
         });
     }
 
-    public static void updateVolume()
+    public static void updateVolume() //TODO woanders rein
     {
         float volume = Settings.isMusicEnabled() ? 1 : 0f;
         music.setVolume(volume);
