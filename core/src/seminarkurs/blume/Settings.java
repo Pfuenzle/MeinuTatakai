@@ -12,37 +12,37 @@ public class Settings {
     private static Preferences prefs;
     public static void init()
     {
-        prefs = Gdx.app.getPreferences("Settings");
+        prefs = Gdx.app.getPreferences("Settings"); //Initialisiere Preferences-Objekt
     }
 
     public static boolean isSaveUser() {
         return prefs.getBoolean("isSaveUser");
-    }
+    } //Lese aus, ob der Nutzer das Passwort gespeichert haben will
 
     public static void setSaveUser(boolean saveUser) {
         prefs.putBoolean("isSaveUser", saveUser);
         prefs.flush();
-    }
+    }//Speichere, ob der Nutzer das Passwort gespeichert haben will
 
 
     public static boolean isSavePass() {
         return prefs.getBoolean("isSavePass");
-    }
+    }//Lese aus, ob der Nutzer den Usernamen gespeichert haben will
 
     public static void setSavePass(boolean savePass) {
         prefs.putBoolean("isSavePass", savePass);
         prefs.flush();
-    }
+    }//Speichere, ob der Nutzer den Usernamen gespeichert haben will
 
 
     public static Boolean isMusicEnabled() {
         return prefs.getBoolean("volume_music");
-    }
+    } //
 
     public static void setMusicEnabled(boolean volume_music) {
         prefs.putBoolean("volume_music", volume_music);
         prefs.flush();
-    }
+    } //Speichere Musik-Einstellung des Nutzers
 
 
     public static boolean isSoundEnabled() {
@@ -65,12 +65,12 @@ public class Settings {
     }
 
 
-    public static String getPassword() {
+    public static String getPassword() { //Lese Passwort-Hash aus
         String password = prefs.getString("password");
         return password;
     }
 
-    public static void setPassword(String password) {
+    public static void setPassword(String password) { //Speichere Passwort-Hash
         prefs.putString("password", password);
         prefs.flush();
     }

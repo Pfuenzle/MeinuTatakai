@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import jdk.nashorn.internal.runtime.ECMAException;
+
 /**
  * Created by Leon on 27.02.2018.
  */
@@ -203,7 +205,13 @@ public class MultiPlayer {
             init = true;
         }
         else if (packet.substring(0, 2).equals("21")) {
-            System.out.println("PlayerNr: " + packet.substring(3));
+            try {
+                System.out.println("PlayerNr: " + packet.substring(3));
+            }
+            catch(Exception e)
+            {
+
+            }
             try {
                 playerNr = Integer.parseInt(packet.substring(3));
             }
@@ -229,25 +237,12 @@ public class MultiPlayer {
             }
             catch(Exception e)
             {
+                mpgs.dispose();
+                dispose();
                 game.setScreen(new MainScreen(game));
             }
             multiplayerRunning = false;
         }
-    }
-
-    private void handleEnemyPacket(String packet)
-    {
-
-    }
-
-    private void handleLocalPacket(String packet)
-    {
-
-    }
-
-    private void handleStatus(String packet)
-    {
-        setServerStatus(packet.substring(3, packet.length()));
     }
 
     public void startMultiPlayerThread() throws IOException{
@@ -275,9 +270,9 @@ public class MultiPlayer {
                 try {
                     inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 } catch (IOException e) {
+                    mpgs.dispose();
                     dispose();
                     game.setScreen(new MainScreen(game));
-                    dispose();
                     e.printStackTrace();
                 }
                 String packet = null;
@@ -291,14 +286,14 @@ public class MultiPlayer {
                             hasStartPos = true;
                         }
                     } catch (IOException e) {
+                        mpgs.dispose();
                         dispose();
                         game.setScreen(new MainScreen(game));
-                        dispose();
                         e.printStackTrace();
                     } catch (Exception e) {
+                        mpgs.dispose();
                         dispose();
                         game.setScreen(new MainScreen(game));
-                        dispose();
                         e.printStackTrace();
                     }
                     System.out.println("Packet received: ");
@@ -306,19 +301,21 @@ public class MultiPlayer {
                         System.out.println(packet);
                     if(packet != null)
                         parsePacket(packet);
-                    if(!init/* || enemy.getUsername().equals("null")*/)
+                    /*if(!init)
                     {
                         try {
                             outToServer.writeBytes("20x\n");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    }
+                    }*/
                 }
                 try {
                     socket.close();
                 } catch (IOException e) {
+                    mpgs.dispose();
                     dispose();
+                    game.setScreen(new MainScreen(game));
                     e.printStackTrace();
                 }
                 //packet = null;
@@ -357,7 +354,9 @@ public class MultiPlayer {
         try {
             startMultiPlayerThread();
         } catch (Exception e) {
-            e.printStackTrace();
+            mpgs.dispose();
+            dispose();
+            game.setScreen(new MainScreen(game));
         }
     }
 
@@ -390,14 +389,14 @@ public class MultiPlayer {
     public void doTritt() throws IOException{
         final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
         localPlayer.setAction(5); //Setze Action auf Tritt
-        outToClient.writeBytes("31x" + "\n"); //Sende Attacke-Paket //TODO BESSER
+        outToClient.writeBytes("31x" + "\n"); //Sende Attacke-Paket
         localPlayer.sendUpdate(socket);
     }
 
     public void doSchlag() throws IOException{
         final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
         localPlayer.setAction(6); //Setze Action auf Schlag
-        outToClient.writeBytes("31x" + "\n"); //Sende Attacke-Paket //TODO BESSER
+        outToClient.writeBytes("31x" + "\n"); //Sende Attacke-Paket
         localPlayer.sendUpdate(socket);
     }
 

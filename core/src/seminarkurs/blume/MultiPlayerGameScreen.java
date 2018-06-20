@@ -75,6 +75,8 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
     private boolean showWinningScreen = false;
     private int winningScreenFrames = 240;
 
+    boolean hasSentStill = false;
+
     @Override
     public void show() {
 
@@ -177,6 +179,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
             try {
                 MP.moveRight(walk_width);
+                hasSentStill = false;
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -203,6 +206,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
             try {
                 MP.moveLeft(walk_width);
+                hasSentStill = false;
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -324,7 +328,11 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 stage.getBatch().draw(Animation.sprite_char2_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
             else
                 stage.getBatch().draw(Animation.sprite_char1_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
-            MP.doNothing();
+            if(!hasSentStill)
+            {
+                MP.doNothing();
+                hasSentStill = true;
+            }
         }
     }
 
@@ -618,6 +626,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         butJump.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                hasSentStill = false;
                 player1_isInJump = true;
                 return true;
             }
@@ -636,6 +645,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                     canSchlag = false;
                     try {
                         MP.doSchlag();
+                        hasSentStill = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
@@ -660,6 +670,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                     canTritt = false;
                     try {
                         MP.doTritt();
+                        hasSentStill = false;
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
