@@ -9,6 +9,11 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by Leon on 05.06.2018.
  */
 
+
+/**
+ * Music: http://www.bensound.com/royalty-free-music
+ */
+
 public class MusicPlayer {
     private static Music music;
     private static String[] MusicName = {"bensound-actionable.mp3", "bensound-extremeaction.mp3", "bensound-highoctane.mp3", "bensound-rumble.mp3"}; //Array mit den Namen der MP3 Dateien
