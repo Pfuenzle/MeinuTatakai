@@ -86,19 +86,19 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
     public void render(float delta) {
         stage.getBatch().setProjectionMatrix(cam.combined);
         stage.getBatch().begin();
-        if(!MP.getWinner().equals(""))
+        if(!MP.getWinner().equals("")) //Zeigt Gewinner an falls Spiel vorbei ist
         {
             isLoading = false;
             showWinningScreen = true;
         }
-        if(isLoading)
+        if(isLoading) //Zeigt Ladebildschirm an
         {
             game.font_debug.draw(stage.getBatch(), "Connecting to Server", screen_width/2, screen_height / 4 * 3);
             Animation.loading_elapsed_time += delta;
             Animation.loadingCurrentFrame = (TextureRegion) Animation.loadingAnimation.getKeyFrame(Animation.loading_elapsed_time);
             stage.getBatch().draw(Animation.loadingCurrentFrame, screen_width / 2, screen_height / 5 * 2);
         }
-        else if(showWinningScreen)
+        else if(showWinningScreen) //Zeige Gewinner und Verlierer
         {
             if(MP.getWinner().equals(NetworkPlayer.getUsername()))
             {
@@ -117,19 +117,19 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 game.font_debug.setColor(Color.BLACK);
             }
             game.font_debug.draw(stage.getBatch(), "Winner: " + MP.getWinner() + "\nLooser: " + MP.getLooser(), screen_width / 2.5f, screen_height / 2);
-            winningScreenFrames--;
-            if(winningScreenFrames == 0) {
+            winningScreenFrames--; //Zähle von 240 jeden Frame runter
+            if(winningScreenFrames == 0) { //Bei 60 FPS nach 4 Sekunden
                 dispose();
-                game.setScreen(new MainScreen(game));
+                game.setScreen(new MainScreen(game)); //Schließe Multiplayer und geh ins Hauptmenü
                 LocalPlayer.setMap(0);
                 MP.dispose();
             }
         }
         else {
-            player1_char = MP.getLocalPlayer().getPlayer();
+            player1_char = MP.getLocalPlayer().getPlayer(); //Hole Charaktere der Spieler
             player2_char = MP.getEnemy().getPlayer();
             try {
-                animatePlayer1();
+                animatePlayer1(); //Animiere beide Spieler
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -138,23 +138,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
             animatePlayer2();
 
- //TODO debug code
-            /*String enemy = "Enemy";
-            String you = "You";
-            if (MP.getEnemy().getDirection() == -1)
-                enemy = "<-- GEGNER";
-            else
-                enemy = "GEGNER -->";
-            if (MP.getLocalPlayer().getDirection() == -1)
-                you = "<-- DU";
-            else
-                you = "DU -->";
-            game.font_debug.draw(stage.getBatch(), "Dir: " + MP.getLocalPlayer().getDirection() + " NR: " + MultiPlayer.getPlayerNr() + "PNR: " + MP.getLocalPlayer().getPlayer(), screen_width / 3, screen_height / 20 * 16);
-            game.font_debug.draw(stage.getBatch(), "Your X: " + MP.getLocalPlayer().getX() + " Y: " + MP.getLocalPlayer().getY() + " Direction: " + you, screen_width / 3, screen_height / 20 * 13);
-            game.font_debug.draw(stage.getBatch(), "Enemy X: " + MP.getEnemy().getX() + " Y: " + MP.getEnemy().getY() + " Direction: " + enemy, screen_width / 3, screen_height / 20 * 10);*/
-
-
-            game.font_debug.draw(stage.getBatch(), "Your HP: " + MP.getLocalPlayer().getHealth(), screen_width / 12, screen_height / 12);
+            game.font_debug.draw(stage.getBatch(), "Your HP: " + MP.getLocalPlayer().getHealth(), screen_width / 12, screen_height / 12); //Zeige eigene Leben und die des Gegners an
             game.font_debug.draw(stage.getBatch(), "Enemy HP: " + MP.getEnemy().getHealth(), screen_width / 2, screen_height / 12);
         }
         stage.getBatch().end();
@@ -162,23 +146,23 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         stage.draw();
     }
 
-    private void animatePlayer1() throws IOException{
+    private void animatePlayer1() throws IOException{ //Animationen und Logik für lokalen Spieler
         boolean animation_done = false;
-        if(butRight.isPressed() && MP.getLocalPlayer().getX() + walk_width < 1460)
+        if(butRight.isPressed() && MP.getLocalPlayer().getX() + walk_width < 1460) //Falls Spieler nach Rechts drückt und noch weiter laufen kann
         {
             moveright = true;
             Animation.player1_walk_elapsed_time += Gdx.graphics.getDeltaTime();
 
-            if(player1_char == 2)
+            if(player1_char == 2) //Wähle Bild für richtigen Charakter
                 Animation.player1_walkCurrentFrame = (TextureRegion) Animation.char2_walkAnimation.getKeyFrame(Animation.player1_walk_elapsed_time);
             else
                 Animation.player1_walkCurrentFrame = (TextureRegion) Animation.char1_walkAnimation.getKeyFrame(Animation.player1_walk_elapsed_time);
 
-            stage.getBatch().draw(Animation.player1_walkCurrentFrame, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
+            stage.getBatch().draw(Animation.player1_walkCurrentFrame, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY()); //Rendere Bild an Position des Spielers
             animation_done = true;
 
             try {
-                MP.moveRight(walk_width);
+                MP.moveRight(walk_width); //Sende Aktion an Server
                 hasSentStill = false;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -187,25 +171,25 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             }
         }
 
-        if(butLeft.isPressed() && MP.getLocalPlayer().getX() - walk_width > -180)
+        if(butLeft.isPressed() && MP.getLocalPlayer().getX() - walk_width > -180) //Falls Spieler nach links drückt und noch weiter laufen kann
         {
             moveleft = true;
             Animation.player1_walk_elapsed_time += Gdx.graphics.getDeltaTime();
 
-            if(player1_char == 2)
+            if(player1_char == 2) //Wähle Bild für richtigen Charakter
                 Animation.player1_walkCurrentFrame = (TextureRegion) Animation.char2_walkAnimation.getKeyFrame(Animation.player1_walk_elapsed_time);
             else
                 Animation.player1_walkCurrentFrame = (TextureRegion) Animation.char1_walkAnimation.getKeyFrame(Animation.player1_walk_elapsed_time);
 
-            Animation.player1_walkCurrentFrame.flip(true, false);
+            Animation.player1_walkCurrentFrame.flip(true, false); //Drehe Bild um
             if(!animation_done) {
-                stage.getBatch().draw(Animation.player1_walkCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                stage.getBatch().draw(Animation.player1_walkCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY()); //Rendere Bild
                 animation_done = true;
             }
             Animation.player1_walkCurrentFrame.flip(true, false);
 
             try {
-                MP.moveLeft(walk_width);
+                MP.moveLeft(walk_width); //Sende Aktion an Server
                 hasSentStill = false;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -218,21 +202,21 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         {
             seminarkurs.blume.Animation.player1_jump_elapsed_time += Gdx.graphics.getDeltaTime();
 
-            if(player1_char == 2)
+            if(player1_char == 2) //Wähle Bild für richtigen Charakter
                 seminarkurs.blume.Animation.player1_jumpCurrentFrame = (TextureRegion) seminarkurs.blume.Animation.char2_jumpAnimation.getKeyFrame(seminarkurs.blume.Animation.player1_jump_elapsed_time);
             else
                 seminarkurs.blume.Animation.player1_jumpCurrentFrame = (TextureRegion) seminarkurs.blume.Animation.char1_jumpAnimation.getKeyFrame(seminarkurs.blume.Animation.player1_jump_elapsed_time);
 
             if(!animation_done) {
-                stage.getBatch().draw(seminarkurs.blume.Animation.player1_jumpCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                stage.getBatch().draw(seminarkurs.blume.Animation.player1_jumpCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY()); //Rendere Bild an Position des Spielers
                 animation_done = true;
             }
             if(!player1_hasSentJump) {
-                MP.jump(250); //TODO Werte raus
+                MP.jump(250); //Sende Aktion an Server
                 player1_hasSentJump = true;
             }
             player1_sprung++;
-            if(player1_sprung > 24/* && seminarkurs.blume.Animation.char1_jumpAnimation.isAnimationFinished(seminarkurs.blume.Animation.player1_jump_elapsed_time)*/)
+            if(player1_sprung > 24) //Nach 24 Frames wieder auf Boden setzen
             {
                 MP.onGround(250);
                 player1_hasSentJump = false;
@@ -246,17 +230,17 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         {
             Animation.player1_schlag_elapsed_time += Gdx.graphics.getDeltaTime();
 
-            if(player1_char == 2)
+            if(player1_char == 2) //Wähle Bild für richtigen Charakter
                 Animation.player1_schlagCurrentFrame = (TextureRegion) Animation.char2_schlagAnimation.getKeyFrame(Animation.player1_schlag_elapsed_time);
             else
                 Animation.player1_schlagCurrentFrame = (TextureRegion) Animation.char1_schlagAnimation.getKeyFrame(Animation.player1_schlag_elapsed_time);
 
             int direction = MP.getLocalPlayer().getDirection();
-            if(direction == -1) {
+            if(direction == -1) { //Drehe Bild je nach Blickrichtung des Spielers
                 Animation.player1_schlagCurrentFrame.flip(true, false);
                 if(!animation_done)
                 {
-                    stage.getBatch().draw(Animation.player1_schlagCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                    stage.getBatch().draw(Animation.player1_schlagCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY()); //Rendere Bild an Position des Spielers
                     animation_done = true;
                 }
                 Animation.player1_schlagCurrentFrame.flip(true, false);
@@ -264,7 +248,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             else if(direction == 1) {
                 if(!animation_done)
                 {
-                    stage.getBatch().draw(Animation.player1_schlagCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                    stage.getBatch().draw(Animation.player1_schlagCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY()); //Rendere Bild an Position des Spielers
                     animation_done = true;
                 }
             }
@@ -280,17 +264,17 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         {
             Animation.player1_tritt_elapsed_time += Gdx.graphics.getDeltaTime();
 
-            if(player1_char == 2)
+            if(player1_char == 2) //Wähle Bild für richtigen Charakter
                 Animation.player1_trittCurrentFrame = (TextureRegion) Animation.char2_trittAnimation.getKeyFrame(Animation.player1_tritt_elapsed_time);
             else
                 Animation.player1_trittCurrentFrame = (TextureRegion) Animation.char1_trittAnimation.getKeyFrame(Animation.player1_tritt_elapsed_time);
 
             int direction = MP.getLocalPlayer().getDirection();
-            if(direction == -1) {
+            if(direction == -1) { //Drehe Bild je nach Blickrichtung des Spielers
                 Animation.player1_trittCurrentFrame.flip(true, false);
                 if(!animation_done)
                 {
-                    stage.getBatch().draw(Animation.player1_trittCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                    stage.getBatch().draw(Animation.player1_trittCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY()); //Rendere Bild an Position des Spielers
                     animation_done = true;
                 }
                 Animation.player1_trittCurrentFrame.flip(true, false);
@@ -298,7 +282,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             else if(direction == 1) {
                 if(!animation_done)
                 {
-                    stage.getBatch().draw(Animation.player1_trittCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY());
+                    stage.getBatch().draw(Animation.player1_trittCurrentFrame, (float) MP.getLocalPlayer().getX(), (float) MP.getLocalPlayer().getY()); //Rendere Bild an Position des Spielers
                     animation_done = true;
                 }
             }
@@ -306,9 +290,9 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             if(player1_char == 2)
             {
                 if(Animation.char2_trittAnimation.isAnimationFinished(Animation.player1_tritt_elapsed_time)) {
-                    canTritt = true;
+                    canTritt = true; //Spieler kann wieder angreifen
                     tritt = false;
-                    Animation.player1_tritt_elapsed_time = 0;
+                    Animation.player1_tritt_elapsed_time = 0; //Animationen zurücksetzen
                 }
             }
             else
@@ -322,45 +306,45 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
         }
 
-        if(!animation_done)
+        if(!animation_done) //Falls Spieler steht, zeige Bild von vorne
         {
             if(player1_char == 2)
-                stage.getBatch().draw(Animation.sprite_char2_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
+                stage.getBatch().draw(Animation.sprite_char2_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY()); //Rendere Bild an Position des Spielers
             else
-                stage.getBatch().draw(Animation.sprite_char1_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY());
-            if(!hasSentStill)
+                stage.getBatch().draw(Animation.sprite_char1_still, (float)MP.getLocalPlayer().getX(), (float)MP.getLocalPlayer().getY()); //Rendere Bild an Position des Spielers
+            if(!hasSentStill) //Sende Aktion nur einmal um nicht zu spammen
             {
-                MP.doNothing();
+                MP.doNothing(); //Sende Aktion an Server
                 hasSentStill = true;
             }
         }
     }
 
-    private void animatePlayer2()
+    private void animatePlayer2() //Animationen für Gegner
     {
         boolean animation_done = false;
         int direction;
 
         int enemy_action = MP.getEnemy().getAction();
 
-        if(enemy_action == 2)
+        if(enemy_action == 2) //Falls Gegner nach rechts läuft
         {
             Animation.player2_walk_elapsed_time += Gdx.graphics.getDeltaTime();
 
-            if(player2_char == 2)
+            if(player2_char == 2) //Wähle Bild für richtigen Charakter
                 Animation.player2_walkCurrentFrame = (TextureRegion) Animation.char2_walkAnimation.getKeyFrame(Animation.player2_walk_elapsed_time);
             else
                 Animation.player2_walkCurrentFrame = (TextureRegion) Animation.char1_walkAnimation.getKeyFrame(Animation.player2_walk_elapsed_time);
 
-            stage.getBatch().draw(Animation.player2_walkCurrentFrame, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
+            stage.getBatch().draw(Animation.player2_walkCurrentFrame, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
             animation_done = true;
         }
 
-        if(enemy_action == 1)
+        if(enemy_action == 1) //Falls Gegner nach links läuft
         {
             Animation.player2_walk_elapsed_time += Gdx.graphics.getDeltaTime();
 
-            if(player2_char == 2)
+            if(player2_char == 2) //Wähle Bild für richtigen Charakter
                 Animation.player2_walkCurrentFrame = (TextureRegion) Animation.char2_walkAnimation.getKeyFrame(Animation.player2_walk_elapsed_time);
             else
                 Animation.player2_walkCurrentFrame = (TextureRegion) Animation.char1_walkAnimation.getKeyFrame(Animation.player2_walk_elapsed_time);
@@ -368,7 +352,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
             if(!animation_done) {
                 Animation.player2_walkCurrentFrame.flip(true, false);
-                stage.getBatch().draw(Animation.player2_walkCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                stage.getBatch().draw(Animation.player2_walkCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
                 animation_done = true;
                 Animation.player2_walkCurrentFrame.flip(true, false);
             }
@@ -376,17 +360,17 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
         player2_isInJump = MP.getEnemy().getAction() == 3;
 
-        if(player2_isInJump)
+        if(player2_isInJump) //Falls Gegner springt
         {
             seminarkurs.blume.Animation.player2_jump_elapsed_time += Gdx.graphics.getDeltaTime();
 
-            if(player2_char == 2)
+            if(player2_char == 2) //Wähle Bild für richtigen Charakter
                 seminarkurs.blume.Animation.player2_jumpCurrentFrame = (TextureRegion) seminarkurs.blume.Animation.char2_jumpAnimation.getKeyFrame(seminarkurs.blume.Animation.player1_jump_elapsed_time);
             else
                 seminarkurs.blume.Animation.player2_jumpCurrentFrame = (TextureRegion) seminarkurs.blume.Animation.char1_jumpAnimation.getKeyFrame(seminarkurs.blume.Animation.player1_jump_elapsed_time);
 
             if(!animation_done) {
-                stage.getBatch().draw(seminarkurs.blume.Animation.player2_jumpCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                stage.getBatch().draw(seminarkurs.blume.Animation.player2_jumpCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
                 animation_done = true;
             }
             /*player2_sprung++;
@@ -398,25 +382,25 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             }*/
         }
 
-        if(enemy_action == 5) {
+        if(enemy_action == 5) { //Falls Gegner tritt
             Animation.player2_tritt_elapsed_time += Gdx.graphics.getDeltaTime();
 
-            if (player2_char == 2)
+            if (player2_char == 2) //Wähle Bild für richtigen Charakter
                 Animation.player2_trittCurrentFrame = (TextureRegion) Animation.char2_trittAnimation.getKeyFrame(Animation.player2_tritt_elapsed_time);
             else
                 Animation.player2_trittCurrentFrame = (TextureRegion) Animation.char1_trittAnimation.getKeyFrame(Animation.player2_tritt_elapsed_time);
 
             direction = MP.getEnemy().getDirection();
-            if (direction == -1) {
+            if (direction == -1) { //Drehe Bild je nach Blickrichtung des Gegners
                 Animation.player2_trittCurrentFrame.flip(true, false);
                 if (!animation_done) {
-                    stage.getBatch().draw(Animation.player2_trittCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    stage.getBatch().draw(Animation.player2_trittCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
                     animation_done = true;
                 }
                 Animation.player2_trittCurrentFrame.flip(true, false);
             } else if (direction == 1) {
                 if (!animation_done) {
-                    stage.getBatch().draw(Animation.player2_trittCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                    stage.getBatch().draw(Animation.player2_trittCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
                     animation_done = true;
                 }
             }
@@ -436,17 +420,17 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         }
         if (enemy_action == 6) {
             Animation.player2_schlag_elapsed_time += Gdx.graphics.getDeltaTime();
-            if (player2_char == 2)
+            if (player2_char == 2) //Wähle Bild für richtigen Charakter
                 Animation.player2_schlagCurrentFrame = (TextureRegion) Animation.char2_schlagAnimation.getKeyFrame(Animation.player2_schlag_elapsed_time);
             else
                 Animation.player2_schlagCurrentFrame = (TextureRegion) Animation.char1_schlagAnimation.getKeyFrame(Animation.player2_schlag_elapsed_time);
 
             direction = MP.getEnemy().getDirection();
-            if (direction == -1) {
+            if (direction == -1) { //Drehe Bild je nach Blickrichtung des Gegners
                 Animation.player2_schlagCurrentFrame.flip(true, false);
                 if (!animation_done) {
                     try {
-                        stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                        stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
                     }
                     catch (Exception e)
                     {
@@ -458,7 +442,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             } else if (direction == 1) {
                 if (!animation_done) {
                     try {
-                        stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY());
+                        stage.getBatch().draw(Animation.player2_schlagCurrentFrame, (float) MP.getEnemy().getX(), (float) MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
                     }
                     catch (Exception e)
                     {
@@ -468,7 +452,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
                 }
             }
 
-            if(player2_char == 2)
+            if(player2_char == 2) //Animation zurücksetzen
             {
                 if(Animation.char2_schlagAnimation.isAnimationFinished(Animation.player2_schlag_elapsed_time)) {
                     Animation.player2_schlag_elapsed_time = 0;
@@ -482,18 +466,18 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             }
         }
 
-        if(!animation_done)
+        if(!animation_done) //Falls Gegner steht, zeige Bild von vorne
         {
             switch(player2_char)
             {
                 case 1:
-                    stage.getBatch().draw(Animation.sprite_char1_still, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
+                    stage.getBatch().draw(Animation.sprite_char1_still, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
                     break;
                 case 2:
-                    stage.getBatch().draw(Animation.sprite_char2_still, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
+                    stage.getBatch().draw(Animation.sprite_char2_still, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
                     break;
                 default:
-                    stage.getBatch().draw(Animation.sprite_char1_still, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY());
+                    stage.getBatch().draw(Animation.sprite_char1_still, (float)MP.getEnemy().getX(), (float)MP.getEnemy().getY()); //Rendere Bild an Position des Spielers
             }
         }
     }
@@ -517,7 +501,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
     }
 
-    private void showLoadingScreen()
+    private void showLoadingScreen() //Zeige Ladebildschirm
     {
         isLoading = true;
     }
@@ -525,10 +509,10 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
     public void exitLoadingScreen()
     {
         isLoading = false;
-    }
+    } //Beende Ladebildschirm
 
     @Override
-    public void create()
+    public void create() //Initialisiere die Oberflächen
     {
         showLoadingScreen();
 
@@ -568,11 +552,11 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
 
     public MultiPlayerGameScreen(MyGdxGame game, int PORT){
         this.game = game;
-        MP = new MultiPlayer(PORT, this);
-        create();
+        MP = new MultiPlayer(PORT, this); //Starte Multiplayer auf übergebenem Port
+        create(); //Starte Methode zur Initialisierung
     }
 
-    private void initPauseButton()
+    private void initPauseButton() //Initialisiere Pause-Knopf
     {
         butBack = new TextButton("||", uiSkin);
         butBack.setTransform(true);
@@ -590,7 +574,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         stage.addActor(butBack);
     }
 
-    private void setupInterface()
+    private void setupInterface() //Initialisiere Die Knöpfe für die Steuerung
     {
         butLeft = new TextButton("<--", uiSkin);
         butLeft.setTransform(true);
@@ -627,7 +611,7 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 hasSentStill = false;
-                player1_isInJump = true;
+                player1_isInJump = true; //Spieler springt
                 return true;
             }
         });
@@ -641,10 +625,10 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         butSchlag.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(canSchlag) {
+                if(canSchlag) { //Falls Spieler wieder schlagen kann
                     canSchlag = false;
                     try {
-                        MP.doSchlag();
+                        MP.doSchlag(); //Sende Schlag an Server
                         hasSentStill = false;
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -666,10 +650,10 @@ public class MultiPlayerGameScreen  extends ApplicationAdapter implements Screen
         butTritt.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(canTritt) {
+                if(canTritt) { //Falls Spieler wieder treten kann
                     canTritt = false;
                     try {
-                        MP.doTritt();
+                        MP.doTritt(); //Sende Tritt an Server
                         hasSentStill = false;
                     } catch (IOException e) {
                         e.printStackTrace();

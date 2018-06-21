@@ -42,36 +42,36 @@ public class MyGdxGame extends Game {
 	private static Texture back_selectTexture;
 	private static Sprite back_selectSprite;
 
-	private String deviceName;
+	private String deviceName; //Gerätename
 
 	@Override
 	public void create () {
 		stage = new Stage();
 
-		uiSkin = new Skin(Gdx.files.internal("skin/skin/comic-ui.json"));
+		uiSkin = new Skin(Gdx.files.internal("skin/skin/comic-ui.json")); //Lade UI und deren Schriftart
 		font = uiSkin.getFont("font");
 		uiSkin.getFont("font").getData().setScale(3f);
 
 		Gdx.app.setLogLevel(Application.LOG_ERROR);
 
-		initBackground();
+		initBackground(); //Initialisierung der Oberfläche
 
-		initFPS();
+		initFPS(); //Lade FPS-Anzeige
 
-		seminarkurs.blume.Animation.initAll();
+		seminarkurs.blume.Animation.initAll(); //Laden der Animationen
 
 		this.screen_width = Gdx.graphics.getWidth();
 		this.screen_height = Gdx.graphics.getHeight();
 
-		Settings.init();
+		Settings.init(); //Laden der Einstellungen
 
-		MusicPlayer.startPlaylist();
+		MusicPlayer.startPlaylist(); //Starten der Musik
 
-		this.setScreen(new LoginScreen(this));
+		this.setScreen(new LoginScreen(this)); //Loginscreen aufrufen
 	}
 
 	@Override
-	public void render () {
+	public void render () { //Anzeigen von Hintergrund und ggf. FPS
 		stage.getBatch().begin();
 
 		renderBackground();
@@ -100,7 +100,7 @@ public class MyGdxGame extends Game {
 		return this.screen_height;
 	}
 
-	private void initBackground()
+	private void initBackground() //Menühintergrund initialisieren
 	{
 		backgroundTexture = new Texture("background/background.png");
 		backgroundSprite = new Sprite(backgroundTexture);
@@ -116,7 +116,7 @@ public class MyGdxGame extends Game {
 		back_selectSprite.setOrigin(background_origin_x, background_origin_y);
 	}
 
-	private void renderBackground()
+	private void renderBackground() //Je nach aktuellem Menü Hintergrund anzeigen
 	{
 		if((!LocalPlayer.isIngame() || LocalPlayer.getMap() == null) && !LocalPlayer.isSelecting())
 			backgroundSprite.draw(stage.getBatch());
@@ -126,7 +126,7 @@ public class MyGdxGame extends Game {
 			LocalPlayer.getMap().drawMap(stage);
 	}
 
-	private void initFPS()
+	private void initFPS() //Laden der Schrift für die FPS-Anzeige
 	{
 		final String FONT_PATH = "OpenSans.ttf";
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
@@ -154,7 +154,7 @@ public class MyGdxGame extends Game {
 
 	private void renderFPS()
 	{
-		if(!deviceName.equals("nicisilver")) { //Zeige keine FPS wenn es das Handy von Nicole ist
+		if(deviceName.equals("Pfuenzle") || deviceName.equals("superflo22") || deviceName.equals("nicisilver")) { //Zeige FPS und Session nur an, wenn es Handys von uns sind
 			font_debug.draw(stage.getBatch(), "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), screen_width / 20 * 17, screen_height / 20 * 19);
 			font_debug.draw(stage.getBatch(), "SESSION: " + NetworkPlayer.getSESSION(), screen_width / 20 * 10, screen_height / 20 * 19);
 		}
@@ -175,9 +175,9 @@ public class MyGdxGame extends Game {
 		return this.uiSkin;
 	}
 
-	public MyGdxGame(String HWID, String deviceName)
+	public MyGdxGame(String HWID, String deviceName) //Konstruktor
 	{
-		NetworkPlayer.setHWID(HWID);
+		NetworkPlayer.setHWID(HWID); //Setzen von HWID und Gerätename
 		this.deviceName = deviceName;
 	}
 

@@ -19,8 +19,8 @@ public class GamePlayer{
     private double health;
     private double speed;
 
-    private int player;
-    private int skin;
+    private int player; //Charakter des Spielers
+    private int skin; //Skin des Spielers
 
     private double x = 0;
     private double y = 0;
@@ -115,7 +115,7 @@ public class GamePlayer{
         this.direction = direction;
     }
 
-    public void sendUpdate(Socket s) throws IOException
+    public void sendUpdate(Socket s) throws IOException //Schickt alle Attribute an übergebenen Socket
     {
         Socket socket = s;
         final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());

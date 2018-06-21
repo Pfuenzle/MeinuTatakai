@@ -5,7 +5,5 @@ package seminarkurs.blume;
  */
 
 public class GameSettings {
-    static boolean drawBackButton = false;
-    static boolean drawFPS = true;
-    static boolean drawBackground = true;
+    static boolean drawFPS = true; //Ob die FPS angezeigt werden sollen
 }

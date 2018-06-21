@@ -82,11 +82,13 @@ public class MultiPlayer {
         this.looser = looser;
     }
 
+    DataOutputStream outToServer;
+
     public void dispose()
     {
         multiplayerRunning = false;
         try {
-            socket.close();
+            socket.close(); //Beende Verbindung zu Server
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,7 +100,7 @@ public class MultiPlayer {
     private void parsePacket(String packet) {
         if(packet.length() < 2)
             return;
-        if (packet.substring(0, 2).equals("10")) {
+        if (packet.substring(0, 2).equals("10")) { //Update Nutzernamen des Gegners
             try {
                 enemy.setUsername(packet.substring(3));
                 System.out.println("Set enemy username to " + packet.substring(3));
@@ -109,7 +111,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("11")) {
+        else if (packet.substring(0, 2).equals("11")) { //Update RP des Gegners
             try{
                 enemy.setRP(Integer.parseInt(packet.substring(3)));
             }
@@ -119,8 +121,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("12")) {
-            //12x1x88
+        else if (packet.substring(0, 2).equals("12")) { //Update Leben eines Spielers
             int player = Integer.parseInt(packet.substring(3, 4));
             try {
                 if(player == getPlayerNr())
@@ -134,7 +135,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("13")) {
+        else if (packet.substring(0, 2).equals("13")) {  //Update Geschwindigkeit des Gegners
             try {
                 enemy.setSpeed(Double.parseDouble(packet.substring(3)));
             }
@@ -144,7 +145,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("14")) {
+        else if (packet.substring(0, 2).equals("14")) {  //Update Charakter des Gegners
             try {
                 enemy.setPlayer(Integer.parseInt(packet.substring(3)));
             }
@@ -154,7 +155,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("15")) {
+        else if (packet.substring(0, 2).equals("15")) {  //Update Skin des Gegners
             try {
                 enemy.setSkin(Integer.parseInt(packet.substring(3)));
             }
@@ -164,7 +165,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("16")) {
+        else if (packet.substring(0, 2).equals("16")) {  //Update X-Position des Gegners
             try {
                 enemy.setX(Double.parseDouble(packet.substring(3)));
             }
@@ -174,7 +175,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("17")) {
+        else if (packet.substring(0, 2).equals("17")) {  //Update Y-Position des Gegners
             try {
                 enemy.setY(Double.parseDouble(packet.substring(3)));
             }
@@ -184,7 +185,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("18")) {
+        else if (packet.substring(0, 2).equals("18")) {  //Update Blickrichtung des Gegners
             try {
                 enemy.setDirection(Integer.parseInt(packet.substring(3)));
             }
@@ -194,7 +195,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("19")) {
+        else if (packet.substring(0, 2).equals("19")) {  //Update Aktion des Gegners
             try {
                 enemy.setAction(Integer.parseInt(packet.substring(3)));
             }
@@ -204,7 +205,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("21")) {
+        else if (packet.substring(0, 2).equals("21")) {  //Update Spielernummer
             try {
                 System.out.println("PlayerNr: " + packet.substring(3));
             }
@@ -221,7 +222,7 @@ public class MultiPlayer {
             }
             init = true;
         }
-        else if (packet.substring(0, 2).equals("99")) {
+        else if (packet.substring(0, 2).equals("99")) { //Spiel ist Vorbei
             //99x0000xuserx0000xuser2
             try {
                 int winner_pos_start = 8;
@@ -229,13 +230,13 @@ public class MultiPlayer {
                 int looser_pos_start = winner_pos_end + 6;
                 int looser_pos_end = looser_pos_start + Integer.parseInt(packet.substring(winner_pos_end + 1, winner_pos_end + 5));
                 try {
-                    this.setWinner(packet.substring(winner_pos_start, winner_pos_end));
-                    this.setLooser(packet.substring(looser_pos_start, looser_pos_end));
+                    this.setWinner(packet.substring(winner_pos_start, winner_pos_end)); //Lese Gewinner
+                    this.setLooser(packet.substring(looser_pos_start, looser_pos_end)); //Lese Verlierer
                 } catch (Exception e) {
 
                 }
             }
-            catch(Exception e)
+            catch(Exception e) //Bei Fehler Abbruch und ins Hauptmenü
             {
                 mpgs.dispose();
                 dispose();
@@ -246,11 +247,12 @@ public class MultiPlayer {
     }
 
     public void startMultiPlayerThread() throws IOException{
-        socket = new Socket(SERVER,PORT); //verbinde zu server
+        socket = new Socket(SERVER,PORT); //Verbinde zu Server
         multiplayerRunning = true;
 
-        final DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+        outToServer = new DataOutputStream(socket.getOutputStream());
 
+        //Sende alle eigenen Attribute am Anfang zum Server
         outToServer.writeBytes("11x" + String.valueOf(localPlayer.getRP()) + "\n");
         outToServer.writeBytes("12x" + String.valueOf(localPlayer.getHealth()) + "\n");
         outToServer.writeBytes("13x" + String.valueOf(localPlayer.getSpeed()) + "\n");
@@ -263,7 +265,7 @@ public class MultiPlayer {
         outToServer.writeBytes("10x" + localPlayer.getUsername() + "\n");
 
         new Thread(new Runnable() {
-            public void run() {
+            public void run() { //Starte neuen Thread
                 mpgs.exitLoadingScreen();
                 boolean hasStartPos = false;
                 BufferedReader inFromServer = null;
@@ -276,16 +278,20 @@ public class MultiPlayer {
                     e.printStackTrace();
                 }
                 String packet = null;
-                while(multiplayerRunning)
+                while(multiplayerRunning) //Schleife während Spiel läuft
                 {
                     try {
-                            packet = inFromServer.readLine();
-                        if(getPlayerNr() == 2 && !hasStartPos) {
+                            packet = inFromServer.readLine(); //Lese von Server
+                        if(getPlayerNr() == 2 && !hasStartPos) { //Spieler ist Spieler zwei, setze Position auf rechte Seite und sende Update
                             getLocalPlayer().setX(1460);
                             getLocalPlayer().sendUpdate(socket);
                             hasStartPos = true;
+                        }//                            getLocalPlayer().sendUpdate(socket);
+                        else if(getPlayerNr() == 1 && !hasStartPos) { //Spieler ist Spieler eins, bleibe auf linker Seite
+                            getLocalPlayer().sendUpdate(socket);
+                            hasStartPos = true;
                         }
-                    } catch (IOException e) {
+                    } catch (IOException e) { //Bei Fehler Verbindung beenden und ins Hauptmenü zurück
                         mpgs.dispose();
                         dispose();
                         game.setScreen(new MainScreen(game));
@@ -296,21 +302,19 @@ public class MultiPlayer {
                         game.setScreen(new MainScreen(game));
                         e.printStackTrace();
                     }
-                    System.out.println("Packet received: ");
                     if(packet != null)
                         System.out.println(packet);
                     if(packet != null)
-                        parsePacket(packet);
-                    /*if(!init)
+                        parsePacket(packet); //Paket auslesen
+                    if(getEnemy().getUsername().equals(""))
                     {
                         try {
-                            outToServer.writeBytes("20x\n");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }*/
+                        outToServer.writeBytes("20x\n");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }}
                 }
-                try {
+                try { //Spiel ist vorbei, beenden
                     socket.close();
                 } catch (IOException e) {
                     mpgs.dispose();
@@ -318,7 +322,6 @@ public class MultiPlayer {
                     game.setScreen(new MainScreen(game));
                     e.printStackTrace();
                 }
-                //packet = null;
             }
         }).start();
     }
@@ -328,6 +331,8 @@ public class MultiPlayer {
         this.game = mpgs.getGame();
         this.mpgs = mpgs;
         this.PORT = PORT;
+
+        //Objekte für beide Spieler erstellen
 
         localPlayer = new GamePlayer();
 
@@ -342,17 +347,10 @@ public class MultiPlayer {
 
         enemy = new GamePlayer();
 
-        /*(enemy.setRP(12344321);
-        enemy.setUsername("gegnername");
-        enemy.setHealth(100);
-        enemy.setSpeed(10);
-        enemy.setPlayer(1);
-        enemy.setSkin(0);
-        enemy.setX(0);
-        enemy.setY(0);*/
+        enemy.setUsername("");
 
         try {
-            startMultiPlayerThread();
+            startMultiPlayerThread(); //Mulitplayer-Funktion aufrufen
         } catch (Exception e) {
             mpgs.dispose();
             dispose();
@@ -360,49 +358,55 @@ public class MultiPlayer {
         }
     }
 
-    public void moveLeft(float num) throws IOException{
+    public void moveLeft(float num) throws IOException{ //Bewege Spieler um "num" pixel nach links und sende Aktion und Update an Server
         localPlayer.setX(localPlayer.getX() - num);
         localPlayer.setDirection(-1);
         localPlayer.setAction(1);
-        localPlayer.sendUpdate(socket);
+        outToServer.writeBytes("16x" + String.valueOf(localPlayer.getX()) + "\n"); //Sende X-Position an Server
+        outToServer.writeBytes("18x" + String.valueOf(localPlayer.getDirection()) + "\n"); //Sende Blickrichtung an Server
+        outToServer.writeBytes("19x" + String.valueOf(localPlayer.getAction()) + "\n"); //Sende Aktion an Server
     }
 
-    public void moveRight(float num) throws IOException{
+    public void moveRight(float num) throws IOException{ //Bewege Spieler um "num" pixel nach rechts und sende Aktion und Update an Server
         localPlayer.setX(localPlayer.getX() + num);
         localPlayer.setDirection(1);
         localPlayer.setAction(2);
-        localPlayer.sendUpdate(socket);
+        outToServer.writeBytes("16x" + String.valueOf(localPlayer.getX()) + "\n"); //Sende X-Position an Server
+        outToServer.writeBytes("18x" + String.valueOf(localPlayer.getDirection()) + "\n"); //Sende Blickrichtung an Server
+        outToServer.writeBytes("19x" + String.valueOf(localPlayer.getAction()) + "\n"); //Sende Aktion an Server
     }
 
-    public void jump(float num) throws IOException{
+    public void jump(float num) throws IOException{ //Bewege Spieler um "num" nach oben und sende Aktion und Update an Server
         localPlayer.setY(localPlayer.getY() + num);
         localPlayer.setAction(3);
-        localPlayer.sendUpdate(socket);
+        outToServer.writeBytes("17x" + String.valueOf(localPlayer.getY()) + "\n"); //Sende Y-Position an Server
+        outToServer.writeBytes("19x" + String.valueOf(localPlayer.getAction()) + "\n"); //Sende Aktion an Server
     }
 
-    public void onGround(float num) throws IOException{
+    public void onGround(float num) throws IOException{//Bewege Spieler um "num" nach unten und sende Aktion und Update an Server
         localPlayer.setY(localPlayer.getY() - num);
         localPlayer.setAction(4);
-        localPlayer.sendUpdate(socket);
+        outToServer.writeBytes("17x" + String.valueOf(localPlayer.getY()) + "\n"); //Sende Y-Position an Server
+        outToServer.writeBytes("19x" + String.valueOf(localPlayer.getAction()) + "\n"); //Sende Aktion an Server
     }
 
-    public void doTritt() throws IOException{
+    public void doTritt() throws IOException{ //Spiele Tretanimation und sende Aktion an Server
         final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
         localPlayer.setAction(5); //Setze Action auf Tritt
+        outToServer.writeBytes("19x" + String.valueOf(localPlayer.getAction()) + "\n"); //Sende Aktion an Server
         outToClient.writeBytes("31x" + "\n"); //Sende Attacke-Paket
-        localPlayer.sendUpdate(socket);
     }
 
-    public void doSchlag() throws IOException{
+    public void doSchlag() throws IOException{ //Spiele Schlaganimation und sende Aktion an Server
         final DataOutputStream outToClient = new DataOutputStream(socket .getOutputStream());
         localPlayer.setAction(6); //Setze Action auf Schlag
+        outToServer.writeBytes("19x" + String.valueOf(localPlayer.getAction()) + "\n"); //Sende Aktion an Server
         outToClient.writeBytes("31x" + "\n"); //Sende Attacke-Paket
-        localPlayer.sendUpdate(socket);
     }
 
-    public void doNothing() throws IOException{
+    public void doNothing() throws IOException{ //Sende nichts-Aktion an Server
         localPlayer.setAction(0);
-        localPlayer.sendUpdate(socket);
+        outToServer.writeBytes("19x" + String.valueOf(localPlayer.getAction()) + "\n"); //Sende Aktion an Server
     }
 
 

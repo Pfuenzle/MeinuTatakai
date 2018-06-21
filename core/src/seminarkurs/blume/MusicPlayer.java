@@ -47,7 +47,7 @@ public class MusicPlayer {
             }
         });
         updateVolume(); //Prüfe, ob Nutzer Musik ausgeschalten hat
-        startSong(); //Starte Lied
+        startSong(); //Starte initialisiertes Lied
     }
 
     public static void stopPlaylist() //Stoppe Playlist nach dem aktuellen Lied

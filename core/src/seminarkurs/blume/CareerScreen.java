@@ -167,24 +167,24 @@ public class CareerScreen implements Screen {
         stage.addActor(butBack);
     }
 
-    private void updateStats(String username_in)
+    private void updateStats(String username_in) //Aktualisiert die Statistiken des übergebenen Spielers
     {
         this.username = username_in;
         String packettype = "1x0";
-        String packet = packettype + "x" + username;
+        String packet = packettype + "x" + username; //Statistiken-Packet erstellen
         SocketHints socketHints = new SocketHints();
         Socket socket = null;
         try
         {
-            socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
+            socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints); //Neue Verbindung zum Hauptserver
         }
-        catch(com.badlogic.gdx.utils.GdxRuntimeException e)
+        catch(com.badlogic.gdx.utils.GdxRuntimeException e) //Fehler abfangen
         {
             userNotFound = true;
             return;
         }
         try {
-            socket.getOutputStream().write(packet.getBytes());
+            socket.getOutputStream().write(packet.getBytes()); //Senden des Packetes
         } catch (IOException e) {
             userNotFound = true;
             e.printStackTrace();
@@ -197,8 +197,8 @@ public class CareerScreen implements Screen {
             public void run () {
                 String resp;
                 try {
-                    resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
-                } catch (IOException e) {
+                    resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine(); //Auf Antwort warten
+                } catch (IOException e) { //Bei Fehler abfangen und Fehler ausgeben
                     e.printStackTrace();
                     e.toString();
                     Gdx.app.log("UserPacket", e.toString());
@@ -206,8 +206,8 @@ public class CareerScreen implements Screen {
                     return;
                 }
                 //Gdx.app.log("UserPacket", resp);
-                UserPacket user = new UserPacket(resp);
-                if(user.getRet())
+                UserPacket user = new UserPacket(resp); //Lesen der empfangenen Statistiken
+                if(user.getRet()) //Falls das Paket vollständig ist, setze Statistiken
                 {
                     RP = user.getRP();
                     wins = user.getWins();
@@ -215,7 +215,7 @@ public class CareerScreen implements Screen {
                     userNotFound = false;
                 }
                 else
-                    userNotFound = true;
+                    userNotFound = true; //Nutzer wurde nicht gefunden, zeige userNotFound-Nachricht an
 
             }
         }).start();

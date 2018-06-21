@@ -210,25 +210,26 @@ public class LoginScreen implements Screen {
                 //NetworkPlayer.setUsername(username);
                 String password = passwordTextField.getText();
                 if(!password.equals(Settings.getPassword()))
-                    password = Crypt.applyMD5(password);
+                    password = Crypt.applyMD5(password); //Passwort hashen falls der Nutzer es frisch eingegeben hat
+                //Registrierungspaket erstellen mit Passwort, Hash und Nutzername
                 String packet = packettype + "x" + NetworkPlayer.fill(username.length(), 4) + "x" + username + "x" + NetworkPlayer.fill(password.length(), 4) + "x" + password + "x" + NetworkPlayer.getHWID();
                 SocketHints socketHints = new SocketHints();
                 Socket socket = null;
                 try
                 {
-                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, NetworkPlayer.getMainServer(), 1337, socketHints);
+                    socket = Gdx.net.newClientSocket(Net.Protocol.TCP, NetworkPlayer.getMainServer(), 1337, socketHints); //Neue Verbindung zu Server herstellen
                 }
-                catch(com.badlogic.gdx.utils.GdxRuntimeException e)
+                catch(com.badlogic.gdx.utils.GdxRuntimeException e) //Server nicht erreichbar
                 {
                     ret_type = 1;
-                    ret_text = "Server unreachable";
+                    ret_text = "Server unreachable"; //Fehler anzeigen
                     button_reg.setDisabled(false); //Aktviere Buttons wieder
                     button_log.setDisabled(false);
                     return false;
                 }
 
                 try {
-                    socket.getOutputStream().write(packet.getBytes());
+                    socket.getOutputStream().write(packet.getBytes()); //Paket senden
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -241,22 +242,23 @@ public class LoginScreen implements Screen {
                     public void run () {
                         String resp = "";
                         try {
-                            resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
+                            resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine(); //Auf Antwort warten
                         } catch (IOException e) {
                             button_reg.setDisabled(false);
                             button_log.setDisabled(false);
                             e.printStackTrace();
                         }
-                        RegisterPacket packet_ret = new RegisterPacket(resp);
+                        RegisterPacket packet_ret = new RegisterPacket(resp); //Antwort auswerten
                         if(!packet_ret.isBroken())
                         {
-                            ret_text = packet_ret.getMsg();
+                            ret_text = packet_ret.getMsg(); //Returncode holen
                             ret_type = 2;
                             button_reg.setDisabled(false);
                             button_log.setDisabled(false);
-                            if(packet_ret.getReturn())
+                            if(packet_ret.getReturn()) //Falls Registrierung erfolgreich
                             {
-                                passwordTextField.setText(finalPassword);
+                                passwordTextField.setText(finalPassword); //Hash in Passwortfeld setzen
+                                //Nutzernamen und Passwort speichern falls gewünscht
                                 if(userCheckBox.isChecked())
                                 {
                                     Settings.setUsername(username);
@@ -278,7 +280,7 @@ public class LoginScreen implements Screen {
                                 }
                             }
                         }
-                        else
+                        else //Antwort fehlerhaft, neu anfragen
                         {
                             InputEvent event1 = new InputEvent();
                             event1.setType(InputEvent.Type.touchDown);
@@ -304,7 +306,8 @@ public class LoginScreen implements Screen {
                 NetworkPlayer.setUsername(username);
                 String password = passwordTextField.getText();
                 if(!password.equals(Settings.getPassword()))
-                    password = Crypt.applyMD5(password);
+                    password = Crypt.applyMD5(password); //Passwort hashen falls der Nutzer es frisch eingegeben hat
+                //Loginpaket erstellen
                 String packet = packettype + "x" + NetworkPlayer.fill(username.length(), 4) + "x" + username + "x" + NetworkPlayer.fill(password.length(), 4) + "x" + password + "x" + NetworkPlayer.getHWID();
                 SocketHints socketHints = new SocketHints();
                 Socket socket = null;
@@ -321,7 +324,7 @@ public class LoginScreen implements Screen {
                     return false;
                 }
                 try {
-                    socket.getOutputStream().write(packet.getBytes());
+                    socket.getOutputStream().write(packet.getBytes()); //Paket senden
                 } catch (IOException e) {
                     ret_type = 1;
                     ret_text = "Server unreachable";
@@ -338,18 +341,19 @@ public class LoginScreen implements Screen {
                     public void run () {
                         String resp = "";
                         try {
-                            resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
+                            resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine(); //Auf Antwort warten
                         } catch (IOException e) {
                             button_reg.setDisabled(false);
                             button_log.setDisabled(false);
                             e.printStackTrace();
                         }
-                        LoginPacket packet_ret = new LoginPacket(resp);
+                        LoginPacket packet_ret = new LoginPacket(resp); //Antwort auslesen
                         if(!packet_ret.isBroken()){
                             ret_text = packet_ret.getMsg();
                             ret_type = 1;
-                            if(packet_ret.getReturn())
+                            if(packet_ret.getReturn()) //Login erfolgreich
                             {
+                                //Usernamen und Passwort speichern falls gewünscht
                                 if(userCheckBox.isChecked())
                                 {
                                     Settings.setUsername(username);
@@ -369,12 +373,12 @@ public class LoginScreen implements Screen {
                                   Settings.setPassword("");
                                   Settings.setSavePass(false);
                               }
-                              NetworkPlayer.update(); //Update Stats von Spieler
+                              NetworkPlayer.update(); //Update Stats von lokalem Spieler
                               dispose();
                               game.setScreen(new MainScreen(game));
                             }
                         }
-                        else
+                        else //Paket kaputt, neu anfordern
                         {
                             InputEvent event1 = new InputEvent();
                             event1.setType(InputEvent.Type.touchDown);

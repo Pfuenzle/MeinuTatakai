@@ -150,7 +150,7 @@ public class CharSelectScreen implements Screen {
             playerList[i].addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                NetworkPlayer.setCharID(temp + 1);
+                NetworkPlayer.setCharID(temp + 1); //Setzen des gewählten Charakters bei einem Klick
             }
         });
             stage.addActor(playerList[i]);
@@ -175,7 +175,7 @@ public class CharSelectScreen implements Screen {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 LocalPlayer.setbIsSelecting(false);
                 dispose();
-                game.setScreen(new MainScreen(game));// neuen Screen öffen
+                game.setScreen(new MainScreen(game));// neuen Screen öffnen
                 return true;
             }
         });
@@ -192,7 +192,7 @@ public class CharSelectScreen implements Screen {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new MapSelectScreen(game, next_screen));// neuen Screen öffen
+                game.setScreen(new MapSelectScreen(game, next_screen));// neuen Screen öffnen
                 return true;
             }
         });

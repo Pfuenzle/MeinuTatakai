@@ -91,7 +91,7 @@ public class SettingsScreen implements Screen{
         button_music.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                if(Settings.isMusicEnabled())
+                if(Settings.isMusicEnabled()) //Update Einstellungen
                     Settings.setMusicEnabled(false);
                 else
                     Settings.setMusicEnabled(true);
@@ -110,7 +110,7 @@ public class SettingsScreen implements Screen{
         button_sound.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                if(Settings.isSoundEnabled())
+                if(Settings.isSoundEnabled()) //Update Einstellungen
                     Settings.setSoundEnabled(false);
                 else
                     Settings.setSoundEnabled(true);
@@ -132,7 +132,6 @@ public class SettingsScreen implements Screen{
         butBack.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                LocalPlayer.setbIsSelecting(false);
                 dispose();
                 game.setScreen(new MainScreen(game)); // neuen Screen aufrufen
                 return true;

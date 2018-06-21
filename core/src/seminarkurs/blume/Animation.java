@@ -7,22 +7,22 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
-public class Animation {
+public class Animation { //Diese Klasse wurde für die Animationen für das Initialisieren des Multiplayers genutzt
 
-    static com.badlogic.gdx.graphics.g2d.Animation char1_jumpAnimation;
-    static float char1_jumpDuration = 0.25f;
+    static com.badlogic.gdx.graphics.g2d.Animation char1_jumpAnimation; //Deklaration der Variablen für die verschiedenen Animationen von Character 1
+    static float char1_jumpDuration = 0.25f; //Dauer der Animation
     static float char1_jumpStateTime;
     static TextureRegion player1_jumpCurrentFrame;
     static float player1_jump_elapsed_time = 0f;
 
     static  com.badlogic.gdx.graphics.g2d.Animation char1_walkAnimation;
-    static float char1_walkDuration = 0.1f;
+    static float char1_walkDuration = 0.1f; //Dauer der Animation
     static float char1_walkStateTime;
     static TextureRegion player1_walkCurrentFrame;
     static float player1_walk_elapsed_time = 0f;
 
     static com.badlogic.gdx.graphics.g2d.Animation char1_schlagAnimation;
-    static float char1_schlagDuration = 0.11f;
+    static float char1_schlagDuration = 0.11f; //Dauer der Animation
     static float char1_schlagStateTime;
     static TextureRegion player1_schlagCurrentFrame;
     static TextureRegion player2_schlagCurrentFrame;
@@ -30,7 +30,7 @@ public class Animation {
     static float player2_schlag_elapsed_time = 0f;
 
     static com.badlogic.gdx.graphics.g2d.Animation char1_trittAnimation;
-    static float char1_trittDuration = 0.08f;
+    static float char1_trittDuration = 0.08f; //Dauer der Animation
     static float char1_trittStateTime;
     static TextureRegion player1_trittCurrentFrame;
     static float player1_tritt_elapsed_time = 0f;
@@ -38,17 +38,17 @@ public class Animation {
     static Texture texture_char1_still;
     static Sprite sprite_char1_still;
 
-    public static void initChar1() // Initialisiere Animation von Character 1
+    public static void initChar1() // Initialisiere der Animationen von Character 1
     {
         TextureAtlas atlas;
-        atlas = new TextureAtlas(Gdx.files.internal("char1_sprung/char1_sprung.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("char1_sprung/char1_sprung.atlas")); //Laden der Bilder der Animation
         Array<TextureAtlas.AtlasRegion> jumpFrames = atlas.getRegions();
 
         char1_jumpAnimation = new com.badlogic.gdx.graphics.g2d.Animation(char1_jumpDuration, jumpFrames, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP);
         char1_jumpStateTime = 10f;
 
         TextureAtlas walkatlas;
-        walkatlas = new TextureAtlas(Gdx.files.internal("char1_walk/char1_walk.atlas"));
+        walkatlas = new TextureAtlas(Gdx.files.internal("char1_walk/char1_walk.atlas")); //Laden der Bilder der Animation
         Array<TextureAtlas.AtlasRegion> walkrunningFrames = walkatlas.getRegions();
 
         char1_walkAnimation = new com.badlogic.gdx.graphics.g2d.Animation(char1_walkDuration, walkrunningFrames, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP);
@@ -56,44 +56,44 @@ public class Animation {
         player1_walkCurrentFrame = (TextureRegion) char1_walkAnimation.getKeyFrame(0);
 
         TextureAtlas schlagatlas;
-        schlagatlas = new TextureAtlas(Gdx.files.internal("char1_schlag/char1_schlag.atlas"));
+        schlagatlas = new TextureAtlas(Gdx.files.internal("char1_schlag/char1_schlag.atlas")); //Laden der Bilder der Animation
         Array<TextureAtlas.AtlasRegion> schlagrunningFrames = schlagatlas.getRegions();
 
         char1_schlagAnimation = new com.badlogic.gdx.graphics.g2d.Animation(char1_schlagDuration, schlagrunningFrames);
         char1_schlagStateTime = 10f;
 
         TextureAtlas trittatlas;
-        trittatlas = new TextureAtlas(Gdx.files.internal("char1_tritt/char1_tritt.atlas"));
+        trittatlas = new TextureAtlas(Gdx.files.internal("char1_tritt/char1_tritt.atlas")); //Laden der Bilder der Animation
         Array<TextureAtlas.AtlasRegion> trittrunningFrames = trittatlas.getRegions();
 
         char1_trittAnimation = new com.badlogic.gdx.graphics.g2d.Animation(char1_trittDuration, trittrunningFrames);
         char1_trittStateTime = 10f;
 
 
-        texture_char1_still = new Texture(Gdx.files.internal("char1_standing.png"));
+        texture_char1_still = new Texture(Gdx.files.internal("char1_standing.png")); //Laden der Bilder der Animation
         sprite_char1_still = new Sprite(texture_char1_still, 477, 715);
     }
 
 
 
-    static com.badlogic.gdx.graphics.g2d.Animation char2_jumpAnimation;
-    static float char2_jumpDuration = 0.25f;
+    static com.badlogic.gdx.graphics.g2d.Animation char2_jumpAnimation;  //Deklaration der Variablen für die verschiedenen Animationen von Character 1
+    static float char2_jumpDuration = 0.25f; //Dauer der Animation
     static float char2_jumpStateTime;
     static TextureRegion player2_jumpCurrentFrame;
     static float player2_jump_elapsed_time = 0f;
 
     static  com.badlogic.gdx.graphics.g2d.Animation char2_walkAnimation;
-    static float char2_walkDuration = 0.1f;
+    static float char2_walkDuration = 0.1f; //Dauer der Animation
     static float char2_walkStateTime;
     static TextureRegion player2_walkCurrentFrame;
     static float player2_walk_elapsed_time = 0f;
 
     static com.badlogic.gdx.graphics.g2d.Animation char2_schlagAnimation;
-    static float char2_schlagDuration = 0.11f;
+    static float char2_schlagDuration = 0.11f; //Dauer der Animation
     static float char2_schlagStateTime;
 
     static com.badlogic.gdx.graphics.g2d.Animation char2_trittAnimation;
-    static float char2_trittDuration = 0.08f;
+    static float char2_trittDuration = 0.08f; //Dauer der Animation
     static float char2_trittStateTime;
     static TextureRegion player2_trittCurrentFrame;
     static float player2_tritt_elapsed_time = 0f;
@@ -101,17 +101,17 @@ public class Animation {
     static Texture texture_char2_still;
     static Sprite sprite_char2_still;
 
-    public static void initChar2() // Initialisiere Animation von Spieler 2
+    public static void initChar2() // Initialisieren der Animationen von Spieler 2
     {
         TextureAtlas atlas;
-        atlas = new TextureAtlas(Gdx.files.internal("char2_sprung/char2_sprung.atlas"));
+        atlas = new TextureAtlas(Gdx.files.internal("char2_sprung/char2_sprung.atlas")); //Laden der Bilder der Animation
         Array<TextureAtlas.AtlasRegion> jumpFrames = atlas.getRegions();
 
-        char2_jumpAnimation = new com.badlogic.gdx.graphics.g2d.Animation(char2_jumpDuration, jumpFrames, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP);
+        char2_jumpAnimation = new com.badlogic.gdx.graphics.g2d.Animation(char2_jumpDuration, jumpFrames, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP); //Setzen der Geschwindigkeit und
         char2_jumpStateTime = 10f;
 
         TextureAtlas walkatlas;
-        walkatlas = new TextureAtlas(Gdx.files.internal("char2_walk/char2_walk.atlas"));
+        walkatlas = new TextureAtlas(Gdx.files.internal("char2_walk/char2_walk.atlas")); //Laden der Bilder der Animation
         Array<TextureAtlas.AtlasRegion> walkrunningFrames = walkatlas.getRegions();
 
         char2_walkAnimation = new com.badlogic.gdx.graphics.g2d.Animation(char2_walkDuration, walkrunningFrames, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP);
@@ -119,37 +119,37 @@ public class Animation {
         player2_walkCurrentFrame = (TextureRegion) char2_walkAnimation.getKeyFrame(0);
 
         TextureAtlas schlagatlas;
-        schlagatlas = new TextureAtlas(Gdx.files.internal("char2_schlag/char2_schlag.atlas"));
+        schlagatlas = new TextureAtlas(Gdx.files.internal("char2_schlag/char2_schlag.atlas")); //Laden der Bilder der Animation
         Array<TextureAtlas.AtlasRegion> schlagrunningFrames = schlagatlas.getRegions();
 
         char2_schlagAnimation = new com.badlogic.gdx.graphics.g2d.Animation(char2_schlagDuration, schlagrunningFrames);
         char2_schlagStateTime = 10f;
 
         TextureAtlas trittatlas;
-        trittatlas = new TextureAtlas(Gdx.files.internal("char2_tritt/char2_tritt.atlas"));
+        trittatlas = new TextureAtlas(Gdx.files.internal("char2_tritt/char2_tritt.atlas")); //Laden der Bilder der Animation
         Array<TextureAtlas.AtlasRegion> trittrunningFrames = trittatlas.getRegions();
 
         char2_trittAnimation = new com.badlogic.gdx.graphics.g2d.Animation(char2_trittDuration, trittrunningFrames);
         char2_trittStateTime = 10f;
 
-        texture_char2_still = new Texture(Gdx.files.internal("char2_standing.png"));
+        texture_char2_still = new Texture(Gdx.files.internal("char2_standing.png")); //Laden der Bilder der Animation
         sprite_char2_still = new Sprite(texture_char2_still, 604, 715);
     }
 
-    static com.badlogic.gdx.graphics.g2d.Animation loadingAnimation;
+    static com.badlogic.gdx.graphics.g2d.Animation loadingAnimation; //Deklarattion der Variablen für die Ladeanimation
     static TextureRegion loadingCurrentFrame;
     static float loading_elapsed_time = 0f;
 
-    public static void initAll()
+    public static void initAll() //Alle Methoden zur Deklarierung werden aufgerufen
     {
         initChar1();
         initChar2();
 
         TextureAtlas loadingAtlas;
-        loadingAtlas = new TextureAtlas(Gdx.files.internal("loading/loading.atlas"));
+        loadingAtlas = new TextureAtlas(Gdx.files.internal("loading/loading.atlas")); //Laden der Ladeanimation
         Array<TextureAtlas.AtlasRegion> loadingFrames = loadingAtlas.getRegions();
 
-        loadingAnimation = new com.badlogic.gdx.graphics.g2d.Animation(0.125f, loadingFrames, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP);
+        loadingAnimation = new com.badlogic.gdx.graphics.g2d.Animation(0.125f, loadingFrames, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP); //Setzen der Geschwindigkeit der Animation
     }
 
 }

@@ -52,7 +52,6 @@ public class MultiPlayerScreen implements Screen {
 
     private int queueing_players = 0;
 
-    private static boolean hasError = false;
     private static String errormsg = "";
 
     private String enemy;
@@ -63,7 +62,7 @@ public class MultiPlayerScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float delta) { //Zeigen der Spieler in Warteschlange bzw des Menüs
         stage.getBatch().begin();
         if(inQueue)
             font.draw(stage.getBatch(), "In Queue with " + NetworkPlayer.getRP()+ " RP. Players in Queue: " + String.valueOf(queueing_players), screen_width/20*6, screen_height/20*10);
@@ -107,9 +106,10 @@ public class MultiPlayerScreen implements Screen {
 
         uiSkin = game.getSkin();
 
-        initBackButton();
+        initBackButton(); //Initialisieren der Oberfläche
 
         setupInterface();
+
         //nimmt größe des Bildschirms
         this.screen_width = Gdx.graphics.getWidth();
         this.screen_height = Gdx.graphics.getHeight();
@@ -132,7 +132,7 @@ public class MultiPlayerScreen implements Screen {
                 if(inQueue) {
                     inQueue = false;
                     try {
-                        rankedOutputStream.writeBytes("x5x9");
+                        rankedOutputStream.writeBytes("x5x9"); //Verlassen der Warteschlange
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -183,7 +183,7 @@ public class MultiPlayerScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                game.setScreen(new MultiPlayerScreen(game));// neuen Screen aufrufen
+                game.setScreen(new MultiPlayerScreen(game));// neuen Screen aufrufen, momentan noch ohne Funktion
                 return true;
             }
         });
@@ -202,7 +202,7 @@ public class MultiPlayerScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 try {
-                    rankedOutputStream.writeBytes("x5x9");
+                    rankedOutputStream.writeBytes("x5x9"); //Verlassen der Warteschlange
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -212,15 +212,15 @@ public class MultiPlayerScreen implements Screen {
             }
         });
         stage.addActor(butCancel);
-        final String enterPacket = "x5x0x" + NetworkPlayer.fill(NetworkPlayer.getUsername().length(), 4) + "x" + NetworkPlayer.getUsername() + "x" + NetworkPlayer.getSESSION();
+        final String enterPacket = "x5x0x" + NetworkPlayer.fill(NetworkPlayer.getUsername().length(), 4) + "x" + NetworkPlayer.getUsername() + "x" + NetworkPlayer.getSESSION(); //Paket erstellen
         new Thread(new Runnable() {
             @Override
             public void run() {
                 boolean shouldExit = false;
                 inQueue = true;
                 try {
-                    rankedSocket = new Socket(NetworkPlayer.getMainServer(), 1337);
-                } catch (Exception e) {
+                    rankedSocket = new Socket(NetworkPlayer.getMainServer(), 1337); //Neue Verbindung zu Server
+                } catch (Exception e) { //Server nicht erreichbar
                     e.printStackTrace();
                     inQueue = false;
                     shouldExit = true;
@@ -242,7 +242,7 @@ public class MultiPlayerScreen implements Screen {
                 }
                 if(!shouldExit) {
                     try {
-                        rankedOutputStream.writeBytes(enterPacket); //send packet to enter queue
+                        rankedOutputStream.writeBytes(enterPacket); ////Betreten der Warteschlange
                     } catch (Exception e) {
                         e.printStackTrace();
                         inQueue = false;
@@ -255,7 +255,7 @@ public class MultiPlayerScreen implements Screen {
                 BufferedReader inFromServer = null;
                 if(!shouldExit) {
                     try {
-                        inFromServer = new BufferedReader(new InputStreamReader(rankedSocket.getInputStream()));
+                        inFromServer = new BufferedReader(new InputStreamReader(rankedSocket.getInputStream())); //Auf Antwort warten
                     } catch (Exception e) {
                         e.printStackTrace();
                         inQueue = false;
@@ -279,7 +279,7 @@ public class MultiPlayerScreen implements Screen {
                     if(response != null)
                         Gdx.app.debug("PACKET", response);
                     if(response != null) {
-                        if (response.substring(0, 3).equalsIgnoreCase("5x2")) {
+                        if (response.substring(0, 3).equalsIgnoreCase("5x2")) { //Aktualisieren der Spieler in Warteschleife
                             int queueing_players_str = 0;
                             try {
                                 queueing_players_str = Integer.parseInt(response.substring(4, 8));
@@ -289,23 +289,23 @@ public class MultiPlayerScreen implements Screen {
                                 e.printStackTrace();
                             }
                             queueing_players = Integer.parseInt(String.valueOf(queueing_players_str));
-                        } else if (response.substring(0, 3).equals("5x1")) {
+                        } else if (response.substring(0, 3).equals("5x1")) { //Spiel gefunden
                             Gdx.app.debug("Game found", response);
                             //5x1xLENGTHxENEMYxPORT
-                            int enemy_length = Integer.parseInt(response.substring(4, 8));
+                            int enemy_length = Integer.parseInt(response.substring(4, 8)); //Auslesen des Gegnernamens und des Ports
                             enemy = response.substring(9, 9 + enemy_length);
                             int offset = 10 + enemy_length;
                             port = response.substring(offset);
                             inQueue = false;
                             inGame = true;
                             try {
-                                rankedSocket.close();
+                                rankedSocket.close(); //Verbindung schließen
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                             dispose();
                             try {
-                                game.setScreen(new MultiPlayerGameScreen(game, Integer.parseInt(port)));
+                                game.setScreen(new MultiPlayerGameScreen(game, Integer.parseInt(port))); //Neues Spiel auf übergebenem Port starten
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

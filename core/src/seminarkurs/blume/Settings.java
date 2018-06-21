@@ -37,7 +37,7 @@ public class Settings {
 
     public static Boolean isMusicEnabled() {
         return prefs.getBoolean("volume_music");
-    } //
+    } //Prüfe, ob Nutzer Musik an/aus hat
 
     public static void setMusicEnabled(boolean volume_music) {
         prefs.putBoolean("volume_music", volume_music);
@@ -47,22 +47,22 @@ public class Settings {
 
     public static boolean isSoundEnabled() {
         return prefs.getBoolean("volume_sound");
-    }
+    } //Lese Lautstärke von Tönen
 
     public static void setSoundEnabled(boolean volume_sound) {
         prefs.putBoolean("volume_sound", volume_sound);
         prefs.flush();
-    }
+    } //Speichere Lautstärke von Tönen
 
 
     public static String getUsername() {
         return prefs.getString("username");
-    }
+    } //Lese Nutzernamen
 
     public static void setUsername(String username) {
         prefs.putString("username", username);
         prefs.flush();
-    }
+    }//Speichere Nutzernamen
 
 
     public static String getPassword() { //Lese Passwort-Hash aus

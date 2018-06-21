@@ -34,7 +34,7 @@ public class Map {
         mapName = name;
     }
 
-    public void initBackground(String mapImage)
+    public void initBackground(String mapImage) //Maphintergrund laden
     {
         try
         {
@@ -55,9 +55,9 @@ public class Map {
     void setScale(float scale)
     {
         mapSprite.setScale(scale);
-    }
+    } //Größe der Map setzen
 
-    public void drawMap(Stage stage)
+    public void drawMap(Stage stage) //Rendern der Map
     {
         if(!bLoadMapError)
             mapSprite.draw(stage.getBatch());

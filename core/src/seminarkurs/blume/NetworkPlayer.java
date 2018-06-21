@@ -22,9 +22,9 @@ public class NetworkPlayer {
         return GAME_SERVER;
     }
 
-    private static final String MAIN_SERVER = "seminarkurs.pfuenzle.io"; //IP des Hautpservers
+    private static final String MAIN_SERVER = "seminarkurs.pfuenzle.io"; //Domain des Hautpservers
 
-    private static final String GAME_SERVER = "meinutatakai.pfuenzle.io"; //IP des Spieleservers
+    private static final String GAME_SERVER = "meinutatakai.pfuenzle.io"; //Domain des Spieleservers
 
     public static String getUsername() {
         return username;
@@ -66,8 +66,8 @@ public class NetworkPlayer {
 
 
     //Network
-    private static String SESSION = "0";
-    private static String HWID;
+    private static String SESSION = "0"; //Session-Key des Spielers
+    private static String HWID; //HardwareID
 
     public static String getSESSION() {
         return SESSION;
@@ -101,7 +101,7 @@ public class NetworkPlayer {
         return ret;
     }
 
-    public static void update()
+    public static void update() //Update die Statistiken des gerade angemeldeten Spielers
     {
         String packettype = "1x0";
         String packet = packettype + "x" + username;
@@ -109,14 +109,14 @@ public class NetworkPlayer {
         Socket socket = null;
         try
         {
-            socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints);
+            socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "seminarkurs.pfuenzle.io", 1337, socketHints); //Neue Verbindung
         }
         catch(com.badlogic.gdx.utils.GdxRuntimeException e)
         {
             return;
         }
         try {
-            socket.getOutputStream().write(packet.getBytes());
+            socket.getOutputStream().write(packet.getBytes()); //Schreibe Paket an Server
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -128,7 +128,7 @@ public class NetworkPlayer {
             public void run () {
                 String resp;
                 try {
-                    resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine();
+                    resp = new BufferedReader(new InputStreamReader(finalSocket.getInputStream())).readLine(); //Auf Antwort warten
                 } catch (IOException e) {
                     e.printStackTrace();
                     e.toString();
@@ -136,7 +136,7 @@ public class NetworkPlayer {
                     return;
                 }
                 UserPacket user = new UserPacket(resp);
-                if(user.getRet()) {
+                if(user.getRet()) { //Anwenden der Statistiken
                     setRP(user.getRP());
                     setWins(getWins());
                     setLosses(user.getLosses());

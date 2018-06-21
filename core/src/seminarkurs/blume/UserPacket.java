@@ -60,27 +60,27 @@ public class UserPacket {
         //loose Laenge: 5
         String sRet = "0";
         try {
-            sRet = data.substring(2, 3);
+            sRet = data.substring(2, 3); //Rückgabewert der Anfrage
         }
         catch(Exception e)
         {
         }
         try {
-            if (Integer.parseInt(sRet) == 1) {
+            if (Integer.parseInt(sRet) == 1) { //User existert
                 ret = true;
                 int offset = 9;
                 int points_length = Integer.parseInt(data.substring(4, offset));
                 offset += 1;
-                this.RP = Integer.parseInt(data.substring(offset, offset + points_length));
+                this.RP = Integer.parseInt(data.substring(offset, offset + points_length)); //Lese RP aus
                 offset += points_length + 1;
                 int wins_length = Integer.parseInt(data.substring(offset, offset + 5));
                 offset += 6;
-                this.wins = Integer.parseInt(data.substring(offset, offset + wins_length));
+                this.wins = Integer.parseInt(data.substring(offset, offset + wins_length)); //Lese Siege aus
                 offset += wins_length + 1;
                 int loose_length = Integer.parseInt(data.substring(offset, offset + 5));
                 offset += 6;
-                this.losses = Integer.parseInt(data.substring(offset, offset + loose_length));
-            } else {
+                this.losses = Integer.parseInt(data.substring(offset, offset + loose_length)); //Lese Niederlagen aus
+            } else {//User existert nicht
                 ret = false;
             }
         }

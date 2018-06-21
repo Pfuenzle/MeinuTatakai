@@ -22,11 +22,11 @@ public class AndroidLauncher extends AndroidApplication{
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useImmersiveMode = true;
 
-		String hwid_raw = Build.VERSION.RELEASE + Build.BRAND + Build.DEVICE + Build.FINGERPRINT;
+		String hwid_raw = Build.VERSION.RELEASE + Build.BRAND + Build.DEVICE + Build.FINGERPRINT; //Erstellen eines eindeutigen Gerätestrings
 
 		String hwid = "";
 
-		try {
+		try { //HardwareID mit MD5 hashen, um Benutzer zu anonymisieren
 			java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
 			byte[] array = md.digest(hwid_raw.getBytes());
 			StringBuffer sb = new StringBuffer();
@@ -39,13 +39,13 @@ public class AndroidLauncher extends AndroidApplication{
 
 		String deviceName = "";
 		try {
-			BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter();
+			BluetoothAdapter myDevice = BluetoothAdapter.getDefaultAdapter(); //Holen des Gerätenamens
 			deviceName = myDevice.getName();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 
-		initialize(new MyGdxGame(hwid, deviceName), config);
+		initialize(new MyGdxGame(hwid, deviceName), config); //Starten der Engine mit HardwareID und Gerätename
 	}
 
 }
